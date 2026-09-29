@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-role="investor">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vvEntra · Institutional Operational Asset Exchange</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Transaction Ticker -->
+  <aside class="c-ticker" aria-label="Transaction Registry Feed">
+    <div class="c-ticker__label">
+      <span class="c-ticker__indicator"></span>
+      Transaction Registry
+    </div>
+    <div class="c-ticker__track-wrap">
+      <div class="c-ticker__track" id="ticker-content">
+        <!-- Dynamically populated from data.js -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="c-nav">
+    <div class="c-nav__container">
+      <a href="#overview" class="c-nav__brand">
+        <div class="c-nav__brand-mark">v</div>
+        <div class="c-nav__brand-name">vv<span>Entra</span></div>
+      </a>
+
+      <nav>
+        <ul class="c-nav__links">
+          <li><a href="#overview" class="c-nav__link is-active">Overview</a></li>
+          <li><a href="#dashboard" class="c-nav__link">Sector Matrix</a></li>
+          <li><a href="#browse" class="c-nav__link">Asset Registry</a></li>
+          <li><a href="#pricing" class="c-nav__link">Settlement Model</a></li>
+          <li><a href="#list" class="c-nav__link">Asset Intake</a></li>
+          <li><a href="#trust" class="c-nav__link">Compliance & Escrow</a></li>
+          <li><a href="#faq" class="c-nav__link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="c-nav__actions">
+        <!-- Saved Shortlist Badge -->
+        <a href="#browse" onclick="document.querySelector('[data-filter=saved]')?.click()" class="c-nav__status-pill c-nav__status-pill--saved" title="View your saved asset dossiers">
+          <span>★</span> <span id="saved-count">1</span> Saved
+        </a>
+
+        <!-- Perspective Selector -->
+        <div class="c-role-switch" title="Toggle perspective: Buyer vs. Asset Operator">
+          <button type="button" class="c-role-switch__btn is-active" data-role="investor">Institutional Buyer</button>
+          <button type="button" class="c-role-switch__btn" data-role="architect">Operator / Seller</button>
+        </div>
+
+        <!-- Theme Mode Toggle -->
+        <button type="button" class="c-nav__icon-btn" id="theme-toggle-btn" title="Toggle Dark/Light Mode">🌙</button>
+
+        <!-- Compliance KYC Pill -->
+        <div class="c-nav__status-pill c-nav__status-pill--verified" title="Identity Verified & KYC Compliant">
+          <span>●</span> KYC Verified
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="l-main">
+
+    <!-- ===================================================================
+         VIEW 1: OVERVIEW (#overview)
+         =================================================================== -->
+    <section id="page-overview" class="c-view is-active">
+      <div class="c-hero">
+        <div class="c-hero__tag">Audited Asset Exchange · Neutral Escrow Settlement</div>
+        <h1 class="c-hero__title" id="hero-main-title">
+          Acquire audited commercial assets.<br><em>Deploy execution capital with escrow security.</em>
+        </h1>
+        <p class="c-hero__subtitle" id="hero-main-sub">
+          A confidential network connecting qualified capital with verified commercial assets. Minimum 90-page documentation threshold. Staged legal disclosures. Neutral banking escrow.
+        </p>
+        <div class="c-hero__actions">
+          <a href="#browse" class="c-btn c-btn--primary" id="hero-main-cta">Review Institutional Assets →</a>
+          <a href="#pricing" class="c-btn c-btn--secondary">View 90/10 Settlement Structure</a>
+        </div>
+      </div>
+
+      <!-- Institutional Clarity Explainer -->
+      <div class="c-explainer-banner">
+        <div class="c-explainer-banner__icon">🏛️</div>
+        <div>
+          <div class="c-explainer-banner__heading">
+            <span>Operational Asset Transfer: The Commercial Blueprint Model</span>
+            <span class="c-explainer-banner__badge">Transaction Model</span>
+          </div>
+          <p class="c-explainer-banner__body">
+            Similar to commercial architects who license completed structural blueprints to construction operators, <strong>vvEntra enables senior operators to license verified, 90+ page operational packages—including audited supply chains, codebases, and financial models—to investors with execution capital.</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Three-Stage Transaction Workflow -->
+      <div class="c-workflow-grid">
+        <div class="c-step-card">
+          <div class="c-step-card__num">Phase 01</div>
+          <h3 class="c-step-card__title">Audited Documentation</h3>
+          <p class="c-step-card__desc">
+            Sellers submit complete operational blueprints: vetted vendor contracts, financial pro-formas, and SOPs. Submissions without rigorous documentation are rejected.
+          </p>
+        </div>
+        <div class="c-step-card">
+          <div class="c-step-card__num">Phase 02</div>
+          <h3 class="c-step-card__title">10% Diligence Escrow</h3>
+          <p class="c-step-card__desc">
+            Buyers review redacted summaries, then place a 10% refundable deposit in regulated escrow. This initiates a 45-minute technical review under mutual NDA.
+          </p>
+        </div>
+        <div class="c-step-card">
+          <div class="c-step-card__num">Phase 03</div>
+          <h3 class="c-step-card__title">Closing & Settlement</h3>
+          <p class="c-step-card__desc">
+            Upon approved due diligence, the buyer selects their engagement model (Asset Transfer, Advisory, or Full Partnership) with a 7-day inspection window.
+          </p>
+        </div>
+      </div>
+
+      <!-- Institutional Metrics Strip -->
+      <div class="c-stats-grid">
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">
+            <span>Audited Packages</span>
+            <span class="c-info-tip" data-tooltip="Every listing undergoes review for operational completeness, financial verification, and originality.">?</span>
+          </div>
+          <div class="c-stat-card__val">184</div>
+          <div class="c-stat-card__sub">Minimum 90-page documentation standard</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">
+            <span>Market Spread</span>
+            <span class="c-info-tip" data-tooltip="The spread between institutional buyer allocations and available vetted asset packages.">?</span>
+          </div>
+          <div class="c-stat-card__val">+66 pts</div>
+          <div class="c-stat-card__sub">Peak demand spread in Enterprise Automation</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">
+            <span>Inspection Window</span>
+            <span class="c-info-tip" data-tooltip="Funds remain in neutral banking custody during the inspection period before final release.">?</span>
+          </div>
+          <div class="c-stat-card__val">7 Days</div>
+          <div class="c-stat-card__sub">Full refund resolution for non-delivery</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">
+            <span>Net Proceeds Split</span>
+            <span class="c-info-tip" data-tooltip="Sellers receive 90% of transaction value. vvEntra retains 10% to fund compliance and escrow facilities.">?</span>
+          </div>
+          <div class="c-stat-card__val">90 / 10</div>
+          <div class="c-stat-card__sub">Direct seller settlement upon release</div>
+        </div>
+      </div>
+
+      <!-- Sector Transaction Preview -->
+      <div class="c-section-header">
+        <div>
+          <h2 class="c-section-header__title">Institutional Demand & Market Spreads</h2>
+          <p class="c-section-header__sub">Ranked by trailing 7-day institutional capital allocations</p>
+        </div>
+        <a href="#dashboard" class="c-btn c-btn--secondary c-btn--sm">View All 14 Tracked Sectors →</a>
+      </div>
+
+      <div class="c-card" style="margin-bottom: 3.5rem;">
+        <table class="c-table">
+          <thead>
+            <tr>
+              <th>Sector & Classification</th>
+              <th>Buyer Demand Index</th>
+              <th>Available Listings</th>
+              <th>Market Spread</th>
+              <th>Median Valuation</th>
+            </tr>
+          </thead>
+          <tbody id="overview-arbitrage-body">
+            <!-- Populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Featured Assets Section -->
+      <div class="c-section-header">
+        <div>
+          <h2 class="c-section-header__title">Active Asset Dossiers</h2>
+          <p class="c-section-header__sub">Verified operational packages prepared for technical diligence</p>
+        </div>
+        <a href="#browse" class="c-btn c-btn--secondary c-btn--sm">Browse Registry →</a>
+      </div>
+
+      <div class="c-asset-grid" id="overview-opps-grid">
+        <!-- Populated via JavaScript -->
+      </div>
+
+      <!-- Strategic Positioning Quadrant (2x2 Matrix) -->
+      <div class="c-quadrant-container" style="margin-top: 3.5rem;">
+        <div class="c-section-header">
+          <div>
+            <div class="c-badge c-badge--neutral" style="margin-bottom: 0.4rem;">Market Positioning Analysis</div>
+            <h2 class="c-section-header__title">Strategic Positioning Quadrant</h2>
+            <p class="c-section-header__sub">Real-time mapping of commercial sectors across Demand Growth (X-axis) and Market Activity (Y-axis)</p>
+          </div>
+        </div>
+
+        <div class="l-dashboard-split">
+          <div class="c-card" style="padding: 1rem; overflow-x: auto;">
+            <svg class="c-quad-svg" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; min-width: 600px;">
+              <rect x="80" y="40" width="540" height="220" fill="var(--color-bg-alt)" stroke="var(--color-border-subtle)"/>
+              <rect x="620" y="40" width="540" height="220" fill="var(--color-brand-subtle)" stroke="var(--color-border-subtle)"/>
+              <rect x="80" y="260" width="540" height="220" fill="var(--color-bg-surface)" stroke="var(--color-border-subtle)"/>
+              <rect x="620" y="260" width="540" height="220" fill="var(--color-bg-alt)" stroke="var(--color-border-subtle)"/>
+              <line x1="620" y1="40" x2="620" y2="480" stroke="var(--color-border-default)" stroke-width="1.5" stroke-dasharray="4"/>
+              <line x1="80" y1="260" x2="1160" y2="260" stroke="var(--color-border-default)" stroke-width="1.5" stroke-dasharray="4"/>
+              
+              <text x="635" y="65" font-weight="700" font-size="14" fill="var(--color-brand-primary)">STARS · High Growth & High Activity</text>
+              <text x="95" y="65" font-weight="700" font-size="14" fill="var(--color-text-muted)">RISING · Emerging Momentum</text>
+              <text x="635" y="285" font-weight="700" font-size="14" fill="var(--color-success)">CASH COWS · Established Scaled Yield</text>
+              <text x="95" y="285" font-weight="700" font-size="14" fill="#DC2626">SATURATED · High Friction</text>
+              
+              <line x1="80" y1="480" x2="1160" y2="480" stroke="var(--color-text-muted)" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="480" stroke="var(--color-text-muted)" stroke-width="1"/>
+              <text x="620" y="505" text-anchor="middle" font-size="12" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Demand Growth Rate →</text>
+              <text x="45" y="260" text-anchor="middle" font-size="12" fill="var(--color-text-faint)" font-family="var(--font-family-mono)" transform="rotate(-90 45 260)">Market Activity Volume ↑</text>
+
+              <!-- Star Nodes -->
+              <circle cx="1020" cy="120" r="8" fill="var(--color-brand-primary)"/>
+              <text x="1035" y="125" font-size="12" font-weight="600" fill="var(--color-text-main)">AI Agents (+24%)</text>
+              <circle cx="970" cy="80" r="9" fill="var(--color-brand-primary)"/>
+              <text x="985" y="85" font-size="12" font-weight="600" fill="var(--color-text-main)">B2B SaaS (+22%)</text>
+              <circle cx="1080" cy="180" r="8" fill="var(--color-brand-primary)"/>
+              <text x="1095" y="185" font-size="12" font-weight="600" fill="var(--color-text-main)">RegTech (+26%)</text>
+
+              <!-- Cash Cows Nodes -->
+              <circle cx="890" cy="340" r="8" fill="var(--color-success)"/>
+              <text x="905" y="345" font-size="12" font-weight="600" fill="var(--color-text-main)">Climate Tech (+18%)</text>
+              <circle cx="830" cy="390" r="9" fill="var(--color-success)"/>
+              <text x="845" y="395" font-size="12" font-weight="600" fill="var(--color-text-main)">HealthTech (+12%)</text>
+              <circle cx="760" cy="420" r="9" fill="var(--color-success)"/>
+              <text x="775" y="425" font-size="12" font-weight="600" fill="var(--color-text-main)">Fintech SMB (+9%)</text>
+
+              <!-- Saturated Nodes -->
+              <circle cx="380" cy="410" r="7" fill="#DC2626"/>
+              <text x="395" y="415" font-size="12" fill="var(--color-text-muted)">Crypto & Web3 (-8%)</text>
+              <circle cx="270" cy="440" r="6" fill="#DC2626"/>
+              <text x="285" y="445" font-size="12" fill="var(--color-text-muted)">Consumer App Churn (-12%)</text>
+            </svg>
+          </div>
+
+          <!-- Top Gainers & Insights Sidebar -->
+          <div class="c-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h4 style="font-size: 0.82rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1rem;">Top Sector Momentum (7-Day)</h4>
+              <div class="c-feed" style="margin: 0;">
+                <div class="c-feed-item">
+                  <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">01</span>
+                  <div style="flex: 1; margin: 0 0.5rem; font-size: 0.85rem; font-weight: 600;">AI Compliance & Audit</div>
+                  <strong style="color: var(--color-success); font-family: var(--font-family-mono);">+28.0%</strong>
+                </div>
+                <div class="c-feed-item">
+                  <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">02</span>
+                  <div style="flex: 1; margin: 0 0.5rem; font-size: 0.85rem; font-weight: 600;">RegTech Automation</div>
+                  <strong style="color: var(--color-success); font-family: var(--font-family-mono);">+26.0%</strong>
+                </div>
+                <div class="c-feed-item">
+                  <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">03</span>
+                  <div style="flex: 1; margin: 0 0.5rem; font-size: 0.85rem; font-weight: 600;">Autonomous Workflow AI</div>
+                  <strong style="color: var(--color-success); font-family: var(--font-family-mono);">+24.0%</strong>
+                </div>
+                <div class="c-feed-item">
+                  <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">04</span>
+                  <div style="flex: 1; margin: 0 0.5rem; font-size: 0.85rem; font-weight: 600;">Mid-Market B2B SaaS</div>
+                  <strong style="color: var(--color-success); font-family: var(--font-family-mono);">+22.0%</strong>
+                </div>
+              </div>
+            </div>
+            <div style="padding-top: 1rem; border-top: 1px solid var(--color-border-subtle); font-size: 0.82rem; color: var(--color-text-muted);">
+              Sectors in the <strong>Stars</strong> quadrant experience average escrow clearing times under 14 days.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 2: SECTOR ARBITRAGE MATRIX (#dashboard)
+         =================================================================== -->
+    <section id="page-dashboard" class="c-view">
+      <div class="c-section-header">
+        <div>
+          <h1 class="c-section-header__title">Venture Intelligence Terminal</h1>
+          <p class="c-section-header__sub">Real-time deal flow, sector liquidity telemetry, and predictive buyer-seller demand gap analysis</p>
+        </div>
+      </div>
+
+      <!-- 6 KPI Telemetry Strip -->
+      <div class="c-stats-grid" id="dash-kpi-grid" style="margin-bottom: 2.5rem;">
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">● Live Listings</div>
+          <div class="c-stat-card__val" id="dash-kpi-1">184</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +12 new today</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">● Active Now</div>
+          <div class="c-stat-card__val" id="dash-kpi-2">87</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +14% vs avg</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">New This Week</div>
+          <div class="c-stat-card__val" id="dash-kpi-3">42</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +18% WoW</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Architects Online</div>
+          <div class="c-stat-card__val" id="dash-kpi-4">247</div>
+          <div style="font-size: 0.76rem; color: var(--color-brand-primary); font-weight: 600; margin-top: 4px;">Verified Operators</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Avg Unlock Valuation</div>
+          <div class="c-stat-card__val" id="dash-kpi-5">$4,300</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ 22% MoM</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-card__label">Deals Closed</div>
+          <div class="c-stat-card__val" id="dash-kpi-6">37</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">100% Escrow Cleared</div>
+        </div>
+      </div>
+
+      <!-- Core Matrix & Signal -->
+      <div class="l-dashboard-split" style="margin-bottom: 3rem;">
+        <div class="c-card">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Sector Opportunity Matrix</h3>
+          <table class="c-table">
+            <thead>
+              <tr>
+                <th>Sector Tracked</th>
+                <th>Demand Index</th>
+                <th>Active Listings</th>
+                <th>Market Spread</th>
+                <th>7-Day Velocity</th>
+                <th>Median Value</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-matrix-body">
+              <!-- Populated via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="c-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="c-badge c-badge--success" id="dash-signal-badge" style="margin-bottom: 0.75rem;">Mandate Match · Priority</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;" id="dash-signal-title">Enterprise Software & E-Com</h3>
+            <p style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1.5rem;" id="dash-signal-text">
+              Asset VVE-2440 matches standard private equity search criteria. Operations package includes verified Shopify Plus & ERP integration specifications with audited financial returns.
+            </p>
+            <a href="#listing?id=VVE-2440" class="c-btn c-btn--primary c-btn--full" id="dash-signal-btn">Inspect Asset Specifications →</a>
+          </div>
+
+          <div style="margin-top: 2rem; border-top: 1px solid var(--color-border-subtle); padding-top: 1.2rem;">
+            <h4 style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; margin-bottom: 0.8rem;">Recent Transaction Activity</h4>
+            <div class="c-feed-item">
+              <div class="c-feed-dot"></div>
+              <div><strong>VVE-2440</strong> diligence deposit placed by Private Search Fund ($2,800 escrow committed)</div>
+            </div>
+            <div class="c-feed-item">
+              <div class="c-feed-dot"></div>
+              <div><strong>VVE-2436</strong> Technical review completed; milestone schedule authorized</div>
+            </div>
+            <div class="c-feed-item">
+              <div class="c-feed-dot"></div>
+              <div><strong>VVE-2438</strong> Mutual NDA executed; Virtual Data Room access granted</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 01: 30-Day Demand vs Supply Area Chart & Live Deal Feed -->
+      <div class="c-section-header" style="margin-bottom: 1.2rem;">
+        <div>
+          <h2 class="c-section-header__title">Buyer Demand vs. Architect Supply</h2>
+          <p class="c-section-header__sub">30-day liquidity trajectory across qualified acquisition mandates vs. verified commercial submissions</p>
+        </div>
+      </div>
+
+      <div class="l-dashboard-split" style="margin-bottom: 3rem;">
+        <div class="c-card" style="padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 700;">30-Day Liquidity Trajectory</h3>
+            <div style="display: flex; gap: 0.4rem;">
+              <button type="button" class="c-filter-chip is-active" id="chart-toggle-both">Aggregate</button>
+              <button type="button" class="c-filter-chip" id="chart-toggle-demand">Buyer Demand</button>
+              <button type="button" class="c-filter-chip" id="chart-toggle-supply">Supply</button>
+            </div>
+          </div>
+
+          <div style="position: relative; width: 100%; height: 260px;">
+            <svg id="demand-svg" viewBox="0 0 600 260" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+              <line x1="0" y1="50" x2="600" y2="50" stroke="var(--color-border-subtle)" stroke-dasharray="4"/>
+              <line x1="0" y1="100" x2="600" y2="100" stroke="var(--color-border-subtle)" stroke-dasharray="4"/>
+              <line x1="0" y1="150" x2="600" y2="150" stroke="var(--color-border-subtle)" stroke-dasharray="4"/>
+              <line x1="0" y1="200" x2="600" y2="200" stroke="var(--color-border-subtle)" stroke-dasharray="4"/>
+              <text x="10" y="45" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand</text>
+              <text x="10" y="220" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Baseline</text>
+
+              <!-- Supply Path -->
+              <path id="supply-area" fill="rgba(59, 130, 246, 0.12)" d="M0,180 Q150,160 300,140 T600,110 L600,260 L0,260 Z"/>
+              <path id="supply-line" fill="none" stroke="#3B82F6" stroke-width="2.5" d="M0,180 Q150,160 300,140 T600,110"/>
+
+              <!-- Demand Path -->
+              <path id="demand-area" fill="rgba(226, 87, 27, 0.18)" d="M0,140 Q150,110 300,80 T600,40 L600,260 L0,260 Z"/>
+              <path id="demand-line" fill="none" stroke="var(--color-brand-primary)" stroke-width="3" d="M0,140 Q150,110 300,80 T600,40"/>
+            </svg>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--color-border-subtle); font-size: 0.8rem; font-family: var(--font-family-mono);">
+            <div style="display: flex; gap: 1.25rem;">
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--color-brand-primary); display: inline-block;"></span> Buyer Demand</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #3B82F6; display: inline-block;"></span> Operator Supply</span>
+            </div>
+            <span style="color: var(--color-brand-primary); font-weight: 700;">Net Demand Gap: +34% Premium</span>
+          </div>
+        </div>
+
+        <!-- Live Deal Stream -->
+        <div class="c-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Streaming Deal Flow</h3>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1.2rem;">Live transaction milestones broadcast across verified participants</p>
+
+          <div class="c-feed">
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">VVE-2440</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 600; font-size: 0.85rem;">Inventory QA Automation</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">114p · 18 Frameworks · Senior Operator</div>
+              </div>
+              <strong style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">$28,000</strong>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">VVE-2436</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 600; font-size: 0.85rem;">Manufacturing Telemetry QA</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">132p · 22 Frameworks · Industrial AI</div>
+              </div>
+              <strong style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">$32,000</strong>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">VVE-2434</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 600; font-size: 0.85rem;">Cash-Flow Underwriting Engine</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">104p · 16 Frameworks · Fintech SMB</div>
+              </div>
+              <strong style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">$24,000</strong>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">VVE-2438</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 600; font-size: 0.85rem;">Botanical Extraction Framework</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">98p · 14 Frameworks · HealthTech</div>
+              </div>
+              <strong style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">$18,500</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 02: Sector Demand Radar & Opportunity Gaps -->
+      <div class="c-section-header" style="margin-bottom: 1.2rem;">
+        <div>
+          <h2 class="c-section-header__title">Sector Demand Radar & Opportunity Gaps</h2>
+          <p class="c-section-header__sub">Multi-axis category balance comparing buyer demand intensity against vetted inventory</p>
+        </div>
+      </div>
+
+      <div class="l-dashboard-split" style="margin-bottom: 3rem;">
+        <!-- Sector Demand Radar (Spider Chart) -->
+        <div class="c-card" style="padding: 1.5rem; text-align: center;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; text-align: left;">Sector Demand Radar</h3>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem; text-align: left;">Weekly multi-vector analysis across 8 high-velocity categories</p>
+          
+          <div style="max-width: 440px; margin: 0 auto;">
+            <svg viewBox="0 0 460 380" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto;">
+              <!-- Grid Circles -->
+              <circle cx="230" cy="190" r="40" fill="none" stroke="var(--color-border-subtle)" stroke-width="1"/>
+              <circle cx="230" cy="190" r="80" fill="none" stroke="var(--color-border-subtle)" stroke-width="1"/>
+              <circle cx="230" cy="190" r="120" fill="none" stroke="var(--color-border-subtle)" stroke-width="1"/>
+              <circle cx="230" cy="190" r="160" fill="none" stroke="var(--color-border-default)" stroke-width="1"/>
+              <!-- Axes -->
+              <line x1="230" y1="30" x2="230" y2="350" stroke="var(--color-border-subtle)"/>
+              <line x1="70" y1="190" x2="390" y2="190" stroke="var(--color-border-subtle)"/>
+              <line x1="116" y1="76" x2="344" y2="304" stroke="var(--color-border-subtle)"/>
+              <line x1="344" y1="76" x2="116" y2="304" stroke="var(--color-border-subtle)"/>
+              
+              <!-- Supply Polygon (Blue) -->
+              <polygon points="230,90 320,140 295,220 200,260 130,225 145,160 175,110 250,80" fill="rgba(59, 130, 246, 0.15)" stroke="#3B82F6" stroke-width="2"/>
+              <!-- Demand Polygon (Brand Primary) -->
+              <polygon points="230,50 348,120 330,235 245,310 110,275 85,160 130,80 250,55" fill="rgba(226, 87, 27, 0.22)" stroke="var(--color-brand-primary)" stroke-width="2.5"/>
+
+              <!-- Axis Labels -->
+              <text x="230" y="22" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="middle">AI Compliance (+28%)</text>
+              <text x="395" y="125" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="start">RegTech (+26%)</text>
+              <text x="400" y="240" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="start">Fintech SMB (+9%)</text>
+              <text x="245" y="365" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="middle">HealthTech (+12%)</text>
+              <text x="55" y="295" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="end">Climate (+18%)</text>
+              <text x="30" y="165" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="end">B2B SaaS (+22%)</text>
+              <text x="75" y="75" font-size="11" font-weight="600" fill="var(--color-text-main)" text-anchor="end">AI Agents (+24%)</text>
+            </svg>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; font-size: 0.78rem; font-family: var(--font-family-mono);">
+            <span style="color: var(--color-brand-primary);">■ Buyer Demand Profile</span>
+            <span style="color: #3B82F6;">■ Operator Inventory Supply</span>
+          </div>
+        </div>
+
+        <!-- Top Opportunity Gaps Table -->
+        <div class="c-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Top Opportunity Gaps</h3>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1.2rem;">Highest clearance probability where institutional demand outstrips active supply</p>
+
+          <div class="c-feed">
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">01</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 700; font-size: 0.88rem;">RegTech Compliance for Mid-Market</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">Demand Index: 84 · Active Supply: 18 · Average Clearing: 12 Days</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 700; color: var(--color-brand-primary); font-family: var(--font-family-mono);">+66 Gap</div>
+                <div style="font-size: 0.7rem; color: var(--color-success);">High Priority</div>
+              </div>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">02</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 700; font-size: 0.88rem;">Autonomous Vertical AI Agents</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">Demand Index: 92 · Active Supply: 32 · Average Clearing: 8 Days</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 700; color: var(--color-brand-primary); font-family: var(--font-family-mono);">+60 Gap</div>
+                <div style="font-size: 0.7rem; color: var(--color-success);">Fastest Clearing</div>
+              </div>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">03</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 700; font-size: 0.88rem;">Clinical HealthTech & EHR Integration</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">Demand Index: 74 · Active Supply: 28 · Average Clearing: 15 Days</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 700; color: var(--color-brand-primary); font-family: var(--font-family-mono);">+46 Gap</div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted);">Steady Liquidity</div>
+              </div>
+            </div>
+
+            <div class="c-feed-item">
+              <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">04</span>
+              <div style="flex: 1; margin: 0 0.5rem;">
+                <div style="font-weight: 700; font-size: 0.88rem;">Industrial Climate & Emission Audit</div>
+                <div style="font-size: 0.74rem; color: var(--color-text-muted);">Demand Index: 68 · Active Supply: 22 · Average Clearing: 18 Days</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 700; color: var(--color-brand-primary); font-family: var(--font-family-mono);">+46 Gap</div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted);">ESG Mandates</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 03: "What Should You List?" Interactive Recommender -->
+      <div class="c-card" style="padding: 2rem; margin-bottom: 3rem; background: var(--color-bg-surface); border: 1px solid var(--color-border-default);">
+        <div class="c-section-header" style="margin-bottom: 1.5rem;">
+          <div>
+            <div class="c-badge c-badge--neutral" style="margin-bottom: 0.35rem;">Dynamic Opportunity Engine</div>
+            <h2 class="c-section-header__title" style="font-size: 1.35rem;">What Should You <em>List or Acquire?</em></h2>
+            <p class="c-section-header__sub">Configure your deployment constraints. The algorithm calculates live sector demand and returns the optimal asset archetype.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Capital Depth</label>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button type="button" class="c-filter-chip is-active wsl-btn" data-type="capital" data-val="lean">Lean / Bootstrap</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="capital" data-val="mid">Moderate ($50k+)</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="capital" data-val="heavy">Institutional ($200k+)</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Liquidity Velocity</label>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button type="button" class="c-filter-chip is-active wsl-btn" data-type="speed" data-val="fast">Fastest (< 14 Days)</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="speed" data-val="balanced">Balanced</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="speed" data-val="value">Maximum Multiple</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Domain Advantage</label>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button type="button" class="c-filter-chip is-active wsl-btn" data-type="domain" data-val="any">All Domains</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="domain" data-val="tech">AI & Software</button>
+              <button type="button" class="c-filter-chip wsl-btn" data-type="domain" data-val="ops">Operations / B2B</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="wsl-result-card" style="background: var(--color-bg-alt); border: 1px solid var(--color-border-subtle); padding: 1.25rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="c-badge c-badge--success" id="wsl-badge">Recommended Asset Package</span>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0.35rem 0;" id="wsl-title">RegTech Compliance & Ingestion Pipeline</h4>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); margin: 0;" id="wsl-desc">
+              Strongest buyer clearance velocity (12 days). High institutional willingness to pay with low competitive supply.
+            </p>
+          </div>
+          <a href="#list" class="c-btn c-btn--primary c-btn--sm">Prepare Asset Dossier →</a>
+        </div>
+      </div>
+
+      <!-- SECTION 04: Capital Deployed & Sector Pricing Benchmarks -->
+      <div class="c-section-header" style="margin-bottom: 1.2rem;">
+        <div>
+          <h2 class="c-section-header__title">Capital Deployed & Pricing Benchmarks</h2>
+          <p class="c-section-header__sub">Weekly institutional capital settlement velocity ($42M total) and 30-day valuation benchmarks</p>
+        </div>
+      </div>
+
+      <div class="l-dashboard-split">
+        <!-- Capital Deployed Bar Chart -->
+        <div class="c-card" style="padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+            <h3 style="font-size: 1rem; font-weight: 700;">Weekly Capital Deployed</h3>
+            <span style="font-family: var(--font-family-mono); font-weight: 700; color: var(--color-brand-primary);">Total: $42.6M</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 160px; padding-top: 1rem; border-bottom: 1px solid var(--color-border-subtle); margin-bottom: 0.75rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$2.4M</span>
+              <div style="width: 100%; height: 50px; background: var(--color-brand-primary); opacity: 0.6; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W1</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$3.1M</span>
+              <div style="width: 100%; height: 65px; background: var(--color-brand-primary); opacity: 0.7; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W2</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$1.9M</span>
+              <div style="width: 100%; height: 40px; background: var(--color-brand-primary); opacity: 0.5; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W3</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$4.2M</span>
+              <div style="width: 100%; height: 85px; background: var(--color-brand-primary); opacity: 0.8; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W4</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$4.8M</span>
+              <div style="width: 100%; height: 95px; background: var(--color-brand-primary); opacity: 0.85; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W5</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$3.7M</span>
+              <div style="width: 100%; height: 75px; background: var(--color-brand-primary); opacity: 0.75; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W6</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-muted);">$5.4M</span>
+              <div style="width: 100%; height: 115px; background: var(--color-brand-primary); opacity: 0.9; border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W7</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; width: 10%;">
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-success); font-weight: 700;">$6.1M</span>
+              <div style="width: 100%; height: 130px; background: var(--color-success); border-radius: 2px;"></div>
+              <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">W8</span>
+            </div>
+          </div>
+          <div style="font-size: 0.76rem; color: var(--color-text-muted);">
+            Week-over-week capital clearing rate accelerating at <strong style="color: var(--color-success);">+18.4%</strong>.
+          </div>
+        </div>
+
+        <!-- Sector Pricing Benchmarks -->
+        <div class="c-card" style="padding: 1.5rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Sector Pricing Benchmarks (30-Day)</h3>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1.2rem;">Historical diligence valuation clearance by category</p>
+
+          <table class="c-table" style="font-size: 0.82rem;">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Median Diligence Fee</th>
+                <th>Upper Decile</th>
+                <th>Trajectory</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Fintech SMB Lending</strong></td>
+                <td>$7,200</td>
+                <td>$12,400</td>
+                <td><span class="c-badge c-badge--success">+16.4%</span></td>
+              </tr>
+              <tr>
+                <td><strong>HealthTech & Clinical Ops</strong></td>
+                <td>$6,800</td>
+                <td>$11,200</td>
+                <td><span class="c-badge c-badge--success">+12.2%</span></td>
+              </tr>
+              <tr>
+                <td><strong>AI Workflow Automation</strong></td>
+                <td>$5,400</td>
+                <td>$9,600</td>
+                <td><span class="c-badge c-badge--success">+24.0%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Climate & Carbon Accounting</strong></td>
+                <td>$4,400</td>
+                <td>$7,800</td>
+                <td><span class="c-badge c-badge--success">+18.0%</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mid-Market B2B SaaS</strong></td>
+                <td>$3,200</td>
+                <td>$6,500</td>
+                <td><span class="c-badge c-badge--neutral">+4.2%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 3: ASSET REGISTRY (#browse)
+         =================================================================== -->
+    <section id="page-browse" class="c-view">
+      <div class="c-section-header">
+        <div>
+          <h1 class="c-section-header__title">Asset Registry & Dossiers</h1>
+          <p class="c-section-header__sub">Institutional operational assets with verified technical and financial documentation</p>
+        </div>
+        <div style="font-family: var(--font-family-mono); font-size: 0.82rem; color: var(--color-text-muted);" id="marketplace-count">
+          6 verified commercial dossiers found
+        </div>
+      </div>
+
+      <!-- Search and Filtering Toolbar -->
+      <div class="c-filter-toolbar">
+        <div class="c-search-field">
+          <span class="c-search-field__icon">🔍</span>
+          <input type="text" class="c-search-field__input" id="marketplace-search" placeholder="Search by asset ID, industry vertical, or commercial criteria...">
+        </div>
+
+        <div class="c-filter-group">
+          <button type="button" class="c-filter-chip is-active" data-filter="all">All Industries</button>
+          <button type="button" class="c-filter-chip" data-filter="saved">★ Saved Dossiers</button>
+          <button type="button" class="c-filter-chip" data-filter="Digital Commerce">Digital Commerce</button>
+          <button type="button" class="c-filter-chip" data-filter="RegTech">RegTech</button>
+          <button type="button" class="c-filter-chip" data-filter="Fintech">Fintech</button>
+          <button type="button" class="c-filter-chip" data-filter="ClimateTech">ClimateTech</button>
+          <button type="button" class="c-filter-chip" data-filter="Healthcare & Consumer">Healthcare</button>
+        </div>
+      </div>
+
+      <div class="c-asset-grid" id="marketplace-grid">
+        <!-- Populated via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 4: ASSET DETAIL & DATA ROOM (#listing)
+         =================================================================== -->
+    <section id="page-listing" class="c-view">
+      <!-- Staged Disclosure Stepper -->
+      <div class="c-stepper">
+        <div class="c-stepper__item is-active"><div class="c-stepper__dot"></div> Stage 01 · Public Summary</div>
+        <span>→</span>
+        <div class="c-stepper__item"><div class="c-stepper__dot"></div> Stage 02 · Identity KYC</div>
+        <span>→</span>
+        <div class="c-stepper__item"><div class="c-stepper__dot"></div> Stage 03 · 10% Diligence Escrow</div>
+        <span>→</span>
+        <div class="c-stepper__item"><div class="c-stepper__dot"></div> Stage 04 · Technical Review</div>
+        <span>→</span>
+        <div class="c-stepper__item"><div class="c-stepper__dot"></div> Stage 05 · Complete IP Transfer</div>
+      </div>
+
+      <div class="l-asset-detail">
+        <div>
+          <div style="font-family: var(--font-family-mono); font-size: 0.76rem; color: var(--color-brand-primary); font-weight: 600; margin-bottom: 0.5rem;" id="listing-id-tag">
+            VVE-2440 · Digital Commerce
+          </div>
+          <h1 style="font-size: 2.1rem; font-weight: 700; line-height: 1.25; margin-bottom: 1rem;" id="listing-title">
+            Automated Inventory QA & Vendor Routing System for E-Commerce
+          </h1>
+          <p style="font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 2rem;" id="listing-hook">
+            A turnkey operational infrastructure engineered to automate catalogue QA, supplier handoffs, and inventory reconciliation for brands operating between $2M and $15M in annual GMV.
+          </p>
+
+          <!-- Redacted Diligence Box -->
+          <div class="c-section-header">
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Executive Abstract & Technical Methodology</h3>
+          </div>
+          <div class="c-diligence-box">
+            <div class="c-diligence-box__visible" id="listing-thesis-visible">
+              Mid-market consumer brands frequently face severe operational friction when scaling past $2M GMV…
+            </div>
+            <div class="c-diligence-box__blurred" id="listing-thesis-blurred">
+              Inventory data and supplier communications are fragmented across unmonitored messaging threads. A unified operational data pipeline integrating Shopify Plus, ERP systems (NetSuite/Cin7), and 3PL warehouse management systems with automated webhook error handling and decision trees.
+            </div>
+            <div style="margin-top: 1.2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+              <span class="c-badge c-badge--warning" id="listing-fee-badge">🔒 Escrow Deposit Required to Unlock Complete Technical Specifications</span>
+              <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="demo-unlock-btn">
+                Preview Redacted Data Room
+              </button>
+            </div>
+          </div>
+
+          <!-- Included Documentation Package -->
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 2rem;">Audited Deliverables Package</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">Documentation audited by vvEntra legal and technical review staff.</p>
+          <ul class="c-doc-list" id="listing-doc-list">
+            <!-- Populated via JavaScript -->
+          </ul>
+
+          <!-- =============================================================
+               THE ATOMIC HANDOVER PROTOCOL (Interactive 4-Step Escrow Transfer)
+               ============================================================= -->
+          <div class="c-handover" id="listing-handover-container">
+            <div class="c-handover__header">
+              <div>
+                <div class="c-handover__badge-strip">
+                  <span class="c-badge c-badge--success">★ Atomic Escrow Guarantee</span>
+                  <span class="c-handover__subtag">4-Phase Custody Verification</span>
+                </div>
+                <h3 class="c-handover__title">The Atomic Handover Protocol</h3>
+                <p class="c-handover__desc">
+                  Software and commercial code assets do not change hands via insecure emails or unverified drives. 
+                  vvEntra executes a sequential 4-phase custody transfer. Neutral escrow funds are disbursed strictly 
+                  after each custody phase is cryptographically and operationally verified by the buyer.
+                </p>
+              </div>
+              <div class="c-handover__header-actions">
+                <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="handover-sim-btn">
+                  Simulate Handover Sequence ▶
+                </button>
+              </div>
+            </div>
+
+            <!-- 4-Phase Step Grid -->
+            <div class="c-handover__grid" id="handover-steps-grid">
+              <!-- Dynamically populated via JavaScript -->
+            </div>
+
+            <!-- Interactive Step Inspector Details Drawer -->
+            <div class="c-handover__inspector" id="handover-inspector">
+              <!-- Dynamically populated via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Transaction Overview -->
+        <div>
+          <div class="c-card" style="position: sticky; top: 110px;">
+            <h3 style="font-size: 0.82rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1.2rem;">Transaction Parameters</h3>
+
+            <div style="margin-bottom: 1.2rem;">
+              <div style="font-size: 0.75rem; color: var(--color-text-faint); font-family: var(--font-family-mono);">Asset Valuation</div>
+              <div style="font-size: 1.8rem; font-weight: 700; font-family: var(--font-family-mono);" id="listing-price">$28,000</div>
+              <div style="font-size: 0.82rem; color: var(--color-brand-primary); font-weight: 600;" id="listing-unlock">10% Diligence Escrow: $2,800</div>
+            </div>
+
+            <div style="border-top: 1px solid var(--color-border-subtle); padding-top: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: var(--color-text-muted);">Required Deployment Capital:</span>
+                <strong id="listing-capital">$35k - $65k</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: var(--color-text-muted);">Estimated Transition Time:</span>
+                <strong id="listing-timeline">60 - 90 Days</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: var(--color-text-muted);">Target Jurisdictions:</span>
+                <strong id="listing-geo">US, UK, Australia</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Validated Market Scope:</span>
+                <strong id="listing-tam">$4.2B</strong>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--color-border-subtle); padding-top: 1rem; margin-bottom: 1.5rem;">
+              <div style="font-size: 0.72rem; color: var(--color-text-faint); font-family: var(--font-family-mono); text-transform: uppercase;">Verified Operating Principal</div>
+              <div style="font-weight: 700; margin-top: 2px;" id="listing-arch-name">Amit Jain</div>
+              <div style="font-size: 0.8rem; color: var(--color-text-muted);" id="listing-arch-title">Former Vice President of Operations</div>
+              <div style="font-size: 0.76rem; color: var(--color-success); margin-top: 4px;" id="listing-arch-exit">Historical Transactions: $18M & $7.4M Exits</div>
+            </div>
+
+            <a href="#purchase?id=VVE-2440" class="c-btn c-btn--primary c-btn--full" id="listing-unlock-btn">
+              Initiate Diligence ($2,800 in Escrow) →
+            </a>
+            <div style="text-align: center; font-size: 0.74rem; color: var(--color-text-faint); margin-top: 0.75rem;">
+              Statutory 7-day inspection window · Neutral escrow protection
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 5: SETTLEMENT CALCULATOR (#pricing)
+         =================================================================== -->
+    <section id="page-pricing" class="c-view">
+      <div class="c-section-header" style="text-align: center; display: block; margin-bottom: 2.5rem;">
+        <h1 class="c-section-header__title">Institutional 90/10 Settlement Structure</h1>
+        <p class="c-section-header__sub">Transparent transactional economics. No recurring listing fees. Sellers receive 90% direct payout; buyers deposit 10% in regulated escrow.</p>
+      </div>
+
+      <div class="c-calc-card">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <label for="calc-deal-slider" style="font-weight: 600; font-size: 1.05rem;">Asset Transaction Valuation (USD):</label>
+          <span style="font-size: 2rem; font-weight: 700; font-family: var(--font-family-mono); color: var(--color-brand-primary);" id="calc-input-val">$10,000</span>
+        </div>
+
+        <input type="range" min="3000" max="50000" step="1000" value="10000" class="c-slider" id="calc-deal-slider">
+
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem;">
+          <button type="button" class="c-filter-chip calc-preset-btn" data-val="10000">$10,000 Transaction</button>
+          <button type="button" class="c-filter-chip calc-preset-btn" data-val="25000">$25,000 Transaction</button>
+          <button type="button" class="c-filter-chip calc-preset-btn" data-val="50000">$50,000 Transaction</button>
+        </div>
+
+        <!-- Settlement Split -->
+        <div class="c-split-summary">
+          <div class="c-split-summary__cell">
+            <div style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; margin-bottom: 0.4rem;">Buyer Diligence Deposit (10%)</div>
+            <div class="c-split-summary__val" style="color: var(--color-brand-primary);" id="calc-unlock-fee">$1,000</div>
+            <div style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 4px;">Held in neutral escrow during inspection</div>
+          </div>
+          <div class="c-split-summary__cell">
+            <div style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; margin-bottom: 0.4rem;">Seller Net Proceeds (90%)</div>
+            <div class="c-split-summary__val" style="color: var(--color-success);" id="calc-arch-net">$9,000</div>
+            <div style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 4px;">Settled upon approved milestone release</div>
+          </div>
+          <div class="c-split-summary__cell">
+            <div style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; margin-bottom: 0.4rem;">vvEntra Facility Commission (10%)</div>
+            <div class="c-split-summary__val" id="calc-platform-cut">$1,000</div>
+            <div style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 4px;">Funds legal escrow & technical audit SLA</div>
+          </div>
+        </div>
+
+        <!-- Post-Diligence Engagement Models -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin: 2rem 0;">
+          <div style="background: var(--color-bg-alt); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem;">1. Full Partnership</h4>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.5;">Operator enters an active execution partnership with agreed milestone disbursements.</p>
+          </div>
+          <div style="background: var(--color-bg-alt); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem;">2. Strategic Advisory</h4>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.5;">Operator provides scheduled advisory sessions and architecture oversight during onboarding.</p>
+          </div>
+          <div style="background: var(--color-bg-alt); padding: 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem;">3. Asset Transfer Only</h4>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.5;">Direct intellectual property handover. Buyer internalizes all documentation independently.</p>
+          </div>
+        </div>
+
+        <!-- Arbitration Outcomes -->
+        <div class="c-dispute-table">
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Documented Dispute Arbitration SLA</h3>
+
+          <div class="c-dispute-row">
+            <div>
+              <strong>Complete Specification Delivery (Standard):</strong>
+              <div style="font-size: 0.8rem; color: var(--color-text-muted);">Inspection concluded without material discrepancy.</div>
+            </div>
+            <span style="font-family: var(--font-family-mono); font-weight: 600; color: var(--color-success);" id="disp-scenario-clean">Seller receives $9,000</span>
+          </div>
+
+          <div class="c-dispute-row">
+            <div>
+              <strong>Material Documentation Discrepancy:</strong>
+              <div style="font-size: 0.8rem; color: var(--color-text-muted);">Seller fails to provide verified specifications within 48 hours.</div>
+            </div>
+            <span style="font-family: var(--font-family-mono); font-weight: 600; color: var(--color-info);" id="disp-scenario-ghost">100% Refund to Buyer</span>
+          </div>
+
+          <div class="c-dispute-row">
+            <div>
+              <strong>Mediated Settlement (60/40 Determination):</strong>
+              <div style="font-size: 0.8rem; color: var(--color-text-muted);">Partial deliverable handover with minor technical deviation.</div>
+            </div>
+            <span style="font-family: var(--font-family-mono); font-weight: 600;" id="disp-scenario-6040">Split: $5,400 / $3,600</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 6: ASSET INTAKE & COMPOSER (#list)
+         =================================================================== -->
+    <section id="page-list" class="c-view">
+      <div class="c-section-header">
+        <div>
+          <h1 class="c-section-header__title">Asset Intake & Registration</h1>
+          <p class="c-section-header__sub">Package operational assets for technical audit. Minimum 90-page documentation required.</p>
+        </div>
+      </div>
+
+      <div class="l-composer-split">
+        <!-- Asset Intake Form -->
+        <div class="c-card">
+          <form id="composer-form">
+            <div class="c-form-group">
+              <label for="comp-title" class="c-form-label">Asset Title</label>
+              <input type="text" id="comp-title" class="c-form-input" required placeholder="e.g., Automated Regulatory Compliance Pipeline for Plant Operators">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <label for="comp-industry" class="c-form-label">Industry Vertical</label>
+                <select id="comp-industry" class="c-form-select">
+                  <option value="Enterprise Software">Enterprise Software</option>
+                  <option value="RegTech">RegTech</option>
+                  <option value="Fintech">Fintech</option>
+                  <option value="Digital Commerce">Digital Commerce</option>
+                  <option value="ClimateTech">ClimateTech</option>
+                  <option value="Healthcare & Consumer">Healthcare & Consumer</option>
+                </select>
+              </div>
+              <div>
+                <label for="comp-price" class="c-form-label">Asset Valuation (USD)</label>
+                <input type="number" id="comp-price" class="c-form-input" required min="3000" max="100000" value="25000">
+              </div>
+            </div>
+
+            <div class="c-form-group">
+              <label for="comp-thesis" class="c-form-label">Operational Methodology & Technical Architecture</label>
+              <textarea id="comp-thesis" class="c-form-textarea" required placeholder="Detail the operational workflows, technical data pipelines, and verified financial unit economics. Proprietary identifiers will be redacted for public previews."></textarea>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <button type="button" class="c-btn c-btn--secondary c-btn--full" id="composer-sanitize-btn">
+                Generate Sanitized Executive Abstract
+              </button>
+              <button type="submit" class="c-btn c-btn--primary c-btn--full" id="composer-submit-btn">
+                Submit Asset Dossier to Registry →
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sanitized Dossier Preview -->
+        <div>
+          <h3 style="font-size: 0.85rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1rem;">Public Dossier Preview</h3>
+
+          <div class="c-asset-card" id="comp-preview-box" style="display: none; border-color: var(--color-brand-primary);">
+            <div class="c-asset-card__header">
+              <span class="c-asset-card__id">SUBMISSION DRAFT</span>
+              <span class="c-badge c-badge--warning">Pending Audit</span>
+            </div>
+            <h3 class="c-asset-card__title" id="comp-prev-title">Asset Dossier Title</h3>
+            <p class="c-asset-card__summary" id="comp-prev-lead">Sanitized summary preview will render here...</p>
+            <div style="background: var(--color-bg-alt); padding: 0.8rem; border-radius: var(--radius-xs); margin: 0.8rem 0; font-size: 0.8rem;">
+              <span style="font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; font-size: 0.7rem; display: block; margin-bottom: 2px;">Proprietary Identifiers Redacted:</span>
+              <span style="filter: blur(4px); user-select: none;">Vendor identity, customer cohorts, and proprietary source code schemas remain NDA-gated.</span>
+            </div>
+            <div class="c-asset-card__footer">
+              <span style="font-weight: 700; font-family: var(--font-family-mono);" id="comp-prev-unlock">Diligence Escrow: $2,500</span>
+              <span class="c-badge c-badge--success">Ready for Review</span>
+            </div>
+          </div>
+
+          <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-alt);">
+            <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Disclosure & Confidentiality Protocol:</h4>
+            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.6;">
+              Public previews allow institutional buyers to verify TAM validity, technical depth, and operational rigor without compromising trade secrets prior to bilateral NDA execution and escrow deposit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 7: DILIGENCE ROOM & ESCROW INITIATION (#purchase)
+         =================================================================== -->
+    <section id="page-purchase" class="c-view">
+      <div class="c-diligence-panel">
+        <div style="border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="font-family: var(--font-family-mono); font-size: 0.74rem; color: var(--color-brand-primary); font-weight: 600;">TECHNICAL DILIGENCE & ESCROW</div>
+          <h1 style="font-size: 1.75rem; font-weight: 700; margin: 0.4rem 0;" id="pur-opp-title">Asset Technical Diligence</h1>
+          <div style="font-size: 0.88rem; color: var(--color-text-muted);" id="pur-opp-escrow-note">
+            Your diligence deposit is held in regulated escrow throughout the mandatory 7-day inspection window.
+          </div>
+        </div>
+
+        <!-- Step 1: Deposit Authorization -->
+        <div id="pur-step-1">
+          <div style="background: var(--color-bg-alt); padding: 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span>Full Asset Valuation:</span>
+              <strong id="pur-opp-price" style="font-family: var(--font-family-mono);">$28,000</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; border-top: 1px solid var(--color-border-subtle); padding-top: 0.75rem;">
+              <span>Mandatory 10% Diligence Escrow Deposit:</span>
+              <strong id="pur-opp-unlock" style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">$2,800</strong>
+            </div>
+          </div>
+          <button type="button" class="c-btn c-btn--primary c-btn--full" id="pur-commit-escrow-btn">
+            Authorize $2,800 Escrow Deposit →
+          </button>
+        </div>
+
+        <!-- Step 2: Virtual Data Room & Diligence Schedule -->
+        <div id="pur-step-2" style="display: none;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Stage 04: Technical Diligence & Information Request (RFI)</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
+            Escrow verified. Submit formal Requests for Information (RFI) directly to the operating principal and confirm your scheduled technical review.
+          </p>
+
+          <!-- RFI Audit Log -->
+          <div id="pur-msg-thread" style="height: 180px; overflow-y: auto; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-xs); padding: 1rem; background: var(--color-bg-surface); margin-bottom: 1rem;">
+            <div style="font-size: 0.75rem; color: var(--color-text-faint); font-family: var(--font-family-mono); text-align: center; margin-bottom: 0.5rem;">Diligence Audit Room Initialized · Transaction Escrow Active</div>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <input type="text" class="c-form-input" id="pur-msg-input" placeholder="Submit technical diligence inquiry (RFI) to operator...">
+            <button type="button" class="c-btn c-btn--secondary" id="pur-send-msg-btn">Submit Inquiry</button>
+          </div>
+
+          <!-- Technical Architecture Review Session (Live Video Interface) -->
+          <div class="c-video-terminal" id="video-review-terminal" style="background: var(--color-bg-card); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 0.75rem;">
+              <div>
+                <span class="c-badge c-badge--success" style="font-family: var(--font-family-mono);">● HD WebRTC Feed Ready</span>
+                <h4 style="font-size: 1rem; font-weight: 700; margin-top: 4px;">Technical Architecture Review Session</h4>
+              </div>
+              <div style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">
+                SESSION ID: VVE-VDR-7810
+              </div>
+            </div>
+
+            <!-- Video Frame Simulator -->
+            <div style="position: relative; width: 100%; height: 240px; background: #0A0908; border-radius: var(--radius-sm); overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+              <!-- Operator Avatar & Feed Screen -->
+              <div style="text-align: center; color: #FFFFFF;" id="video-stream-placeholder">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--color-brand-primary); color: #FFFFFF; font-weight: 700; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem;">
+                  AJ
+                </div>
+                <div style="font-weight: 700; font-size: 0.95rem;">Amit Jain (Operating Principal)</div>
+                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: var(--font-family-mono);">Awaiting Buyer Audio/Video Handshake · 45-min SLA</div>
+              </div>
+
+              <!-- Live HUD Overlay -->
+              <div style="position: absolute; top: 12px; left: 12px; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: #4ADE80; font-family: var(--font-family-mono);">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #4ADE80; display: inline-block;"></span>
+                <span>256-BIT ENCRYPTED</span>
+              </div>
+              <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: #FFFFFF; font-family: var(--font-family-mono);" id="video-timer">
+                00:45:00
+              </div>
+            </div>
+
+            <!-- Interactive Media Controls -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="btn-toggle-mic">🎤 Mute Mic</button>
+                <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="btn-toggle-cam">📹 Camera On</button>
+                <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="btn-toggle-share">💻 Share Screen</button>
+              </div>
+              <button type="button" class="c-btn c-btn--primary c-btn--sm" id="pur-start-call-btn">
+                Confirm Review & Proceed to Closing →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Bilateral Contract Execution -->
+        <div id="pur-step-3" style="display: none;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Stage 05: Milestone Settlement Contract</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
+            Technical review complete. Authorize legal execution and escrow disbursement schedule below.
+          </p>
+
+          <div class="c-card" style="background: var(--color-bg-alt); margin-bottom: 1.5rem; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>Selected Transaction Structure:</span> <strong>Full Operational Partnership (90/10)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>Statutory Inspection Term:</span> <strong>7-Day Resolution Window</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Execution State:</span> <span id="pur-contract-status" style="font-weight: 600; color: var(--color-brand-primary);">Pending Buyer Execution</span>
+            </div>
+          <div class="c-card" style="background: var(--color-bg-surface); border: 1px solid var(--color-border-subtle); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+            <div>
+              <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Closing Safeguard</div>
+              <div style="font-weight: 700; font-size: 0.88rem; margin-top: 2px;">Governed by The Atomic Handover Protocol</div>
+              <div style="font-size: 0.78rem; color: var(--color-text-muted);">90% seller payout wires only after Code Repos, Domain DNS, and Stripe token custody verification.</div>
+            </div>
+            <a href="#listing" class="c-btn c-btn--secondary c-btn--sm" style="white-space: nowrap; font-size: 0.75rem;">Inspect 4-Step Protocol →</a>
+          </div>
+
+          <button type="button" class="c-btn c-btn--primary c-btn--full" id="pur-sign-contract-btn">
+            Execute Legal Agreement & Authorize Milestone Schedule
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 8: COMPLIANCE & ESCROW STANDARDS (#trust)
+         =================================================================== -->
+    <section id="page-trust" class="c-view">
+      <div class="c-section-header" style="text-align: center; display: block; margin-bottom: 3rem;">
+        <h1 class="c-section-header__title">Institutional Compliance & Escrow Protection</h1>
+        <p class="c-section-header__sub">Five statutory and escrow controls protecting transactions between buyers and operators</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; margin-bottom: 4rem;">
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🪪</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">1. Identity Verification & KYC</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            Beneficial ownership records, commercial registries, and government identification are audited prior to platform listing approval.
+          </p>
+        </div>
+
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🏦</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">2. Regulated Escrow Custody</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            Transaction capital remains in licensed banking escrow accounts. Funds disburse only upon confirmed deliverable milestones and technical inspection.
+          </p>
+        </div>
+
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🔒</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">3. Staged Legal Disclosures</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            Sensitive commercial IP is safeguarded via sequential checkpoints: Public Summary → Mutual NDA Execution → Full Virtual Data Room Access.
+          </p>
+        </div>
+
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">⚖️</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">4. Five-Day Dispute Resolution SLA</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            Documented criteria govern material specification variance or non-delivery. Disputes receive formal review with structured settlement protocols.
+          </p>
+        </div>
+
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🛡️</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">5. $50,000 Escrow Guarantee Facility</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            High-tier commercial assets qualify for platform escrow guarantees, ensuring settlement finality upon fulfillment of deliverable milestones.
+          </p>
+        </div>
+
+        <div class="c-stat-card">
+          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">📑</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">6. 90-Page Documentation Threshold</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
+            Conceptual business proposals without production-ready workflows, supplier contracts, and working financial models are systematically rejected.
+          </p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="#faq" class="c-btn c-btn--secondary">View Detailed Transaction FAQ →</a>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 9: TRANSACTION & DILIGENCE FAQ (#faq)
+         =================================================================== -->
+    <section id="page-faq" class="c-view">
+      <div class="c-section-header" style="text-align: center; display: block; margin-bottom: 3rem;">
+        <h1 class="c-section-header__title">Frequently Asked Questions</h1>
+        <p class="c-section-header__sub">Key regulatory, legal, and settlement guidelines for institutional buyers and asset operators</p>
+      </div>
+
+      <div class="c-faq-grid">
+        <!-- Buyer FAQ Column -->
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--color-brand-primary);">
+            <h2 style="font-size: 1.15rem; font-weight: 700;">For Institutional Buyers & Capital Allocators</h2>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> How is buyer capital protected during due diligence?</h3>
+            <p class="c-faq-a">All buyer funds are deposited directly into neutral, regulated banking escrow accounts. The operator cannot access these funds during your 7-day inspection window. If deliverables materially deviate from verified specifications, funds are refunded in full under our documented SLA.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> What occurs during the technical diligence review session?</h3>
+            <p class="c-faq-a">Upon 10% escrow deposit confirmation, you receive direct calendar booking access to the operating principal. Under a binding bilateral Non-Disclosure Agreement (NDA), you conduct a 45-minute technical audit examining architecture schematics, accounting records, live integrations, and supplier contracts.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> What are the specific criteria for receiving a 100% escrow refund?</h3>
+            <p class="c-faq-a">Refunds are automatically approved if: (1) deliverable documentation is materially less than stated (fewer than 90 pages or missing operational frameworks), (2) advertised financial models or vendor rosters are omitted, or (3) the operator fails to respond to technical inquiries within the 48-hour SLA window.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> Can I purchase the intellectual property directly without ongoing operator involvement?</h3>
+            <p class="c-faq-a">Yes. At closing, buyers select from three transaction structures: Asset Transfer Only (direct clean IP buyout), Strategic Advisory (retaining the operator for weekly oversight), or Full Operating Partnership (90/10 milestone-based execution partnership).</p>
+          </div>
+        </div>
+
+        <!-- Operator / Seller FAQ Column -->
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--color-success);">
+            <h2 style="font-size: 1.15rem; font-weight: 700;">For Asset Operators & Sellers</h2>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> How are proprietary operational blueprints protected prior to payment?</h3>
+            <p class="c-faq-a">Core operational IP—including source code repositories, vendor agreements, and financial cash-flow models—is never publicly exposed. Buyers only see sanitized executive abstracts until they complete identity verification, execute a mutual NDA, and place 10% cash deposit into regulated escrow.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> What is the mandatory 90-page documentation threshold?</h3>
+            <p class="c-faq-a">vvEntra exclusively lists institutional-grade operational assets. Submissions must include complete procedural workflows (SOPs), technical data schemas, three-statement financial models, and risk mitigation registers. Abstract pitch decks without operational depth are systematically rejected.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> What fees does vvEntra charge asset operators?</h3>
+            <p class="c-faq-a">Intake and technical audits are 100% free upfront. vvEntra retains a flat 10% facility commission strictly upon successful escrow clearance and buyer approval. Operating principals retain 90% of all gross deal proceeds.</p>
+          </div>
+
+          <div class="c-faq-card">
+            <h3 class="c-faq-q"><span>Q:</span> How and when are seller transaction payouts settled?</h3>
+            <p class="c-faq-a">Payouts are cleared within 7 business days of buyer milestone approval or conclusion of the 7-day inspection window. Settlements are transferred directly to verified commercial bank accounts via FedWire, SWIFT, or domestic ACH rails.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Shelf -->
+  <div class="c-toast-shelf" id="toast-shelf"></div>
+
+  <!-- Application Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
