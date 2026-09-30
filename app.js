@@ -582,19 +582,28 @@
   };
 
   function simulateHandoverSequence() {
-    if (isHandoverSimulating || !currentHandoverData) return;
-    isHandoverSimulating = true;
+    if (!currentHandoverData) return;
+    if (isHandoverSimulating) return;
+
     const simBtn = DOM.get('#handover-sim-btn');
+    if (simBtn && simBtn.textContent.includes('Reset')) {
+      renderHandoverProtocol(AssetRepository.getById(State.activeAssetId));
+      simBtn.textContent = '▶ Run Live Simulation Now';
+      return;
+    }
+
+    isHandoverSimulating = true;
     if (simBtn) {
       simBtn.disabled = true;
-      simBtn.textContent = 'Simulating Handover in Progress...';
+      simBtn.textContent = '⏳ Simulating Handover in Progress...';
     }
 
     const phases = currentHandoverData.phases;
     let currentIdx = 0;
     const asset = AssetRepository.getById(State.activeAssetId);
     const val = asset.valuation || 380000;
-    const sellerNet = Math.round(val * 0.90);
+    const fee = Math.round(val * 0.10);
+    const sellerNet = val - fee;
 
     phases[0].status = 'Verifying Buyer Escrow Wire...';
     phases[0].badgeClass = 'c-badge--warning';
@@ -629,7 +638,6 @@
             phases[3].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 3) {
-          const fee = Math.round(val * 0.10);
           currentPhase.status = `✓ Seller Paid $${sellerNet.toLocaleString()} (90%) · vvEntra Fee $${fee.toLocaleString()} (10%)`;
         }
 
@@ -641,11 +649,7 @@
         isHandoverSimulating = false;
         if (simBtn) {
           simBtn.disabled = false;
-          simBtn.textContent = 'Reset / Run Simulation Again ↻';
-          simBtn.onclick = function() {
-            renderHandoverProtocol(AssetRepository.getById(State.activeAssetId));
-            simBtn.onclick = simulateHandoverSequence;
-          };
+          simBtn.textContent = '↺ Reset / Run Simulation Again';
         }
         showNotification('Atomic Handover Complete: Escrow deposit verified, code secured, domain transferred, and payout settled.');
       }
