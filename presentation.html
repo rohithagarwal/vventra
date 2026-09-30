@@ -3,68 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vvEntra Presentation — Content Deep Dive & Extensibility</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>vvEntra Presentation — Simple & Plain Overview</title>
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: #121826;
-      --card-border: #26324a;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #ffffff;
+      --text-muted: #cbd5e1;
       --accent-blue: #38bdf8;
-      --accent-green: #34d399;
-      --accent-amber: #f59e0b;
-      --tag-bg: #1a2436;
+      --accent-green: #4ade80;
+      --accent-amber: #fbbf24;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
       color: var(--text-main);
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
+    /* Top Bar */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 2rem;
+      padding: 0.8rem 2rem;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 15, 25, 0.98);
-      z-index: 50;
+      background: #0f172a;
     }
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .brand-logo {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 800;
-      color: #0b0f19;
+      color: var(--text-main);
     }
     .slide-counter {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
-      background: var(--tag-bg);
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
+      background: var(--card-bg);
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
       border: 1px solid var(--card-border);
     }
     .top-controls {
@@ -79,29 +60,27 @@
       border-radius: 6px;
       font-size: 0.85rem;
       cursor: pointer;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      transition: all 0.15s ease;
       font-family: inherit;
-      text-decoration: none;
     }
     .btn:hover {
-      background: #1c273c;
-      border-color: var(--accent-blue);
+      background: #334155;
       color: #fff;
     }
     .btn-primary {
       background: var(--accent-blue);
-      color: #0b0f19;
+      color: #0f172a;
       font-weight: 600;
       border: none;
     }
     .btn-primary:hover {
       background: #7dd3fc;
-      color: #0b0f19;
     }
 
+    /* Deck Viewport */
     .deck-viewport {
       flex: 1;
       position: relative;
@@ -113,52 +92,45 @@
     .slide {
       position: absolute;
       width: 94%;
-      max-width: 1240px;
+      max-width: 1200px;
       height: 84vh;
-      max-height: 720px;
+      max-height: 680px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 12px;
       padding: 2.5rem 3rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       opacity: 0;
       visibility: hidden;
-      transform: scale(0.97) translateY(15px);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+      transform: translateY(10px);
+      transition: all 0.2s ease;
     }
     .slide.active {
       opacity: 1;
       visibility: visible;
-      transform: scale(1) translateY(0);
+      transform: translateY(0);
       z-index: 10;
     }
 
     .badge {
       display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--accent-blue);
-      background: var(--tag-bg);
-      border: 1px solid var(--card-border);
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
     }
     .slide-title {
-      font-size: 2.1rem;
+      font-size: 2rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
       color: var(--text-main);
       margin-bottom: 0.3rem;
     }
     .slide-subtitle {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--text-muted);
       margin-bottom: 1.5rem;
     }
@@ -172,17 +144,16 @@
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
 
     .card {
-      background: rgba(11, 15, 25, 0.65);
+      background: #0f172a;
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.4rem;
+      border-radius: 8px;
+      padding: 1.3rem;
       display: flex;
       flex-direction: column;
     }
     .card-tag {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 0.4rem;
     }
@@ -193,7 +164,7 @@
     .card-title {
       font-size: 1.15rem;
       font-weight: 600;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.75rem;
       color: var(--text-main);
     }
     .card-list {
@@ -201,13 +172,13 @@
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.5;
     }
     .card-list li {
       position: relative;
-      padding-left: 1.25rem;
+      padding-left: 1.2rem;
     }
     .card-list li::before {
       content: "•";
@@ -216,39 +187,34 @@
       color: var(--accent-blue);
       font-weight: bold;
     }
-    .card-list li strong {
-      color: #e2e8f0;
+    .card-list strong {
+      color: #fff;
     }
 
-    /* Title Slide Layout */
+    /* Title Slide */
     .title-slide {
       justify-content: center;
       align-items: flex-start;
       padding: 4rem;
-      background: radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.07), transparent 50%), var(--card-bg);
     }
     .hero-h1 {
-      font-size: 3.8rem;
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      line-height: 1.05;
-      margin-bottom: 0.6rem;
-      background: linear-gradient(135deg, #fff 40%, var(--accent-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #fff;
     }
     .hero-sub {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       color: var(--accent-blue);
       font-weight: 500;
       margin-bottom: 1.25rem;
     }
     .hero-desc {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
-      max-width: 820px;
+      max-width: 800px;
       line-height: 1.6;
-      margin-bottom: 2.25rem;
+      margin-bottom: 2rem;
     }
 
     /* Speaker Notes Drawer */
@@ -257,13 +223,12 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(15, 23, 42, 0.98);
+      background: #090d16;
       border-top: 2px solid var(--accent-blue);
       padding: 1.25rem 2rem;
       transform: translateY(100%);
-      transition: transform 0.25s ease;
+      transition: transform 0.2s ease;
       z-index: 100;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
     }
     .notes-drawer.open {
       transform: translateY(0);
@@ -272,18 +237,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       font-size: 0.85rem;
       color: var(--accent-blue);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
     .notes-content {
-      font-size: 1rem;
-      color: #e2e8f0;
+      font-size: 1.05rem;
+      color: #f1f5f9;
       line-height: 1.6;
-      max-width: 1100px;
+      max-width: 1000px;
     }
 
     /* Bottom Bar */
@@ -291,35 +255,33 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.85rem 2rem;
+      padding: 0.8rem 2rem;
       border-top: 1px solid var(--card-border);
-      background: rgba(11, 15, 25, 0.98);
+      background: #0f172a;
     }
     .progress-track {
       flex: 1;
       height: 4px;
-      background: var(--tag-bg);
+      background: #334155;
       border-radius: 999px;
       margin: 0 2rem;
       overflow: hidden;
     }
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
-      width: 14%;
-      transition: width 0.3s ease;
+      background: var(--accent-blue);
+      width: 16%;
+      transition: width 0.2s ease;
     }
     .key-hint {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
     }
     kbd {
-      background: var(--tag-bg);
+      background: #334155;
       padding: 0.15rem 0.4rem;
       border-radius: 4px;
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
+      color: #fff;
     }
   </style>
 </head>
@@ -327,14 +289,11 @@
 
   <!-- Top Bar -->
   <header class="top-bar">
-    <div class="brand">
-      <div class="brand-logo">v</div>
-      <span>vvEntra Presentation</span>
-    </div>
-    <div class="slide-counter" id="slideIndicator">Slide 1 / 7</div>
+    <div class="brand">vvEntra — Presentation</div>
+    <div class="slide-counter" id="slideIndicator">Slide 1 / 6</div>
     <div class="top-controls">
-      <button class="btn" id="toggleNotesBtn">🎙 Speaker Script</button>
-      <a href="https://rohithagarwal.github.io/vventra/" target="_blank" class="btn btn-primary">🔗 Open Live Platform</a>
+      <button class="btn" id="toggleNotesBtn">🎙 What to Say (Script)</button>
+      <a href="https://rohithagarwal.github.io/vventra/" target="_blank" class="btn btn-primary">🔗 Open Live Website</a>
       <a href="vventra_presentation.pptx" download class="btn">⬇ Download PPTX</a>
     </div>
   </header>
@@ -344,252 +303,214 @@
 
     <!-- SLIDE 1: Title -->
     <section class="slide title-slide active" data-slide="1">
-      <div class="badge">Comprehensive Deep-Dive</div>
+      <div class="badge">Project Presentation</div>
       <h1 class="hero-h1">vvEntra</h1>
-      <h2 class="hero-sub">Institutional Tech M&A Platform & Atomic Handover Protocol</h2>
+      <h2 class="hero-sub">A Safe Marketplace to Buy & Sell Software Businesses</h2>
       <p class="hero-desc">
-        A zero-dependency, content-first presentation covering the core business problem, user & platform economics, full platform capabilities, our AI-agent extensible architecture, and the proprietary Atomic Handover innovation.
+        A simple, fast website where developers and investors trade apps and software businesses safely without getting scammed. Built with clean, pure code and zero extra libraries.
       </p>
       <div style="display:flex; gap:1rem; align-items:center;">
-        <button class="btn btn-primary" onclick="nextSlide()">Begin Presentation →</button>
-        <span class="key-hint">Press <kbd>→</kbd> or <kbd>Space</kbd> to advance</span>
+        <button class="btn btn-primary" onclick="nextSlide()">Start Presentation →</button>
+        <span class="key-hint">Use <kbd>→</kbd> and <kbd>←</kbd> keys to change slides</span>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Today I'm presenting a complete, content-focused breakdown of vvEntra. We will focus directly on substance: what problem the website solves, the mutual benefits for users and our platform, every major functionality, the zero-dependency tech stack and its AI-agent extensibility, our core innovation compared to the original reference site, and key lessons learned."
+        "Hello everyone. Today I'm presenting vvEntra. In simple terms, vvEntra is an online marketplace where people can buy and sell software businesses safely. I rebuilt the website using simple, clean code with zero extra libraries, made it load fast, and added a safe 4-step handover system so neither buyers nor sellers get scammed."
       </div>
     </section>
 
-    <!-- SLIDE 2: Core Idea, Problem & Mutual Benefits -->
+    <!-- SLIDE 2: Core Idea, Problem & Benefits -->
     <section class="slide" data-slide="2">
       <div>
-        <div class="badge">1. Core Mission & Economics</div>
-        <h2 class="slide-title">Core Idea, Problem Solved & Mutual Benefits</h2>
-        <p class="slide-subtitle">The commercial rationale behind vvEntra and how it generates mutual value for users and the business.</p>
+        <div class="badge">1. Core Idea</div>
+        <h2 class="slide-title">What is vvEntra, What It Solves & Why It Helps</h2>
+        <p class="slide-subtitle">A simple explanation of the business and who it helps.</p>
       </div>
       <div class="cards-grid grid-3">
         <div class="card">
-          <div class="card-tag tag-amber">The Problem Solved</div>
-          <div class="card-title">Broken M&A Dynamics</div>
+          <div class="card-tag tag-amber">The Problem It Solves</div>
+          <div class="card-title">Why Selling Apps is Hard</div>
           <ul class="card-list">
-            <li><strong>Predatory Broker Fees</strong>: Traditional investment bankers charge 10%–15% and take 6 to 12 months to close.</li>
-            <li><strong>Rampant Scams</strong>: Public listing marketplaces are filled with fake revenue screenshots and plagiarized code.</li>
-            <li><strong>Settlement Anxiety</strong>: Buyers fear losing capital without receiving code; sellers fear handing over IP and getting ghosted.</li>
+            <li><strong>Expensive Middlemen</strong>: Traditional brokers charge huge fees (10% to 15%) and take 6 to 12 months.</li>
+            <li><strong>Fake Numbers</strong>: Public websites are full of fake earnings screenshots and stolen code.</li>
+            <li><strong>Fear of Getting Cheated</strong>: Buyers are afraid to pay first. Sellers are afraid to give away code without getting paid.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-green">Benefits For Users</div>
+          <div class="card-tag tag-green">Benefits for the User</div>
           <div class="card-title">Buyers & Sellers</div>
           <ul class="card-list">
-            <li><strong>For Buyers</strong>: 100% verified Stripe revenue data (no fake screenshots), audited code quality, and protected payment escrow.</li>
-            <li><strong>For Sellers</strong>: Low sliding-scale fees (3%–7% saving $50k+ per deal), access to vetted capital, and protected code handover.</li>
-            <li><strong>Frictionless Speed</strong>: Deals close in an average of 18 days instead of 9 months.</li>
+            <li><strong>For Buyers</strong>: Real earnings checked with Stripe; code is checked for bugs; money stays safe in escrow.</li>
+            <li><strong>For Sellers</strong>: Low fees (3% to 7% instead of 15%, saving $50k+); code is never handed over until the buyer's money is locked.</li>
+            <li><strong>Fast Deals</strong>: Deals close in about 18 days instead of almost a year.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-blue">Benefits For Us (The Platform)</div>
-          <div class="card-title">Commercial Model</div>
+          <div class="card-tag tag-blue">Benefits for Us (The Platform)</div>
+          <div class="card-title">How We Make Money</div>
           <ul class="card-list">
-            <li><strong>High-Margin Transaction Fees</strong>: 3% to 7% success fee on closed deals (e.g. $1M buyout = $50,000 pure platform revenue).</li>
-            <li><strong>Ancillary Monetization</strong>: Premium Virtual Data Room (VDR) compliance fees, escrow processing, and code audit fees.</li>
-            <li><strong>Proprietary Data Moat</strong>: Proprietary index of private software valuation multiples and market liquidity spreads.</li>
+            <li><strong>Simple Fee Model</strong>: We take a small 3% to 7% fee on every sale (e.g. $30,000 profit on a $500,000 deal).</li>
+            <li><strong>Extra Services</strong>: Revenue from code audits, escrow fees, and private deal room access.</li>
+            <li><strong>Valuable Data</strong>: We build a real database of how much software companies actually sell for.</li>
           </ul>
         </div>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Point 1: The core idea of vvEntra is to be the trusted escrow and exchange for software businesses. It solves the 15% broker fees and rampant scams on open marketplaces. For users: Buyers get verified financials and audited code; sellers save tens of thousands in fees and protect their IP. For us as a business: We capture a 3% to 7% transaction fee on every deal, plus premium compliance and audit revenue."
+        "Point 1: What is the core idea? Think of it like a trusted real estate agent, but for apps and software instead of houses. It solves three simple problems: high broker fees, fake earnings screenshots, and the fear of getting scammed. Buyers get real numbers and safe escrow. Sellers save tens of thousands in fees and protect their code. And for our platform, we make a clear 3% to 7% fee on every successful sale."
       </div>
     </section>
 
-    <!-- SLIDE 3: Major Functionalities (Market Intelligence) -->
+    <!-- SLIDE 3: Main Features -->
     <section class="slide" data-slide="3">
       <div>
-        <div class="badge">2. Platform Capabilities (Part 1)</div>
-        <h2 class="slide-title">Major Functionality: Market Intelligence & Discovery</h2>
-        <p class="slide-subtitle">Analytical and valuation tools that empower buyers and founders with real-time deal data.</p>
+        <div class="badge">2. Main Features</div>
+        <h2 class="slide-title">Each Major Functionality of the Website</h2>
+        <p class="slide-subtitle">What users can actually see and do on the platform.</p>
       </div>
       <div class="cards-grid grid-3">
         <div class="card">
-          <div class="card-tag tag-blue">M&A Matrix</div>
-          <div class="card-title">2×2 Strategic Quadrant</div>
+          <div class="card-tag tag-blue">Dashboard & Grid</div>
+          <div class="card-title">Market Overview</div>
           <ul class="card-list">
-            <li>Plots software companies by <strong>ARR Multiple vs. Technical Moat</strong> strength.</li>
-            <li>Categorizes assets into: <em>Scale Giants, Enterprise Niche, Emerging Alpha, & Utility Tools</em>.</li>
-            <li><strong>Interactive</strong>: Clicking any quadrant dynamically filters marketplace listings to match specific buyer mandates.</li>
+            <li><strong>Buyer / Seller Switch</strong>: One click changes the view to show what buyers care about (profits, risks) or what sellers care about (valuation).</li>
+            <li><strong>4-Box Market Grid</strong>: Groups apps into 4 simple buckets (Big apps, Fast growers, Niche tools, Basic utilities). Click any box to filter.</li>
+            <li><strong>Supply & Demand Graph</strong>: Shows which software categories have the most buyers waiting.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-green">Market Depth</div>
-          <div class="card-title">Dynamics & Radar Charts</div>
+          <div class="card-tag tag-green">Buy & Sell Tools</div>
+          <div class="card-title">Price Tool & Market</div>
           <ul class="card-list">
-            <li><strong>Demand vs. Supply Vector Curves</strong>: Visualizes buyer liquidity spreads across AI Infrastructure, FinTech Core, & HealthTech.</li>
-            <li><strong>6-Axis Sector Radar</strong>: Evaluates Growth, Margins, IP Moat, Churn, Code Safety, and Team Continuity.</li>
-            <li><strong>Live Ticker</strong>: Rolling terminal displaying signed NDAs and milestone releases.</li>
+            <li><strong>Price Calculator</strong>: A tool for sellers. Type in your earnings, and it instantly tells you what your app is worth and your chances of selling.</li>
+            <li><strong>Browse Marketplace</strong>: Search and filter apps by category (AI, Finance, Health) with real monthly earnings, profit, and tech stack shown clearly.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-amber">Valuation Engine</div>
-          <div class="card-title">Listing Recommender</div>
+          <div class="card-tag tag-amber">Deal Safety</div>
+          <div class="card-title">Private Room & Fees</div>
           <ul class="card-list">
-            <li>"What Should You List?" self-service valuation calculator.</li>
-            <li>Founders enter ARR, technical moat tier, and churn rate.</li>
-            <li><strong>Instant Output</strong>: Calculates realistic valuation multiple, clearance probability, and audit readiness score.</li>
-            <li>Serves as an automated, self-service seller conversion funnel.</li>
+            <li><strong>Private Diligence Room</strong>: A locked room where buyers can view private tax files and code stats after signing an agreement.</li>
+            <li><strong>Code Walkthrough Video</strong>: A video screen where the creator explains how the code works.</li>
+            <li><strong>Fee Calculator</strong>: A slider showing exactly how many thousands of dollars you save compared to traditional brokers.</li>
           </ul>
         </div>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Point 2, Part 1: Major functionalities for market intelligence. Our 2x2 matrix categorizes companies by moat versus multiple and actively filters listings. Our native SVG demand curves and 6-axis radar give investors complete operational health diagnostics. And our valuation recommender lets founders instantly calculate their expected multiple and sale probability."
+        "Point 2: Here are the main features of the website. First, a top switch that flips between Buyer and Seller mode. Second, a dashboard with a 4-box grid where users can click to filter companies, and charts showing market demand. Third, a calculator that tells founders what their software is worth. Fourth, a clean marketplace to search apps. And fifth, a private data room to view sensitive business records safely."
       </div>
     </section>
 
-    <!-- SLIDE 4: Major Functionalities (Diligence & Escrow) -->
+    <!-- SLIDE 4: Tech Stack & Adding AI Agents -->
     <section class="slide" data-slide="4">
       <div>
-        <div class="badge">2. Platform Capabilities (Part 2)</div>
-        <h2 class="slide-title">Major Functionality: Diligence, VDR & Escrow</h2>
-        <p class="slide-subtitle">Operational workflows handling confidential data rooms, video reviews, and transaction execution.</p>
-      </div>
-      <div class="cards-grid grid-3">
-        <div class="card">
-          <div class="card-tag tag-blue">Discovery</div>
-          <div class="card-title">Marketplace & Dossiers</div>
-          <ul class="card-list">
-            <li>Filterable directory across 14 verified tech sectors.</li>
-            <li><strong>Deep Audited Dossiers</strong>: Verified ARR, EBITDA margins, IP score, tech stack tags, and escrow custody status.</li>
-            <li><strong>Buyer/Seller Switch</strong>: A single global toggle dynamically flips interface metrics, yields, and action items.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-tag tag-amber">Confidential Diligence</div>
-          <div class="card-title">Virtual Data Room (VDR)</div>
-          <ul class="card-list">
-            <li><strong>Compliance-Gated VDR</strong>: Simulated NDA execution workflow unmasking sensitive tax history and customer concentration.</li>
-            <li><strong>Video Diligence Terminal</strong>: WebRTC-style console for founder-recorded codebase walkthroughs with timestamped chapter notes.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <div class="card-tag tag-green">Fair Economics</div>
-          <div class="card-title">Fee Calculator & FAQ</div>
-          <ul class="card-list">
-            <li><strong>Dynamic Fee Slider</strong>: Drag-and-drop deal sizing (3%–7%) showing exact dollar savings vs traditional 10%–15% brokers.</li>
-            <li><strong>Institutional Trust & FAQ</strong>: Legal guidelines covering non-competes, escrow safety, IP assignment, and code warranties.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="speaker-note-text" style="display:none;">
-        "Point 2, Part 2: On the transaction and diligence side, each listing has deep audited dossiers. The Virtual Data Room protects sensitive information until an NDA is signed. The video console gives buyers a direct code walkthrough, and our transparent fee calculator proves massive savings."
-      </div>
-    </section>
-
-    <!-- SLIDE 5: Tech Stack & AI Agent Readiness -->
-    <section class="slide" data-slide="5">
-      <div>
-        <div class="badge">3. Architecture & AI Extensibility</div>
-        <h2 class="slide-title">Tech Stack & Extensibility for AI Agents</h2>
-        <p class="slide-subtitle">Why our zero-dependency foundation is uniquely suited for multi-agent autonomous operations.</p>
+        <div class="badge">3. Technology</div>
+        <h2 class="slide-title">The Tech Stack & How AI Agents Can Be Added</h2>
+        <p class="slide-subtitle">Simple code that makes the site fast and easy for AI to work with.</p>
       </div>
       <div class="cards-grid grid-2">
         <div class="card">
-          <div class="card-tag tag-blue">Current Architecture</div>
-          <div class="card-title">Zero-Dependency Core</div>
+          <div class="card-tag tag-blue">Simple Tech Stack</div>
+          <div class="card-title">Pure Code, Zero Libraries</div>
           <ul class="card-list">
-            <li><strong>HTML5 Semantic</strong>: W3C compliant markup with accessible ARIA landmarks for 8 distinct single-page routes.</li>
-            <li><strong>CSS3 & BEM</strong>: Strict Block-Element-Modifier styling with native CSS variables for instant theme & role shifts. Zero CSS framework bloat.</li>
-            <li><strong>Vanilla JavaScript (ES6+)</strong>: Pure client-side routing, state management, and native SVG math. Zero npm dependencies.</li>
-            <li><strong>GitHub Pages CI/CD</strong>: Served globally via GitHub CDN with sub-120ms load times and auto-deployment on git push.</li>
+            <li><strong>Pure HTML5 & CSS3</strong>: Clean layout and styling using modern CSS variables. No heavy frameworks like Tailwind or Bootstrap.</li>
+            <li><strong>Vanilla JavaScript</strong>: Pure code for page navigation, search, and charts. Zero npm packages, zero React, and zero build steps.</li>
+            <li><strong>GitHub Pages Hosting</strong>: Free global hosting directly from GitHub. Fast loading in under 120ms with zero server crashes.</li>
           </ul>
         </div>
         <div class="card">
           <div class="card-tag tag-green">AI Agent Readiness</div>
-          <div class="card-title">Extensibility for AI Agents</div>
+          <div class="card-title">How AI Agents Can Be Added</div>
           <ul class="card-list">
-            <li><strong>Isolated Data Layer (data.js)</strong>: Pure structured objects allow AI agents to inject, audit, and evaluate listings via JSON/APIs without modifying UI code.</li>
-            <li><strong>Zero Virtual DOM Friction</strong>: Unlike React's obfuscated virtual DOM, autonomous browser agents (Puppeteer/Playwright) can reliably inspect predictable semantic DOM elements.</li>
-            <li><strong>Code Audit AI Agent</strong>: Ingests connected GitHub repos, conducts static security scans, and outputs code health scores into dossiers.</li>
-            <li><strong>Valuation AI Agent</strong>: LLM agent tracking live M&A comps to dynamically recalculate multiples and clearance probabilities.</li>
-            <li><strong>Handover Verification Agent</strong>: Autonomous agent verifying DNS propagation and AWS root credentials before releasing escrow funds.</li>
+            <li><strong>Single Data File (data.js)</strong>: All listings and numbers live in one clean file. AI agents can easily read and add new listings without breaking UI code.</li>
+            <li><strong>No Hidden React Code</strong>: Because the HTML is clean and direct, AI browser tools can easily click buttons, search listings, and read text.</li>
+            <li><strong>AI Agents We Can Add Easily</strong>:
+              <br>• <em>Code Audit AI</em>: Scans GitHub repos and gives a code safety score.
+              <br>• <em>Price AI</em>: Checks recent sales and updates valuations automatically.
+              <br>• <em>Q&A AI Chatbot</em>: Answers buyers' questions inside the private deal room.
+              <br>• <em>Handover AI</em>: Verifies passwords and domains before money is sent.
+            </li>
           </ul>
         </div>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Point 3: The tech stack is 100% pure HTML5, CSS3 with BEM, and Vanilla JS. Why is this stack uniquely valuable for adding AI agents? Because all data lives in a clean, isolated data layer (data.js) without React build bloat. Autonomous AI agents can easily inspect predictable DOM structures, run automated code audits on repositories, dynamically adjust valuation multiples, and verify cloud transfers before releasing escrow funds."
+        "Point 3: For our tech stack, we kept it 100% simple: pure HTML, CSS, and Vanilla JavaScript with zero extra libraries. Why is this helpful for adding AI agents? Because all data is stored in one clean file (data.js), and the web code is completely clean without complex React layers. AI agents can easily connect to it: an AI can scan GitHub code, an AI can automatically update prices, and an AI assistant can answer buyers' questions inside the private data room."
       </div>
     </section>
 
-    <!-- SLIDE 6: Core Innovation: Atomic Handover vs Original Site -->
-    <section class="slide" data-slide="6">
+    <!-- SLIDE 5: Innovation vs Original Website -->
+    <section class="slide" data-slide="5">
       <div>
-        <div class="badge">4. Innovation vs. Original Platform</div>
-        <h2 class="slide-title">Core Innovation: The Atomic Handover Protocol™</h2>
-        <p class="slide-subtitle">The crucial architectural and security leap compared to the original reference site.</p>
+        <div class="badge">4. Innovation</div>
+        <h2 class="slide-title">Innovation Added (Compared to Original Website)</h2>
+        <p class="slide-subtitle">How our platform is safer and more functional than the reference site.</p>
       </div>
       <div class="cards-grid grid-2">
         <div class="card">
-          <div class="card-tag tag-amber">Reference Site (vventrabyaj)</div>
-          <div class="card-title">Static Visuals & No Custody</div>
+          <div class="card-tag tag-amber">Original Reference Site</div>
+          <div class="card-title">Flashy Graphics, Little Substance</div>
           <ul class="card-list">
-            <li><strong>Visuals Over Substance</strong>: Relied on crypto-style neon gradients and purple drop-shadows that felt speculative rather than institutional.</li>
-            <li><strong>Static / Non-Functional Mockups</strong>: Cards and graphs were static images without interactive filtering or real calculations.</li>
-            <li><strong>Zero Custody Mechanism</strong>: Offered generic "Buy Now" buttons without answering how software code or domains are safely transferred.</li>
-            <li><strong>Heavy Framework Overhead</strong>: Built on heavy bundled frameworks with unnecessary script baggage.</li>
+            <li><strong>Flashy Graphics Over Substance</strong>: Used heavy neon purple colors and glows that looked like a video game or crypto token.</li>
+            <li><strong>Buttons Did Not Work</strong>: Many cards and charts were just pictures that you could not click or interact with.</li>
+            <li><strong>No Safe Transfer Method</strong>: Only had a basic "Buy" button, with no answer to how code or money is actually protected.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-green">Our Innovation: Atomic Handover™</div>
-          <div class="card-title">Proprietary 4-Phase Custody Engine</div>
+          <div class="card-tag tag-green">Our Innovation</div>
+          <div class="card-title">The Safe 4-Step Handover System</div>
           <ul class="card-list">
-            <li><strong>4-Phase Sequential Custody</strong>: 
-              <em>1. Escrow Deposit → 2. Code & Cloud Custody Lock → 3. DNS Migration → 4. Dual Sign-off & Release.</em>
+            <li><strong>Safe Handover System</strong>: Solves the biggest fear in buying software using 4 clear steps:
+              <br>1. <em>Money Deposit</em>: Buyer puts money in a safe lockbox (escrow).
+              <br>2. <em>Code Lock</em>: Seller hands over code and cloud accounts safely.
+              <br>3. <em>Domain Move</em>: The website domain is moved to the buyer.
+              <br>4. <em>Testing & Release</em>: Buyer tests the app; once confirmed, money goes to the seller.
             </li>
-            <li><strong>Interactive Live Simulator</strong>: Embedded step-by-step simulator on every listing demonstrating real-time custody verification.</li>
-            <li><strong>Zero Fraud / Zero Ghosting</strong>: Code is verified before funds release, and capital is locked before code transfers.</li>
-            <li><strong>Institutional Design System</strong>: Bloomberg-grade typography (Geist, Instrument Serif, JetBrains Mono) replacing neon gimmicks.</li>
+            <li><strong>Interactive Simulator</strong>: Users can click through all 4 steps on the screen to see how it works.</li>
+            <li><strong>Clean, Professional Look</strong>: Simple typography and clean cards instead of confusing neon effects.</li>
           </ul>
         </div>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Point 4: Innovation compared to the original site. The original site had a flashy neon look, but the components were mostly static and lacked a real transfer mechanism. Our core innovation is the Atomic Handover Protocol: an interactive 4-phase custody transfer that proves step-by-step how money, cloud credentials, code, and domains are safely migrated before final payment releases. This transforms the website from a passive bulletin board into an active, trusted transaction engine."
+        "Point 4: What is our main innovation compared to the original site? The original site had flashy neon colors, but the buttons and charts didn't do much, and there was no way to safely transfer apps. We built the Safe 4-Step Handover system: money is locked in escrow, code is secured, the domain is moved, and the buyer confirms everything works before the money is released. We also added a live simulator on every listing so users can click through and see the safety for themselves."
       </div>
     </section>
 
-    <!-- SLIDE 7: Conclusion & Key Learnings -->
-    <section class="slide" data-slide="7">
+    <!-- SLIDE 6: Conclusion & Key Learnings -->
+    <section class="slide" data-slide="6">
       <div>
-        <div class="badge">5. Key Takeaways & Summary</div>
-        <h2 class="slide-title">Conclusion: Key Learnings from Building the Mock</h2>
-        <p class="slide-subtitle">Critical architectural, product, and transaction insights discovered during engineering.</p>
+        <div class="badge">5. Conclusion</div>
+        <h2 class="slide-title">Conclusion & Key Learnings</h2>
+        <p class="slide-subtitle">The three main lessons learned while building this project.</p>
       </div>
       <div class="cards-grid grid-3">
         <div class="card">
-          <div class="card-tag tag-blue">Engineering Insight</div>
-          <div class="card-title">1. Framework Independence</div>
+          <div class="card-tag tag-blue">Code Lesson</div>
+          <div class="card-title">1. Simple Code is Fast</div>
           <ul class="card-list">
-            <li>Modern web standards are exceptionally capable: Native CSS variables and ES6 modules replicated multi-page SPA routing seamlessly.</li>
-            <li>Zero dependencies removed npm vulnerabilities, package rot, and build steps completely.</li>
-            <li>Sub-120ms load times prove that lightweight vanilla code beats bloated frameworks for high-trust platforms.</li>
+            <li>We didn't need big frameworks like React to build an interactive multi-page website.</li>
+            <li>Pure HTML, CSS, and JavaScript loaded in under 120ms with zero extra installs.</li>
+            <li>Fewer libraries mean fewer bugs and zero maintenance headache.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-green">Product Insight</div>
-          <div class="card-title">2. Trust UX in FinTech</div>
+          <div class="card-tag tag-green">Design Lesson</div>
+          <div class="card-title">2. Clear Info Beats Flashy UI</div>
           <ul class="card-list">
-            <li>In institutional M&A, transparency builds far more trust than flashy animations.</li>
-            <li>Institutional investors prioritize verified financial multiples, clean data tables, and risk mitigation over neon gradients.</li>
-            <li>Every UI element must answer: <em>"Why should I trust this platform with $1,000,000?"</em></li>
+            <li>In business, people care about honest numbers, not glowing neon buttons.</li>
+            <li>Clean tables, verified Stripe data, and clear fee comparisons build real trust.</li>
+            <li>Simple and plain design looks far more serious and professional.</li>
           </ul>
         </div>
         <div class="card">
-          <div class="card-tag tag-amber">Market Insight</div>
-          <div class="card-title">3. Solving Deal Anxiety</div>
+          <div class="card-tag tag-amber">Product Lesson</div>
+          <div class="card-title">3. Safety is What Sells</div>
           <ul class="card-list">
-            <li>Anyone can build a directory that lists software for sale.</li>
-            <li>The real commercial value in M&A lies in solving the settlement risk: the fear of getting scammed during custody transfer.</li>
-            <li>Designing the Atomic Handover Protocol proved that transaction safety is our ultimate competitive moat.</li>
+            <li>Anyone can build a website that lists apps for sale.</li>
+            <li>The real challenge is making sure nobody gets scammed when handing over code and money.</li>
+            <li>Building the safe 4-step handover is what makes this platform genuinely useful and valuable.</li>
           </ul>
         </div>
       </div>
       <div class="speaker-note-text" style="display:none;">
-        "Point 5: To conclude, our three biggest learnings: First, zero-dependency engineering proves that modern vanilla web standards deliver unmatched speed and reliability. Second, in high-value finance, clean typography and data transparency beat flashy animations every time. And third, solving post-agreement custody anxiety is the real secret to building a defensible software M&A platform. Thank you! The live platform and presentation are accessible online."
+        "Point 5: To wrap up, our three biggest learnings: First, simple code is faster and easier to maintain than heavy frameworks. Second, clean numbers and honest data build much more trust than flashy animations. And third, solving the safety problem of handing over code is what gives this platform real value. The website is live and ready to view. Thank you!"
       </div>
     </section>
 
@@ -598,11 +519,11 @@
   <!-- Speaker Notes Drawer -->
   <div class="notes-drawer" id="notesDrawer">
     <div class="notes-header">
-      <span>🎙 Speaker Talking Script (Slide <span id="notesSlideNum">1</span>)</span>
+      <span>🎙 What to Say (Slide <span id="notesSlideNum">1</span>)</span>
       <button class="btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="toggleNotes()">Close</button>
     </div>
     <div class="notes-content" id="notesContent">
-      Loading speaker script...
+      Loading script...
     </div>
   </div>
 
@@ -612,13 +533,13 @@
     <div class="progress-track">
       <div class="progress-fill" id="progressFill"></div>
     </div>
-    <span class="key-hint">Navigate with <kbd>←</kbd> and <kbd>→</kbd> keys</span>
+    <span class="key-hint">Press <kbd>←</kbd> and <kbd>→</kbd> to navigate</span>
     <button class="btn btn-primary" onclick="nextSlide()">Next →</button>
   </footer>
 
   <script>
     let currentSlide = 1;
-    const totalSlides = 7;
+    const totalSlides = 6;
     const slides = document.querySelectorAll('.slide');
     const indicator = document.getElementById('slideIndicator');
     const progressFill = document.getElementById('progressFill');
