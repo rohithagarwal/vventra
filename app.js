@@ -518,6 +518,16 @@
     currentHandoverData = VVENTRA_DATA.getHandoverProtocol(asset);
     if (!currentHandoverData) return;
 
+    // Update Step 0 Escrow Deposit Banner
+    const escrowBal = DOM.get('#handover-escrow-balance');
+    const escrowDesc = DOM.get('#handover-deposit-desc');
+    if (escrowBal && asset) {
+      escrowBal.textContent = formatCurrency(asset.valuation || 380000);
+    }
+    if (escrowDesc && asset) {
+      escrowDesc.textContent = `The Buyer has deposited 100% of purchase funds (${formatCurrency(asset.valuation || 380000)}) into vvEntra's secure escrow holding account. Funds are safely locked. The seller can now safely begin transferring code and domain assets.`;
+    }
+
     activeHandoverStepIndex = 0;
     renderHandoverSteps();
     renderHandoverInspector(currentHandoverData.phases[activeHandoverStepIndex], asset);
@@ -628,6 +638,11 @@
         } else if (currentIdx === 3) {
           const sellerNet = Math.round((AssetRepository.getById(State.activeAssetId).valuation || 25000) * 0.90);
           currentPhase.status = `✓ Escrow Wire Disbursed ($${sellerNet.toLocaleString()})`;
+          
+          const escrowBal = DOM.get('#handover-escrow-balance');
+          const escrowDesc = DOM.get('#handover-deposit-desc');
+          if (escrowBal) escrowBal.textContent = 'Settled ($0.00 in Escrow)';
+          if (escrowDesc) escrowDesc.textContent = `Escrow wire released! Seller received 90% payout ($${sellerNet.toLocaleString()}) after buyer completed technical verification.`;
         }
 
         renderHandoverSteps();
@@ -639,6 +654,10 @@
         if (simBtn) {
           simBtn.disabled = false;
           simBtn.textContent = 'Reset / Run Simulation Again ↻';
+          simBtn.onclick = function() {
+            renderHandoverProtocol(AssetRepository.getById(State.activeAssetId));
+            simBtn.onclick = simulateHandoverSequence;
+          };
         }
         showNotification('Atomic Handover Verified: All 4 custody phases confirmed by neutral escrow. 90% payout settled.');
       }
