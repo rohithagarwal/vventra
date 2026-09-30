@@ -518,16 +518,6 @@
     currentHandoverData = VVENTRA_DATA.getHandoverProtocol(asset);
     if (!currentHandoverData) return;
 
-    // Update Step 0 Escrow Deposit Banner
-    const escrowBal = DOM.get('#handover-escrow-balance');
-    const escrowDesc = DOM.get('#handover-deposit-desc');
-    if (escrowBal && asset) {
-      escrowBal.textContent = formatCurrency(asset.valuation || 380000);
-    }
-    if (escrowDesc && asset) {
-      escrowDesc.textContent = `The Buyer has deposited 100% of purchase funds (${formatCurrency(asset.valuation || 380000)}) into vvEntra's secure escrow holding account. Funds are safely locked. The seller can now safely begin transferring code and domain assets.`;
-    }
-
     activeHandoverStepIndex = 0;
     renderHandoverSteps();
     renderHandoverInspector(currentHandoverData.phases[activeHandoverStepIndex], asset);
@@ -602,12 +592,15 @@
 
     const phases = currentHandoverData.phases;
     let currentIdx = 0;
+    const asset = AssetRepository.getById(State.activeAssetId);
+    const val = asset.valuation || 380000;
+    const sellerNet = Math.round(val * 0.90);
 
-    phases[0].status = 'Verifying Repo & IP...';
+    phases[0].status = 'Verifying Buyer Escrow Wire...';
     phases[0].badgeClass = 'c-badge--warning';
-    phases[1].status = 'Queued';
-    phases[2].status = 'Queued';
-    phases[3].status = 'Awaiting Signoffs';
+    phases[1].status = 'Queued for Code Transfer';
+    phases[2].status = 'Queued for DNS Migration';
+    phases[3].status = 'Awaiting Testing & Signoff';
     renderHandoverSteps();
 
     const interval = setInterval(() => {
@@ -618,35 +611,29 @@
         currentPhase.badgeClass = 'c-badge--success';
 
         if (currentIdx === 0) {
-          currentPhase.status = '✓ Code Custody Transferred';
+          currentPhase.status = `✓ 100% Funds Locked in Escrow ($${val.toLocaleString()})`;
           if (phases[1]) {
-            phases[1].status = 'Re-keying DNS & Cloud IAM...';
+            phases[1].status = 'Locking Code & Cloud IAM into Escrow...';
             phases[1].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 1) {
-          currentPhase.status = '✓ DNS & Root Cloud Re-keyed';
+          currentPhase.status = '✓ Code & Cloud Secured in Escrow';
           if (phases[2]) {
-            phases[2].status = 'Migrating Merchant Tokens...';
+            phases[2].status = 'Migrating Domain & DNS to Buyer...';
             phases[2].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 2) {
-          currentPhase.status = '✓ Customer Billing Tokens Mapped';
+          currentPhase.status = '✓ Domain & DNS Migrated to Buyer';
           if (phases[3]) {
-            phases[3].status = 'Verifying 3/3 Mutual Approvals...';
+            phases[3].status = 'Buyer Testing & Mutual Signoff...';
             phases[3].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 3) {
-          const sellerNet = Math.round((AssetRepository.getById(State.activeAssetId).valuation || 25000) * 0.90);
           currentPhase.status = `✓ Escrow Wire Disbursed ($${sellerNet.toLocaleString()})`;
-          
-          const escrowBal = DOM.get('#handover-escrow-balance');
-          const escrowDesc = DOM.get('#handover-deposit-desc');
-          if (escrowBal) escrowBal.textContent = 'Settled ($0.00 in Escrow)';
-          if (escrowDesc) escrowDesc.textContent = `Escrow wire released! Seller received 90% payout ($${sellerNet.toLocaleString()}) after buyer completed technical verification.`;
         }
 
         renderHandoverSteps();
-        renderHandoverInspector(currentPhase, AssetRepository.getById(State.activeAssetId));
+        renderHandoverInspector(currentPhase, asset);
         currentIdx++;
       } else {
         clearInterval(interval);
@@ -659,7 +646,7 @@
             simBtn.onclick = simulateHandoverSequence;
           };
         }
-        showNotification('Atomic Handover Verified: All 4 custody phases confirmed by neutral escrow. 90% payout settled.');
+        showNotification('Atomic Handover Complete: Escrow deposit verified, code secured, domain transferred, and payout settled.');
       }
     }, 1100);
   }

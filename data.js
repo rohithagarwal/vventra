@@ -490,74 +490,74 @@ const VVENTRA_DATA = {
         {
           id: 'phase-1',
           number: '01',
-          title: 'Code & IP Ownership',
-          category: 'Repository & Copyright Transfer',
-          status: 'Escrow Vaulted',
-          statusCode: 'vaulted',
+          title: 'Escrow Deposit',
+          category: 'Buyer Capital Collateralization',
+          status: 'Escrow Locked',
+          statusCode: 'verified',
           badgeClass: 'c-badge--success',
-          icon: '📁',
-          primaryMetric: 'Private GitHub Org + Clean IP Deed',
-          headline: 'Cryptographic commit history & statutory IP assignment deeds',
+          icon: '🔒',
+          primaryMetric: `100% Purchase Capital (${formatCurrency ? formatCurrency(val) : '$' + val.toLocaleString()})`,
+          headline: 'Buyer deposits 100% of purchase funds into vvEntra escrow before seller transfers any assets.',
           checkpoints: [
-            `Private GitHub organization transfer (${repoSlug}-production-repo)`,
-            'Statutory bilateral copyright assignment deed signed via DocuSign/Escrow',
-            'Automated SBOM scan: 0 copyleft/GPL contaminant licenses detected'
+            'Buyer wires 100% of purchase capital into vvEntra FDIC-insured escrow account',
+            'vvEntra verifies funds are completely locked; seller cannot take them yet, buyer cannot cancel without process',
+            'Seller receives cryptographic proof of locked funds; transfer sequence is safely authorized'
           ],
-          technicalArtifact: `Git SHA: ${repoSlug.replace('-', '')}8f9a · 1,420 Commits · 0 Lic Conflicts`
+          technicalArtifact: `Escrow Lock TXID: 0x8a92f...7e1 · ${formatCurrency ? formatCurrency(val) : '$' + val.toLocaleString()} Confirmed in Neutral Vault`
         },
         {
           id: 'phase-2',
           number: '02',
-          title: 'Cloud Infrastructure & DNS',
-          category: 'Apex Routing & Host Accounts',
-          status: 'Transfer Keys Ready',
+          title: 'Code & Cloud Custody Lock',
+          category: 'Repository & Cloud Infrastructure',
+          status: 'Ready for Custody',
           statusCode: 'ready',
           badgeClass: 'c-badge--neutral',
-          icon: '🌐',
-          primaryMetric: 'Cloudflare Apex DNS + Cloud Root IAM',
-          headline: 'Zero-downtime routing & cloud root credential re-delegation',
-          details: [
-            'Domain registrar EPP authorization code held in neutral escrow vault',
-            'Cloudflare proxy routing shifted to buyer ingress without TTL delay',
-            'AWS/GCP root organization ownership transferred; seller IAM credentials revoked'
+          icon: '📁',
+          primaryMetric: 'Private GitHub Org + AWS/Cloud Root IAM',
+          headline: 'Seller safely transfers source code, GitHub repository, and cloud servers into custody.',
+          checkpoints: [
+            `Private GitHub organization transfer (${repoSlug}-production-repo) secured in escrow`,
+            'AWS / Google Cloud root organization credentials re-keyed and isolated',
+            'Automated code audit confirms 0 backdoors, clean licenses, and complete commit history'
           ],
-          technicalArtifact: 'Apex Domain Auth-Code verified · Auto-SSL Intact · 99.98% Uptime SLA'
+          technicalArtifact: `Git SHA: ${repoSlug.replace('-', '')}8f9a · 1,420 Commits · 0 Vulnerabilities`
         },
         {
           id: 'phase-3',
           number: '03',
-          title: 'Customer Billing Custody',
-          category: 'Recurring Revenue & Gateway',
-          status: 'Token Mapping Verified',
+          title: 'Domain & DNS Migration',
+          category: 'Website Address & Live Traffic',
+          status: 'Queued for Routing',
           statusCode: 'ready',
           badgeClass: 'c-badge--neutral',
-          icon: '💳',
-          primaryMetric: 'Stripe/Paddle Merchant Customer Tokens',
-          headline: 'Zero card re-entry; active recurring subscriber retention',
-          details: [
-            'Payment gateway merchant tokens transferred directly between Stripe accounts',
-            'Active paying subscriber contracts and billing intervals preserved',
-            'Merchant tax IDs and automated payout banking switched to buyer entity'
+          icon: '🌐',
+          primaryMetric: 'Apex Domain Registrar + SSL Certificates',
+          headline: 'Website domain name and server traffic are transferred directly to the buyer with zero downtime.',
+          checkpoints: [
+            'Domain registrar EPP authorization code transferred to buyer\'s registrar account',
+            'Cloudflare / DNS routing and SSL certificates pointed to buyer\'s cloud server',
+            'Live customer traffic and active web services verified active with zero downtime'
           ],
-          technicalArtifact: 'Customer Tokens Mapped · Active MRR Preserved · Zero Interruption'
+          technicalArtifact: 'EPP Domain Auth Verified · DNS Propagated · Zero Downtime SLA'
         },
         {
           id: 'phase-4',
           number: '04',
-          title: 'Neutral Escrow Release',
-          category: 'Dual-Signoff Automated Wire',
-          status: 'Awaiting Signoffs',
+          title: 'Testing & Payout Release',
+          category: 'Buyer Acceptance & Wire Settlement',
+          status: 'Awaiting Verification',
           statusCode: 'pending',
           badgeClass: 'c-badge--warning',
-          icon: '🔒',
-          primaryMetric: 'Dual-Control Wire Settlement',
-          headline: 'Capital released to seller only after buyer confirms Steps 1, 2, and 3',
-          details: [
-            'Buyer confirms verified control of source code, domain DNS, and customer billing',
-            '7-day statutory inspection window satisfied or early sign-off submitted',
-            `Neutral FDIC escrow automatically wires 90% payout ($${sellerNet.toLocaleString()}) to seller`
+          icon: '✓',
+          primaryMetric: 'Dual Digital Sign-off + Payout Wire',
+          headline: 'Buyer tests and confirms the live software. Both parties sign off, and escrow releases the money to seller.',
+          checkpoints: [
+            'Buyer logs in, tests live software, and confirms full operational control',
+            'Both buyer and seller submit digital sign-offs confirming transaction completion',
+            `vvEntra escrow releases the payout wire ($${sellerNet.toLocaleString()}) to seller`
           ],
-          technicalArtifact: 'Disbursement Condition: 3 of 3 steps verified by buyer'
+          technicalArtifact: 'Mutual Sign-off Confirmed · Escrow Disbursed · Deal 100% Closed'
         }
       ]
     };
