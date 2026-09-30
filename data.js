@@ -491,19 +491,19 @@ const VVENTRA_DATA = {
           id: 'phase-1',
           number: '01',
           title: 'Escrow Deposit',
-          category: 'Buyer Capital Collateralization',
-          status: 'Escrow Locked',
+          category: 'Buyer Deposits 100% Full Amount',
+          status: `✓ 100% Full Amount Locked ($${val.toLocaleString()})`,
           statusCode: 'verified',
           badgeClass: 'c-badge--success',
           icon: '🔒',
-          primaryMetric: `100% Purchase Capital (${formatCurrency ? formatCurrency(val) : '$' + val.toLocaleString()})`,
-          headline: 'Buyer deposits 100% of purchase funds into vvEntra escrow before seller transfers any assets.',
+          primaryMetric: `100% Full Purchase Amount: $${val.toLocaleString()}`,
+          headline: `Buyer deposits 100% of the purchase funds ($${val.toLocaleString()}) into vvEntra escrow before seller transfers any code or assets.`,
           checkpoints: [
-            'Buyer wires 100% of purchase capital into vvEntra FDIC-insured escrow account',
-            'vvEntra verifies funds are completely locked; seller cannot take them yet, buyer cannot cancel without process',
-            'Seller receives cryptographic proof of locked funds; transfer sequence is safely authorized'
+            `Buyer wires the full 100% purchase amount ($${val.toLocaleString()}) into vvEntra's secure escrow account`,
+            `vvEntra verifies the full $${val.toLocaleString()} is locked; seller cannot withdraw it yet, buyer cannot cancel without agreement`,
+            'Seller receives verified proof that 100% of the money is locked in vvEntra; transfer is safely authorized'
           ],
-          technicalArtifact: `Escrow Lock TXID: 0x8a92f...7e1 · ${formatCurrency ? formatCurrency(val) : '$' + val.toLocaleString()} Confirmed in Neutral Vault`
+          technicalArtifact: `Escrow Lock TXID: 0x8a92f...7e1 · Full 100% ($${val.toLocaleString()}) Confirmed in Vault`
         },
         {
           id: 'phase-2',
@@ -545,19 +545,19 @@ const VVENTRA_DATA = {
           id: 'phase-4',
           number: '04',
           title: 'Testing & Payout Release',
-          category: 'Buyer Acceptance & Wire Settlement',
-          status: 'Awaiting Verification',
+          category: 'Seller Receives 90% · vvEntra Fee 10%',
+          status: `Seller: $${sellerNet.toLocaleString()} · Fee: $${Math.round(val * 0.10).toLocaleString()}`,
           statusCode: 'pending',
           badgeClass: 'c-badge--warning',
           icon: '✓',
-          primaryMetric: 'Dual Digital Sign-off + Payout Wire',
-          headline: 'Buyer tests and confirms the live software. Both parties sign off, and escrow releases the money to seller.',
+          primaryMetric: `Seller Receives 90% ($${sellerNet.toLocaleString()}) + vvEntra 10% Fee ($${Math.round(val * 0.10).toLocaleString()})`,
+          headline: `Buyer tests and confirms the live software. Both parties sign off: seller gets 90% ($${sellerNet.toLocaleString()}) and vvEntra retains 10% ($${Math.round(val * 0.10).toLocaleString()}).`,
           checkpoints: [
             'Buyer logs in, tests live software, and confirms full operational control',
             'Both buyer and seller submit digital sign-offs confirming transaction completion',
-            `vvEntra escrow releases the payout wire ($${sellerNet.toLocaleString()}) to seller`
+            `vvEntra escrow releases the 90% payout wire ($${sellerNet.toLocaleString()}) to seller, and retains the 10% platform fee ($${Math.round(val * 0.10).toLocaleString()})`
           ],
-          technicalArtifact: 'Mutual Sign-off Confirmed · Escrow Disbursed · Deal 100% Closed'
+          technicalArtifact: `Settlement Complete: Seller Paid $${sellerNet.toLocaleString()} (90%) · Platform Fee $${Math.round(val * 0.10).toLocaleString()} (10%)`
         }
       ]
     };

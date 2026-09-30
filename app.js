@@ -611,7 +611,7 @@
         currentPhase.badgeClass = 'c-badge--success';
 
         if (currentIdx === 0) {
-          currentPhase.status = `✓ 100% Funds Locked in Escrow ($${val.toLocaleString()})`;
+          currentPhase.status = `✓ 100% Full Amount Deposited & Locked ($${val.toLocaleString()})`;
           if (phases[1]) {
             phases[1].status = 'Locking Code & Cloud IAM into Escrow...';
             phases[1].badgeClass = 'c-badge--warning';
@@ -629,7 +629,8 @@
             phases[3].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 3) {
-          currentPhase.status = `✓ Escrow Wire Disbursed ($${sellerNet.toLocaleString()})`;
+          const fee = Math.round(val * 0.10);
+          currentPhase.status = `✓ Seller Paid $${sellerNet.toLocaleString()} (90%) · vvEntra Fee $${fee.toLocaleString()} (10%)`;
         }
 
         renderHandoverSteps();
