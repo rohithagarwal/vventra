@@ -343,7 +343,7 @@
     if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
 
-  function setPerspective(role) {
+  function setPerspective(role, notify = true) {
     State.role = role;
     document.documentElement.setAttribute('data-role', role);
     StorageService.set('role', role);
@@ -355,7 +355,9 @@
     renderPerspectiveContent();
     renderDashboard();
     SettlementCalculator.updateUI();
-    showNotification(`Switched perspective to ${role === 'investor' ? 'Institutional Buyer' : 'Asset Operator / Seller'}`);
+    if (notify) {
+      showNotification(`Switched perspective to ${role === 'investor' ? 'Institutional Buyer' : 'Asset Operator / Seller'}`);
+    }
   }
 
   function renderPerspectiveContent() {
@@ -474,26 +476,33 @@
 
   function renderDashboardSummary() {
     const tbody = DOM.get('#overview-arbitrage-body');
-    if (!tbody) return;
+    if (!tbody || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
     const items = VVENTRA_DATA.sectors.slice(0, 5);
-    tbody.innerHTML = items.map(s => `
-      <tr>
-        <td>
-          <div style="font-weight: 600;">${s.name}</div>
-          <div style="font-size: 0.75rem; color: var(--color-text-faint);">${s.industry}</div>
-        </td>
-        <td>
-          <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${s.buyerDemandIndex}%;"></div></div>
-          <strong>${s.buyerDemandIndex}</strong>
-        </td>
-        <td>
-          <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${s.availableListings}%; background: var(--color-text-faint);"></div></div>
-          <span>${s.availableListings}</span>
-        </td>
-        <td><span class="c-badge c-badge--success">${s.marketGap}</span></td>
-        <td><strong>${s.medianUnlockValuation}</strong></td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = items.map(s => {
+      const industry = s.industry || s.category || 'General';
+      const demand = s.buyerDemandIndex || 50;
+      const listings = typeof s.availableListings !== 'undefined' ? s.availableListings : (s.architectSupplyCount || 0);
+      const gap = s.marketGap || (s.arbitrageGap ? '+' + s.arbitrageGap : '+30');
+      const val = s.medianUnlockValuation || s.avgUnlockPrice || '$5,000';
+      return `
+        <tr>
+          <td>
+            <div style="font-weight: 600;">${s.name}</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-faint);">${industry}</div>
+          </td>
+          <td>
+            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${demand}%;"></div></div>
+            <strong>${demand}</strong>
+          </td>
+          <td>
+            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${listings}%; background: var(--color-text-faint);"></div></div>
+            <span>${listings}</span>
+          </td>
+          <td><span class="c-badge c-badge--success">${gap}</span></td>
+          <td><strong>${val}</strong></td>
+        </tr>
+      `;
+    }).join('');
   }
 
   function renderFeaturedAssets() {
@@ -505,54 +514,72 @@
 
   function renderDashboard() {
     const tbody = DOM.get('#dashboard-matrix-body');
-    if (!tbody) return;
-    tbody.innerHTML = VVENTRA_DATA.sectors.map(s => `
-      <tr>
-        <td>
-          <div style="font-weight: 600;">${s.name}</div>
-          <div style="font-size: 0.75rem; color: var(--color-text-faint);">${s.industry}</div>
-        </td>
-        <td>
-          <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${s.buyerDemandIndex}%;"></div></div>
-          <strong>${s.buyerDemandIndex}</strong>
-        </td>
-        <td>
-          <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${s.availableListings}%; background: var(--color-text-faint);"></div></div>
-          <span>${s.availableListings}</span>
-        </td>
-        <td><span class="c-badge c-badge--success">${s.marketGap}</span></td>
-        <td><span style="font-family: var(--font-family-mono); font-weight: 600; color: ${s.trailing7dChange.startsWith('+') ? 'var(--color-success)' : 'var(--color-danger)'};">${s.trailing7dChange}</span></td>
-        <td><strong>${s.medianUnlockValuation}</strong></td>
-      </tr>
-    `).join('');
+    if (!tbody || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
+    tbody.innerHTML = VVENTRA_DATA.sectors.map(s => {
+      const industry = s.industry || s.category || 'General';
+      const demand = s.buyerDemandIndex || 50;
+      const listings = typeof s.availableListings !== 'undefined' ? s.availableListings : (s.architectSupplyCount || 0);
+      const gap = s.marketGap || (s.arbitrageGap ? '+' + s.arbitrageGap : '+30');
+      const change = String(s.trailing7dChange || s.growth7d || '+0%');
+      const isPositive = change.startsWith('+');
+      const val = s.medianUnlockValuation || s.avgUnlockPrice || '$5,000';
+      return `
+        <tr>
+          <td>
+            <div style="font-weight: 600;">${s.name}</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-faint);">${industry}</div>
+          </td>
+          <td>
+            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${demand}%;"></div></div>
+            <strong>${demand}</strong>
+          </td>
+          <td>
+            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${listings}%; background: var(--color-text-faint);"></div></div>
+            <span>${listings}</span>
+          </td>
+          <td><span class="c-badge c-badge--success">${gap}</span></td>
+          <td><span style="font-family: var(--font-family-mono); font-weight: 600; color: ${isPositive ? 'var(--color-success)' : 'var(--color-danger)'};">${change}</span></td>
+          <td><strong>${val}</strong></td>
+        </tr>
+      `;
+    }).join('');
   }
 
   function createAssetCardMarkup(asset) {
     const isSaved = AssetRepository.isBookmarked(asset.id);
+    const industry = asset.industry || asset.sector || 'Opportunity';
+    const summary = asset.summary || asset.publicPreviewThesis || '';
+    const pageCount = asset.pageCount || (asset.documentationDepth && asset.documentationDepth.totalPages) || 90;
+    const frameworkCount = asset.frameworkCount || (asset.documentationDepth && asset.documentationDepth.sopPages) || 12;
+    const jurisdiction = (asset.targetJurisdiction || asset.geography || 'Global').split(',')[0];
+    const valuation = asset.valuation || (asset.unlockPrice ? asset.unlockPrice * 10 : 50000);
+    const deposit = asset.escrowDeposit || asset.unlockPrice || 5000;
+    const trustRating = asset.trustRating || 99;
+
     return `
       <article class="c-asset-card">
         <div>
           <div class="c-asset-card__header">
-            <span class="c-asset-card__id">${asset.id} · ${asset.industry}</span>
+            <span class="c-asset-card__id">${asset.id} · ${industry}</span>
             <div style="display: flex; align-items: center; gap: 6px;">
               <button type="button" class="c-btn-bookmark ${isSaved ? 'is-bookmarked' : ''}" onclick="window.vveToggleBookmark('${asset.id}', event)" title="Save asset to shortlist">
                 ${isSaved ? '★' : '☆'}
               </button>
-              <span class="c-badge c-badge--success">★ ${asset.trustRating}% Audit</span>
+              <span class="c-badge c-badge--success">★ ${trustRating}% Audit</span>
             </div>
           </div>
           <h3 class="c-asset-card__title">${asset.title}</h3>
-          <p class="c-asset-card__summary">${asset.summary}</p>
+          <p class="c-asset-card__summary">${summary}</p>
           <div class="c-asset-card__meta">
-            <span>📄 ${asset.pageCount} Pages</span>
-            <span>⚡ ${asset.frameworkCount} Frameworks</span>
-            <span>📍 ${asset.targetJurisdiction.split(',')[0]}</span>
+            <span>📄 ${pageCount} Pages</span>
+            <span>⚡ ${frameworkCount} Frameworks</span>
+            <span>📍 ${jurisdiction}</span>
           </div>
         </div>
         <div class="c-asset-card__footer">
           <div>
-            <div class="c-asset-card__price-val">${formatCurrency(asset.valuation)}</div>
-            <div class="c-asset-card__deposit-val">10% Diligence Escrow: ${formatCurrency(asset.escrowDeposit)}</div>
+            <div class="c-asset-card__price-val">${formatCurrency(valuation)}</div>
+            <div class="c-asset-card__deposit-val">10% Diligence Escrow: ${formatCurrency(deposit)}</div>
           </div>
           <a href="#listing?id=${asset.id}" class="c-btn c-btn--primary c-btn--sm">
             Review Asset Dossier →
@@ -1287,7 +1314,7 @@
   // ===================================================================
   // 11. INITIALIZATION ON DOM READY
   // ===================================================================
-  document.addEventListener('DOMContentLoaded', () => {
+  function initApp() {
     setTheme(State.theme);
     const themeToggle = DOM.get('#theme-toggle-btn');
     if (themeToggle) {
@@ -1296,7 +1323,7 @@
       });
     }
 
-    setPerspective(State.role);
+    setPerspective(State.role, false);
     DOM.getAll('.c-role-switch__btn').forEach(btn => {
       btn.addEventListener('click', () => {
         setPerspective(btn.dataset.role);
@@ -1345,6 +1372,12 @@
 
     window.addEventListener('hashchange', handleNavigation);
     handleNavigation();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 
 })();
