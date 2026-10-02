@@ -40,6 +40,7 @@
           <li><a href="#trust" class="c-nav__link">Trust Policy</a></li>
           <li><a href="#pricing" class="c-nav__link">Pricing & Flow</a></li>
           <li><a href="#faq" class="c-nav__link">FAQ</a></li>
+          <li><a href="#terms" class="c-nav__link">Terms</a></li>
           <li><a href="#list" class="c-nav__link">List Opportunity</a></li>
         </ul>
       </nav>
@@ -840,39 +841,645 @@
     </section>
 
     <!-- ===================================================================
-         VIEW 3B: THE PLAYBOOK (#playbook)
+         VIEW 3: THE VVENTRA PLAYBOOK (#playbook)
+         Verbatim architecture from original vvEntra platform
          =================================================================== -->
-    <section id="page-playbook" class="c-view">
-      <div class="c-playbook-header">
-        <div class="c-badge c-badge--neutral" style="margin-bottom: 0.5rem;">The Field Manual</div>
-        <h1 style="font-size: 2.2rem; font-weight: 700; line-height: 1.25; margin-bottom: 0.75rem;">The vvEntra Playbook</h1>
-        <p style="font-size: 1.05rem; color: var(--color-text-muted); max-width: 760px; line-height: 1.6;">
-          vvEntra is built for operators, not amateurs. This playbook is what we've learned from watching the top 10% of users succeed and the bottom 30% fail. Read it before you act.
-        </p>
+    <section id="page-playbook" class="c-view page" data-page="playbook">
+<!-- HERO -->
+<header class="hero">
+  <div class="container-narrow">
+    <div class="hero-content">
+      <span class="eyebrow reveal">The Playbook · Strategic guidelines</span>
+      <h1 class="display xl reveal delay-1">How serious users get <em>serious results.</em></h1>
+      <p class="lead reveal delay-2">vvEntra is built for operators, not amateurs. This playbook is what we've learned from watching the top 10% of users succeed and the bottom 30% fail. <em>Read it before you act.</em></p>
+
+      <div class="role-toggle reveal delay-3" id="role-toggle">
+        <div class="role-indicator"></div>
+        <button class="role-btn" data-role="investor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+          <span class="icon-text">As Buyer<span class="sub-label">Investor playbook</span></span>
+        </button>
+        <button class="role-btn" data-role="architect">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18M5 3v10a7 7 0 0 0 14 0V3"/><circle cx="12" cy="20" r="1.5"/></svg>
+          <span class="icon-text">As Architect<span class="sub-label">Creator playbook</span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PROGRESS NAV -->
+<div class="progress-nav">
+  <div class="progress-nav-inner">
+    <a href="#ch-01" class="prog-step" data-target="ch-01"><span class="step-num">01</span><span>Mindset</span></a>
+    <a href="#ch-02" class="prog-step" data-target="ch-02"><span class="step-num">02</span><span>Preparation</span></a>
+    <a href="#ch-03" class="prog-step" data-target="ch-03"><span class="step-num">03</span><span>Execution</span></a>
+    <a href="#ch-04" class="prog-step" data-target="ch-04"><span class="step-num">04</span><span>Red flags</span></a>
+    <a href="#ch-05" class="prog-step" data-target="ch-05"><span class="step-num">05</span><span>Success patterns</span></a>
+    <a href="#ch-06" class="prog-step" data-target="ch-06"><span class="step-num">06</span><span>Common mistakes</span></a>
+  </div>
+</div>
+
+<!-- =================== BUYER PLAYBOOK =================== -->
+<div class="role-show" data-show="investor">
+
+  <!-- CH 01 · MINDSET -->
+  <section class="chapter" id="ch-01">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">01</span><span class="line"></span><span class="name">Mindset</span></div>
+        <h2 class="display lg">Think like an <em>operator</em>, not a tourist.</h2>
+        <p>The buyers who succeed on vvEntra approach opportunities the way they approach a private investment. They underwrite, they ask hard questions, and they trust the staged-reveal process. <em>The buyers who fail are the ones who treat this like a marketplace and expect everything visible upfront.</em></p>
       </div>
 
-      <!-- Playbook Perspective Switcher & Chapter Navigation -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
-        <div class="c-playbook-tabs" id="playbook-chapter-tabs">
-          <button type="button" class="c-playbook-tab is-active" data-chapter="ch-01">01 · Mindset</button>
-          <button type="button" class="c-playbook-tab" data-chapter="ch-02">02 · Preparation</button>
-          <button type="button" class="c-playbook-tab" data-chapter="ch-03">03 · Execution</button>
-          <button type="button" class="c-playbook-tab" data-chapter="ch-04">04 · Red Flags</button>
-          <button type="button" class="c-playbook-tab" data-chapter="ch-05">05 · Success Patterns</button>
-          <button type="button" class="c-playbook-tab" data-chapter="ch-06">06 · Common Mistakes</button>
+      <div class="principles-grid">
+        <div class="principle reveal" data-num="1">
+          <h3>Conviction over <em>curiosity</em></h3>
+          <p>Don't unlock opportunities to "see what's in there." Unlock because you have a defined thesis and this opportunity fits it. <strong>Curiosity unlocks are how buyers waste capital and architects lose trust.</strong></p>
+          <span class="key-tag">→ Define thesis first</span>
+        </div>
+        <div class="principle reveal delay-1" data-num="2">
+          <h3>Trust the <em>structure</em></h3>
+          <p>The staged reveal exists because every previous idea marketplace died from full-IP exposure. <strong>You will not see everything before paying.</strong> If that's a deal-breaker for you, this platform isn't for you.</p>
+          <span class="key-tag">→ Pay in stages</span>
+        </div>
+        <div class="principle reveal" data-num="3">
+          <h3>Architects are <em>partners</em>, not vendors</h3>
+          <p>The best transactions involve ongoing relationships, not one-time downloads. <strong>Treat senior architects as potential operating partners</strong> who happen to have already done the structuring work for you.</p>
+          <span class="key-tag">→ Build relationships</span>
+        </div>
+        <div class="principle reveal delay-1" data-num="4">
+          <h3>Time is the <em>real cost</em></h3>
+          <p>The $5,000 unlock isn't the price. The price is the 6-12 months you'd have spent researching this opportunity yourself. <strong>Compare against your own time cost, not against a freelance fee.</strong></p>
+          <span class="key-tag">→ Price your time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 02 · PREPARATION -->
+  <section class="chapter" id="ch-02">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">02</span><span class="line"></span><span class="name">Preparation</span></div>
+        <h2 class="display lg">What to do <em>before</em> your first unlock.</h2>
+        <p>The biggest delta between buyers who get great deals and buyers who get burned is what they do *before* paying anything. <em>This is the single highest-leverage hour you'll spend on the platform.</em></p>
+      </div>
+
+      <div class="checklist reveal">
+        <div class="checklist-head">
+          <h3>Buyer <em>pre-flight checklist</em></h3>
+          <span class="count">7 steps</span>
         </div>
 
-        <div class="c-role-switch" style="margin: 0;">
-          <button type="button" class="c-role-switch__btn is-active" id="pb-role-investor">Investor Guide</button>
-          <button type="button" class="c-role-switch__btn" id="pb-role-architect">Architect Guide</button>
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Define your <em>thesis</em> in writing</strong>
+            <span>One paragraph. Sector, geography, deal size, what kind of operator you want behind it, what stage of opportunity you're looking for. <em>If you can't write it, you don't have one.</em></span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Set your <em>capital allocation</em> for the platform</strong>
+            <span>Decide upfront how much you're willing to deploy across unlocks this quarter. <strong>Most successful buyers allocate $20-40k per quarter</strong>, distributed across 4-8 opportunities. Random one-off unlocks tend to underperform.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Verify your account <em>and your buyer tier</em></strong>
+            <span>Complete the KYC + capacity verification before browsing. Architects can see your verification status and will deprioritize unverified inquiries. Premium-tier verification unlocks priority architect responses.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Read 3-5 <em>full opportunity previews</em> before paying for any</strong>
+            <span>Calibrate your eye for what depth looks like. <em>Notice which architects write tightly, which financial models actually make sense, and which preview sentences signal real insight vs marketing fluff.</em></span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Check the <em>architect's track record</em></strong>
+            <span>Previous deals closed, average buyer rating, sector consistency, exit history. <strong>A senior architect with 5+ closed deals is worth a 20% premium over an unproven one</strong>, every time.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Send <em>structured questions at Tier 1</em></strong>
+            <span>Free tier inquiries are how you stress-test the architect's depth without paying. Ask 2-3 sharp questions about the specific market, the execution constraints, or the financial assumptions. <em>How they answer matters more than what they answer.</em></span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Understand the <em>refund policy</em> before paying</strong>
+            <span>Refunds are issued for material misrepresentation, not for changing your mind. If that policy feels uncomfortable, stop here. <strong>The buyers who succeed accept this trade-off as the price of architect trust.</strong></span>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Chapter Content Render Area -->
-      <div id="playbook-content-container">
-        <!-- Dynamically rendered via JavaScript from VVENTRA_DATA.playbookChapters -->
+  <!-- CH 03 · EXECUTION -->
+  <section class="chapter" id="ch-03">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">03</span><span class="line"></span><span class="name">Execution</span></div>
+        <h2 class="display lg">The five stages of a <em>successful unlock.</em></h2>
+        <p>Each stage has a discipline. The buyers who skip stages don't save time, they just create downstream confusion. <em>Move through deliberately, not aggressively.</em></p>
       </div>
+
+      <div class="stages reveal">
+        <div class="stage">
+          <span class="stage-num">Stage 1</span>
+          <span class="stage-ttl">Identify</span>
+          <span class="stage-desc">Browse with your thesis as a filter. Save 5-8 opportunities to your shortlist. Don't rush this.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 2</span>
+          <span class="stage-ttl">Probe</span>
+          <span class="stage-desc">Send Tier 1 structured questions to 2-3 shortlisted architects. Their answer quality is your signal.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 3</span>
+          <span class="stage-ttl">Commit</span>
+          <span class="stage-desc">Pay the Tier 2 interest deposit on your top pick. Wait for the architect to grant access.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 4</span>
+          <span class="stage-ttl">Verify</span>
+          <span class="stage-desc">Sign the NDA. Review the partial unlock. Confirm the architect's claims match what you see.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 5</span>
+          <span class="stage-ttl">Unlock</span>
+          <span class="stage-desc">Pay the full unlock. Use the 7-day inspection window to vet thoroughly. Open execution dialogue.</span>
+          <div class="stage-bar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 04 · RED FLAGS -->
+  <section class="chapter" id="ch-04">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">04</span><span class="line"></span><span class="name">Red flags</span></div>
+        <h2 class="display lg">When to <em>walk away</em>.</h2>
+        <p>These signals are how experienced buyers detect that an opportunity will likely disappoint, even if everything looks fine on the surface. <em>Walking away is also a skill.</em></p>
+      </div>
+
+      <div class="red-flags reveal">
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Architect won't answer Tier 1 questions</h4></div>
+          <p>If they dodge specific market questions or give marketing-style responses to operational questions, the depth probably isn't there. <em>Real operators love technical questions.</em></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Generic frameworks, no proprietary insight</h4></div>
+          <p>If the preview mentions only standard frameworks (Porter's Five Forces, SWOT, etc.) without sector-specific depth, the full document likely lacks original thinking. <strong>You're paying for what only this operator can know.</strong></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Pricing way below sector average</h4></div>
+          <p>If a Fintech listing is priced at $1,500 when the sector average is $7,200, either the architect doesn't know their value (concerning) or the depth is shallow (more likely). <em>Cheap rarely means good in this market.</em></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>No verified credentials or exit history</h4></div>
+          <p>First-time architects can deliver excellent work, but the variance is much higher. <strong>For your first 2-3 platform purchases, stick to architects with track record.</strong> Use new architects only after you've calibrated.</p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Architect avoids the 7-day inspection window</h4></div>
+          <p>If they pressure you to "skip the inspection" or "release funds early because they need it for their next project," that's a hard stop. <em>Serious architects respect the process.</em></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Vague answers about execution support</h4></div>
+          <p>If you ask "would you advise during execution?" and the answer is unclear, you're buying static IP only. Sometimes that's fine. <strong>But the highest-value opportunities come with architect involvement.</strong> Confirm before paying.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 05 · SUCCESS PATTERNS -->
+  <section class="chapter" id="ch-05">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">05</span><span class="line"></span><span class="name">Success patterns</span></div>
+        <h2 class="display lg">What <em>top buyers</em> do differently.</h2>
+        <p>We've studied the buyers who keep coming back, who close more deals, who turn into operating partners with their architects. <em>Here's what separates them.</em></p>
+      </div>
+
+      <div class="success-grid reveal">
+        <div class="success-card">
+          <span class="label">Deal velocity</span>
+          <div class="metric"><em>4-8</em><small>unlocks per year</small></div>
+          <h4>They <em>concentrate</em> on a thesis</h4>
+          <p>Top buyers unlock 4-8 opportunities in their core sector annually. They build domain depth on the platform itself, recognizing patterns most one-off buyers miss.</p>
+        </div>
+        <div class="success-card">
+          <span class="label">Time to action</span>
+          <div class="metric"><em>30d</em><small>median to first action</small></div>
+          <h4>They <em>act fast</em> after unlock</h4>
+          <p>Top buyers begin execution within 30 days of unlock. The opportunities decay in value the longer they sit on a hard drive. <strong>Speed of action correlates with deal success.</strong></p>
+        </div>
+        <div class="success-card">
+          <span class="label">Architect retention</span>
+          <div class="metric"><em>62%</em><small>buy again from same</small></div>
+          <h4>They <em>build with</em> architects</h4>
+          <p>62% of top buyers eventually unlock 2+ opportunities from the same senior architect. The first deal is the audition. The second deal is the relationship.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 06 · COMMON MISTAKES -->
+  <section class="chapter" id="ch-06">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">06</span><span class="line"></span><span class="name">Common mistakes</span></div>
+        <h2 class="display lg">What <em>not to do</em>.</h2>
+        <p>These are the patterns that show up in nearly every disappointed buyer's history. <em>Avoid these and you'll outperform 80% of the buyer pool by default.</em></p>
+      </div>
+
+      <div class="mistakes reveal">
+        <div class="mistake">
+          <span class="num">01</span>
+          <div class="content">
+            <h4>Buying <em>before</em> defining a thesis</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>"This AI workflow opportunity looks interesting, let me unlock it and see if I can do something with it."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>"I'm looking for B2B vertical AI plays in regulated industries with $2-5M revenue potential within 18 months. <strong>This matches my filter.</strong> Unlocking."</span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">02</span>
+          <div class="content">
+            <h4>Skipping <em>Tier 1 questions</em> to "save time"</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Paying the Tier 2 deposit immediately because the preview "looks good enough."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Sending 2-3 sharp Tier 1 questions and reviewing the architect's response style. <em>15 minutes of Tier 1 probing saves $5k of regret.</em></span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">03</span>
+          <div class="content">
+            <h4>Ignoring the <em>inspection window</em></h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Unlocking, glancing at the materials, and letting the 7 days expire without a thorough review.</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Blocking 2-3 hours on day 1-3 to read fully and stress-test claims. <strong>If you spot any material discrepancy, raise it before day 7.</strong></span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">04</span>
+          <div class="content">
+            <h4>Treating architects like <em>vendors</em></h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Paying, downloading, ghosting. Closing the relationship after Tier 4.</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Asking the architect for 30 minutes after unlock to walk through execution constraints. <em>Often free, always valuable.</em> Many top buyers turn architects into advisors.</span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">05</span>
+          <div class="content">
+            <h4>Buying <em>across sectors</em> without focus</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Unlocking one D2C, one Fintech, one Climate, one AI in the same quarter. "Diversification."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Concentrating on 1-2 sectors. <strong>Pattern recognition compounds.</strong> By your 4th unlock in a sector you'll spot weak listings instantly.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- =================== ARCHITECT PLAYBOOK =================== -->
+<div class="role-show" data-show="architect">
+
+  <!-- CH 01 · MINDSET -->
+  <section class="chapter" id="ch-01">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">01</span><span class="line"></span><span class="name">Mindset</span></div>
+        <h2 class="display lg">Think like a <em>publisher</em>, not a freelancer.</h2>
+        <p>The architects who succeed on vvEntra treat their listings like premium intellectual property they're licensing, not gigs they're selling. They invest deeply in fewer listings. <em>Volume thinking destroys reputation here.</em></p>
+      </div>
+
+      <div class="principles-grid">
+        <div class="principle reveal" data-num="1">
+          <h3>Depth is the <em>moat</em></h3>
+          <p>The platform's filter is depth. <strong>Shallow listings get rejected, deprioritized, or refunded.</strong> The minimum 90 pages isn't a paperwork requirement, it's a quality filter that protects every other architect's pricing power.</p>
+          <span class="key-tag">→ Go deep, not wide</span>
+        </div>
+        <div class="principle reveal delay-1" data-num="2">
+          <h3>Your <em>first listing</em> sets your tier</h3>
+          <p>Reviews compound. Your first 3 listings determine whether you become a senior architect (90/10 commission, premium placement) or stay standard (88/12, regular placement). <strong>Invest disproportionately in the first one.</strong></p>
+          <span class="key-tag">→ Front-load quality</span>
+        </div>
+        <div class="principle reveal" data-num="3">
+          <h3>Buyers are <em>not customers</em></h3>
+          <p>They're potential operating partners. The unlock fee is the audition; the long-term value comes from execution support, advisory roles, or follow-on listings. <strong>Treat every buyer as a potential ongoing relationship.</strong></p>
+          <span class="key-tag">→ Play long game</span>
+        </div>
+        <div class="principle reveal delay-1" data-num="4">
+          <h3>Reject buyers <em>who don't fit</em></h3>
+          <p>You can decline buyer access at Tier 2 without penalty. Use this. <em>One bad buyer ruins three reviews.</em> Senior architects accept only 40-60% of access requests, and their ratings reflect that selectivity.</p>
+          <span class="key-tag">→ Be selective</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 02 · PREPARATION -->
+  <section class="chapter" id="ch-02">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">02</span><span class="line"></span><span class="name">Preparation</span></div>
+        <h2 class="display lg">How to structure your <em>first listing.</em></h2>
+        <p>The hardest single decision an architect makes is what to put inside the package. <em>This checklist is what we've seen consistently distinguish accepted from rejected first submissions.</em></p>
+      </div>
+
+      <div class="checklist reveal">
+        <div class="checklist-head">
+          <h3>Architect <em>pre-listing checklist</em></h3>
+          <span class="count">8 steps</span>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Pick a sector <em>you have personally operated in</em></strong>
+            <span>Not "interested in." Not "researched extensively." Operated in. <em>Buyers can tell within the first 10 pages whether you've actually shipped in this space.</em> Use your hard-won insight as your differentiator.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Check the <em>demand radar</em> before you build</strong>
+            <span>The architect dashboard shows live sector demand. <strong>Building in a +60% demand gap sector clears 3x faster than building in saturated sectors.</strong> Don't build what you want to build; build what's underserved that you can build well.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Aim for <em>120-150 pages</em> for your first listing</strong>
+            <span>The minimum is 90 but median accepted depth is 118. <em>Going beyond shows seriousness and dramatically reduces dispute risk.</em> Pages should be substance, not filler.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Include <em>at least 8-10 frameworks or models</em></strong>
+            <span>Financial models, operational playbooks, market sizing models, hiring plans, GTM templates. <strong>Diagrams and tools are what buyers screenshot and reference for years.</strong> Lists of advice are not enough.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Build a <em>tight 1-page thesis</em> for Tier 1</strong>
+            <span>The Tier 1 preview is your highest-leverage marketing surface. <em>One paragraph problem statement, one paragraph approach, one paragraph why-you, one paragraph buyer profile.</em> Spend hours on it.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Plan your <em>execution support</em> package</strong>
+            <span>Decide before listing: do you offer 90-day advisory? Hourly consulting? Operating-partner option? <strong>Listings with structured execution-support tiers earn 2-3x more than IP-only listings.</strong> Price accordingly.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Price against the <em>sector benchmark</em>, not your effort</strong>
+            <span>The dashboard shows sector average, min, top. <em>Price within 80-120% of the average for your first listing.</em> Senior architects can charge top-tier. New ones build trust first, then raise prices.</span>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="body">
+            <strong>Have a <em>colleague review</em> before submitting</strong>
+            <span>Someone from your operational background who can pressure-test the claims. <em>Internal review catches 90% of issues that would otherwise trigger rejection.</em> The platform's reviewers are far less forgiving than your friends will be.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 03 · EXECUTION -->
+  <section class="chapter" id="ch-03">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">03</span><span class="line"></span><span class="name">Execution</span></div>
+        <h2 class="display lg">The five stages of a <em>successful listing.</em></h2>
+        <p>From submission to settlement, your job changes at each stage. <em>The architects who understand this earn 3x what those who don't.</em></p>
+      </div>
+
+      <div class="stages reveal">
+        <div class="stage">
+          <span class="stage-num">Stage 1</span>
+          <span class="stage-ttl">Submit</span>
+          <span class="stage-desc">Upload your full package. Review takes 5-7 days. Senior architects skip to 2-3 days.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 2</span>
+          <span class="stage-ttl">Promote</span>
+          <span class="stage-desc">Once live, respond to Tier 1 questions within 24 hours. Response speed correlates with conversion.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 3</span>
+          <span class="stage-ttl">Filter</span>
+          <span class="stage-desc">Review buyer profiles at Tier 2. Accept serious ones, decline misfits. No penalty either way.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 4</span>
+          <span class="stage-ttl">Reveal</span>
+          <span class="stage-desc">At Tier 3, sign NDA, deliver partial reveal. Be available for substantive questions.</span>
+          <div class="stage-bar"></div>
+        </div>
+        <div class="stage">
+          <span class="stage-num">Stage 5</span>
+          <span class="stage-ttl">Support</span>
+          <span class="stage-desc">After Tier 4 unlock, offer 30-min onboarding call. This is where execution-support revenue starts.</span>
+          <div class="stage-bar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 04 · RED FLAGS -->
+  <section class="chapter" id="ch-04">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">04</span><span class="line"></span><span class="name">Red flags</span></div>
+        <h2 class="display lg">Which <em>buyers to decline.</em></h2>
+        <p>You earn the right to decline. Every wrong buyer accepted is a one-star review waiting to happen. <em>Senior architects build their tier by being selective.</em></p>
+      </div>
+
+      <div class="red-flags reveal">
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Unverified or incomplete buyer profile</h4></div>
+          <p>If their KYC isn't complete or their capacity verification is missing, decline. <strong>The platform requires verification for a reason.</strong> Incomplete profiles correlate with dispute behavior.</p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Tier 1 questions that don't match the sector</h4></div>
+          <p>If a buyer asks generic "what's the market size?" questions when your listing covers a specific niche, they haven't read the preview. <em>Buyers who don't engage seriously at Tier 1 won't engage at Tier 4 either.</em></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Buyer with multiple prior disputes</h4></div>
+          <p>Their public profile shows dispute history. Even if some were resolved, the pattern matters. <strong>A buyer with 2+ disputes is significantly more likely to file another.</strong> Decline politely.</p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Negotiation outside the platform</h4></div>
+          <p>If a buyer suggests "let's do this offline to save commission," that's a hard stop. <em>Off-platform deals have no escrow, no dispute mechanism, no track record.</em> Report and decline.</p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Pressure to skip stages</h4></div>
+          <p>"I'll pay full price now, can we skip Tier 2 and Tier 3?" No. The stages protect both sides. <strong>A buyer who wants to skip is signaling they don't want to be tested.</strong></p>
+        </div>
+        <div class="red-flag">
+          <div class="flag-head"><span class="ic">!</span><h4>Buyer claims to know you "from outside"</h4></div>
+          <p>If they reference your real identity (which they shouldn't have at this tier), something's wrong. <em>This is either an injection attempt or a social engineering vector.</em> Report immediately.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 05 · SUCCESS PATTERNS -->
+  <section class="chapter" id="ch-05">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">05</span><span class="line"></span><span class="name">Success patterns</span></div>
+        <h2 class="display lg">What <em>top architects</em> do differently.</h2>
+        <p>We've tracked the architects who built six-figure earnings on the platform. <em>Here's what we've learned from their behavior.</em></p>
+      </div>
+
+      <div class="success-grid reveal">
+        <div class="success-card">
+          <span class="label">Quality concentration</span>
+          <div class="metric"><em>3-5</em><small>listings/year</small></div>
+          <h4>They <em>publish less</em>, charge more</h4>
+          <p>Top architects publish only 3-5 listings per year. Each one is treated like a senior strategic document. <strong>Their average pricing is 1.8x platform median.</strong></p>
+        </div>
+        <div class="success-card">
+          <span class="label">Buyer relationships</span>
+          <div class="metric"><em>2.4x</em><small>execution revenue</small></div>
+          <h4>They <em>earn more</em> post-unlock</h4>
+          <p>Top architects earn 2.4x as much from execution support and advisory as from the original unlock. <em>The unlock is the introduction; the relationship is where value lives.</em></p>
+        </div>
+        <div class="success-card">
+          <span class="label">Response speed</span>
+          <div class="metric"><em>4hr</em><small>median Tier 1 response</small></div>
+          <h4>They <em>respond fast</em>, deliberately</h4>
+          <p>Top architects respond to Tier 1 inquiries within 4 hours during business hours. Speed signals seriousness. <strong>Slow responders lose 40% of qualified buyers.</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 06 · COMMON MISTAKES -->
+  <section class="chapter" id="ch-06">
+    <div class="container-narrow">
+      <div class="chapter-head reveal">
+        <div class="chapter-marker"><span class="num">06</span><span class="line"></span><span class="name">Common mistakes</span></div>
+        <h2 class="display lg">What <em>not to do</em>.</h2>
+        <p>These are the patterns that consistently show up in the architects who get stuck at standard tier or drop off entirely. <em>Avoid these and your earning ceiling expands dramatically.</em></p>
+      </div>
+
+      <div class="mistakes reveal">
+        <div class="mistake">
+          <span class="num">01</span>
+          <div class="content">
+            <h4>Listing <em>too many opportunities</em> too fast</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Submitting 5 listings in the first month to "maximize coverage."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Submitting one excellent listing, closing 2-3 deals, gathering reviews, then scaling. <em>Reputation precedes volume.</em></span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">02</span>
+          <div class="content">
+            <h4>Pricing <em>below</em> sector average to "compete"</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>"I'll price my AI workflow at $2,800 because I'm new and want volume."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Pricing at $4,400-5,400 (sector average for AI Workflow). <strong>Underpricing signals weak content.</strong> Serious buyers actively avoid underpriced listings.</span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">03</span>
+          <div class="content">
+            <h4>Ignoring <em>Tier 1 inquiries</em> from "low-tier" buyers</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Only responding to PE/VC inquiries; ignoring family offices or operator-investors as "less serious."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Treating all verified buyers equally. <em>Family offices unlock at higher average price than VCs.</em> Operator-investors close fastest. Don't filter by perceived prestige.</span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">04</span>
+          <div class="content">
+            <h4>Skipping the <em>execution support</em> tier</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>"I just want to sell the IP and move on. No advisory."</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Listing optional 90-day execution-support packages at $5-15k. <strong>Roughly 40% of buyers add the package.</strong> Doubles your effective earning per listing.</span></div>
+          </div>
+        </div>
+
+        <div class="mistake">
+          <span class="num">05</span>
+          <div class="content">
+            <h4>Going <em>defensive</em> when a buyer raises a question</h4>
+            <div class="wrong"><span class="lbl">Wrong</span><span>Treating Tier 1 questions as challenges to your competence and answering tersely.</span></div>
+            <div class="right"><span class="lbl">Right</span><span>Treating questions as buying signals. <em>A buyer who asks 3 sharp questions converts at 4x the rate of one who doesn't ask any.</em> Engagement is enthusiasm.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="container-narrow">
+    <div class="closing-card">
+      <span class="eyebrow">Now you're ready</span>
+      <h2 class="display lg">The platform <em>rewards discipline.</em></h2>
+      <p class="lead" style="text-align:center;">The users who treat vvEntra as a serious environment get serious results. The ones who don't, don't. <em>You've now read more than 80% of the people you'll transact with.</em></p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem;">
+        <a href="#dashboard" data-route="dashboard" class="btn btn-orange">Open the dashboard <span class="arrow">→</span></a>
+        <a href="#trust" data-route="trust" class="btn btn-outline">Read trust policy <span class="arrow">→</span></a>
+        <a href="#faq" data-route="faq" class="btn btn-outline">View FAQ <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
     </section>
+
+    
 
     <!-- ===================================================================
          VIEW 4: ASSET DETAIL & DATA ROOM (#listing)
@@ -2038,203 +2645,1076 @@
     </section>
 
     <!-- ===================================================================
-         VIEW 8: COMPLIANCE & ESCROW STANDARDS (#trust)
+         VIEW 7: STRUCTURED TRUST & ESCROW PROTOCOL (#trust)
+         Verbatim architecture from original vvEntra platform
          =================================================================== -->
-    <section id="page-trust" class="c-view">
-      <div class="c-section-header" style="text-align: center; display: block; margin-bottom: 3rem;">
-        <div class="c-badge c-badge--neutral" style="margin-bottom: 0.5rem;">Structured Trust Architecture</div>
-        <h1 class="c-section-header__title">The 5 Layers of Structured Trust</h1>
-        <p class="c-section-header__sub">Every dollar that flows through vvEntra is protected by five layers of structured trust. Identity verification. Escrow custody. Staged reveal. Clear dispute resolution. And for premium deals, a platform-backed guarantee.</p>
+    <section id="page-trust" class="c-view page" data-page="trust">
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="eyebrow reveal">Trust architecture · Payment security</span>
+      <h1 class="display xl reveal delay-1">Trust is <em>engineered.</em><br>Not promised.</h1>
+      <p class="lead reveal delay-2">Every dollar that flows through vvEntra is protected by five layers of structured trust. Identity verification. Escrow custody. Staged reveal. Clear dispute resolution. And for premium deals, a platform-backed guarantee. This page explains exactly how your money and your intellectual property are protected.</p>
+      <div class="hero-pills reveal delay-3">
+        <span class="pill"><span class="ic">●</span> Escrow held</span>
+        <span class="pill"><span class="ic">●</span> NDA gated</span>
+        <span class="pill"><span class="ic">●</span> ID verified</span>
+        <span class="pill"><span class="ic">●</span> 5-day disputes</span>
       </div>
+    </div>
+  </div>
+</header>
 
-      <!-- The Problem Every Idea Marketplace Has Failed to Solve -->
-      <div class="c-card" style="padding: 2.25rem; margin-bottom: 3rem;">
-        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem;">The problem every idea marketplace has failed to solve.</h2>
-        <p style="font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
-          Buying a business opportunity is fundamentally different from buying a physical product. Once intellectual property is revealed, it cannot be returned. This creates an unsolvable trust problem, until you engineer around it.
-        </p>
+<!-- THE PARADOX -->
+<section class="paradox-section">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-marker"><span class="num">01</span><span class="line"></span><span class="name">The trust paradox</span><span class="line"></span></div>
+      <h2 class="display lg">The problem every <em>idea marketplace</em> has failed to solve.</h2>
+      <p class="lead" style="text-align:center;">Buying a business opportunity is fundamentally different from buying a physical product. Once intellectual property is revealed, it cannot be returned. This creates an unsolvable trust problem, until you engineer around it.</p>
+    </div>
 
-        <div class="c-paradox-grid">
-          <div class="c-paradox-card c-paradox-card--dilemma">
-            <div class="c-paradox-card__label">Architect's Dilemma</div>
-            <div class="c-paradox-card__quote">"If I show the buyer my opportunity, they will steal it without paying. I cannot show the substance until I am paid."</div>
-            <div class="c-paradox-card__sub">Creators fear intellectual property theft from curious browsers who never intended to fund execution.</div>
-          </div>
+    <div class="paradox-grid reveal delay-1">
+      <div class="paradox-card">
+        <span class="role">— Architect's fear</span>
+        <p class="quote">If I show the buyer my opportunity, they will steal it without paying. I cannot show the substance until I am paid.</p>
+        <span class="label">The seller cannot reveal first.</span>
+      </div>
+      <div class="paradox-vs">vs</div>
+      <div class="paradox-card">
+        <span class="role">— Buyer's fear</span>
+        <p class="quote">If I pay before seeing the opportunity, the architect could deliver junk or something I already know. I cannot pay until I see the substance.</p>
+        <span class="label">The buyer cannot pay first.</span>
+      </div>
+    </div>
 
-          <div class="c-paradox-card c-paradox-card--dilemma">
-            <div class="c-paradox-card__label">Buyer's Dilemma</div>
-            <div class="c-paradox-card__quote">"If I pay before seeing the opportunity, the architect could deliver junk or something I already know. I cannot pay until I see the substance."</div>
-            <div class="c-paradox-card__sub">Investors and operators fear paying thousands of dollars for generic templates or superficial AI summaries.</div>
-          </div>
+    <div class="paradox-resolution reveal delay-2">
+      <div class="label">vvEntra's resolution</div>
+      <p>Neither party reveals or pays first. Both commit progressively through a <em>staged reveal</em> protected by <em>escrow custody</em>, where each tier of trust unlocks the next layer of value.</p>
+    </div>
+  </div>
+</section>
 
-          <div class="c-paradox-card c-paradox-card--solution">
-            <div class="c-paradox-card__label">The vvEntra Solution</div>
-            <div class="c-paradox-card__quote">"Neither party reveals or pays first. Both commit progressively through a staged reveal protected by escrow custody."</div>
-            <div class="c-paradox-card__sub">Exposure strictly matches commitment across 5 distinct tiers. Neutral banking escrow holds capital until verified inspection.</div>
-          </div>
+<!-- FIVE LAYERS -->
+<section class="layers-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">02</span><span class="line"></span><span class="name">The five layers</span></div>
+      <h2 class="display lg">Trust is not one thing. It is <em>five layers</em> engineered together.</h2>
+      <p class="lead">Each layer protects against a specific failure mode. Together they create an architecture where bad actors are filtered at every step, and good actors transact with confidence.</p>
+    </div>
+
+    <div class="layers-grid">
+      <div class="layer-card reveal">
+        <div class="layer-num">01</div>
+        <div class="layer-content">
+          <span class="subtitle">— Before any money moves</span>
+          <h3>Identity & <em>reputation</em> verification</h3>
+          <p>Every architect and every buyer is a verified human with public stake. No anonymous accounts. No multiple identities. Every action is attached to a real, accountable person. Verification is itself a trust signal, visible on every profile.</p>
+        </div>
+        <div class="layer-mechanism">
+          <div class="label">How we verify</div>
+          <ul>
+            <li>Government ID (Aadhaar / passport)</li>
+            <li>Bank account ownership (penny drop)</li>
+            <li>Phone & email confirmed</li>
+            <li>Buyer capacity verification</li>
+            <li>One-person-one-account policy</li>
+          </ul>
         </div>
       </div>
 
-      <!-- The 5 Layers Engineered Together -->
-      <div class="c-section-header">
+      <div class="layer-card reveal">
+        <div class="layer-num">02</div>
+        <div class="layer-content">
+          <span class="subtitle">— The foundation</span>
+          <h3>Escrow <em>custody</em> on every transaction</h3>
+          <p>Money never moves directly from buyer to seller. Every dollar is held in a regulated escrow account before it ever reaches the architect. This neutralises the trust paradox: the architect knows the money is committed, the buyer knows their funds are protected.</p>
+        </div>
+        <div class="layer-mechanism">
+          <div class="label">How escrow works</div>
+          <ul>
+            <li>Buyer funds held by vvEntra</li>
+            <li>Architect notified of commitment</li>
+            <li>Content unlocks against escrow</li>
+            <li>7-day inspection window opens</li>
+            <li>Funds release on satisfaction</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-card reveal">
+        <div class="layer-num">03</div>
+        <div class="layer-content">
+          <span class="subtitle">— The real innovation</span>
+          <h3>Staged <em>reveal</em> · four progressive tiers</h3>
+          <p>Buyers do not pay full price for full access at once. They progress through four tiers, each unlocking more substance for proportionally more commitment. This mirrors how real M&A diligence works: NDA, CIM review, data room, closing.</p>
+        </div>
+        <div class="layer-mechanism">
+          <div class="label">The four tiers</div>
+          <ul>
+            <li>Tier 0 · Public preview (free)</li>
+            <li>Tier 1 · Verified access (free)</li>
+            <li>Tier 2 · Interest deposit ($100–500)</li>
+            <li>Tier 3 · NDA + partial unlock (30%)</li>
+            <li>Tier 4 · Full unlock (remaining 70%)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-card reveal">
+        <div class="layer-num">04</div>
+        <div class="layer-content">
+          <span class="subtitle">— When something goes wrong</span>
+          <h3>Dispute <em>resolution</em> · clear, fast, fair</h3>
+          <p>Disputes are resolved within five business days by vvEntra moderation, using documented criteria. Refunds are not subjective. They are granted for specific, verifiable failures: misrepresented depth, plagiarised content, false credentials. Not for buyer's remorse.</p>
+        </div>
+        <div class="layer-mechanism">
+          <div class="label">Our commitment</div>
+          <ul>
+            <li>Documented refund criteria</li>
+            <li>5-business-day resolution SLA</li>
+            <li>Public reputation feedback</li>
+            <li>Frivolous claims penalised</li>
+            <li>Bad actors lose access</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layer-card reveal">
+        <div class="layer-num">05</div>
+        <div class="layer-content">
+          <span class="subtitle">— For high-value deals</span>
+          <h3>Platform <em>guarantee</em> · the premium layer</h3>
+          <p>For transactions above $10,000, the vvEntra Guarantee tier puts the platform itself behind the payment. Architects receive guaranteed settlement even during disputes. Buyers receive a verified premium badge. Risk transfers from the parties to the platform.</p>
+        </div>
+        <div class="layer-mechanism">
+          <div class="label">What's included</div>
+          <ul>
+            <li>Guaranteed architect settlement</li>
+            <li>Premium buyer verification</li>
+            <li>Priority dispute review</li>
+            <li>Up to $50k coverage cap</li>
+            <li>Available on high-tier deals</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESCROW FLOW DIAGRAM -->
+<section class="escrow-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">03</span><span class="line"></span><span class="name">Escrow flow · visualised</span></div>
+      <h2 class="display lg">Follow the <em>money.</em><br>From buyer commitment to architect settlement.</h2>
+      <p class="lead">Every transaction flows through this exact sequence. The money is never under the control of either party. It is held by vvEntra's escrow infrastructure and released only when the agreed conditions are met.</p>
+    </div>
+
+    <div class="flow-card reveal delay-1">
+      <div class="flow-header">
+        <h4>Sample transaction · VVE-2438 · $4,800</h4>
+        <span class="meta">Standard escrow flow</span>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="flow-actor">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+          </div>
+          <span class="role">— Buyer</span>
+          <span class="name">PE Director</span>
+          <span class="status">VERIFIED · KYC COMPLETE</span>
+        </div>
+
+        <div class="flow-actor escrow">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="14" r="1.5"/></svg>
+          </div>
+          <span class="role">— vvEntra Escrow</span>
+          <span class="name"><em>Neutral custody</em></span>
+          <span class="status">FIDUCIARY · REGULATED</span>
+        </div>
+
+        <div class="flow-actor">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18M5 3v10a7 7 0 0 0 14 0V3"/><circle cx="12" cy="20" r="1.5"/></svg>
+          </div>
+          <span class="role">— Architect</span>
+          <span class="name">Senior · 2 Exits</span>
+          <span class="status">VERIFIED · BANK CONFIRMED</span>
+        </div>
+      </div>
+
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="stepn">01</span>
+          <span class="step-desc"><strong>Buyer initiates unlock</strong> on VVE-2438. Payment of $4,800 debited via card / bank transfer.</span>
+          <span class="step-state action">INITIATED</span>
+        </div>
+        <div class="flow-step">
+          <span class="stepn">02</span>
+          <span class="step-desc">Funds held in vvEntra escrow. <strong>Architect receives notification</strong> of committed payment. Content unlock begins.</span>
+          <span class="step-state held">$4,800 HELD</span>
+        </div>
+        <div class="flow-step">
+          <span class="stepn">03</span>
+          <span class="step-desc">Buyer reviews opportunity. <strong>7-day inspection window</strong> opens. Buyer can raise dispute with documented evidence if material misrepresentation found.</span>
+          <span class="step-state held">INSPECTION OPEN</span>
+        </div>
+        <div class="flow-step">
+          <span class="stepn">04a</span>
+          <span class="step-desc"><strong>Path A · Buyer satisfied.</strong> Funds release to architect minus platform commission (typically 12-18%). Architect receives $4,032 net within 24 hours.</span>
+          <span class="step-state released">RELEASED</span>
+        </div>
+        <div class="flow-step">
+          <span class="stepn">04b</span>
+          <span class="step-desc"><strong>Path B · Buyer disputes.</strong> Funds frozen. Both parties submit evidence. vvEntra moderation team reviews and resolves within 5 business days.</span>
+          <span class="step-state frozen">FROZEN · UNDER REVIEW</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGED REVEAL -->
+<section class="reveal-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">04</span><span class="line"></span><span class="name">Staged reveal mechanism</span></div>
+      <h2 class="display lg">Four tiers. Each one unlocks <em>more substance</em> for <em>more commitment.</em></h2>
+      <p class="lead">This is how real M&A deals work. NDA before the data room. Deposit before due diligence. Full payment before closing. vvEntra digitises this proven flow for business opportunities of every scale.</p>
+    </div>
+
+    <div class="reveal-tiers">
+      <div class="tier-card reveal">
+        <span class="tier-num">00</span>
         <div>
-          <h2 class="c-section-header__title">Trust is not one thing. It is five layers engineered together.</h2>
-          <p class="c-section-header__sub">Each layer protects against a specific failure mode. Together they create an environment where bad actors are filtered at every step.</p>
+          <h4 class="tier-name">Public <em>preview</em></h4>
+          <div class="tier-cost">Cost · <strong>Free · anyone can see</strong></div>
+        </div>
+        <p class="tier-unlocks"><strong>What's visible:</strong> Sector, market, scale, geography. Architect's verified credentials and exit history. Documentation depth metrics (pages, frameworks, models). Demand signals. <em>Core IP remains locked.</em></p>
+        <div class="tier-percent">0%<span class="small">Paid</span></div>
+      </div>
+
+      <div class="tier-card reveal delay-1">
+        <span class="tier-num">01</span>
+        <div>
+          <h4 class="tier-name">Verified <em>access</em></h4>
+          <div class="tier-cost">Cost · <strong>Free · after KYC</strong></div>
+        </div>
+        <p class="tier-unlocks"><strong>What's visible:</strong> Full opportunity title and one-paragraph thesis. Sub-category and geographic scope. Estimated execution timeline and capital required. Ability to send structured questions to the architect.</p>
+        <div class="tier-percent">0%<span class="small">Paid</span></div>
+      </div>
+
+      <div class="tier-card reveal delay-2">
+        <span class="tier-num">02</span>
+        <div>
+          <h4 class="tier-name">Interest <em>deposit</em></h4>
+          <div class="tier-cost">Cost · <strong>$100–500 · refundable</strong></div>
+        </div>
+        <p class="tier-unlocks"><strong>What changes:</strong> Buyer signals real interest with a refundable deposit. Architect reviews the buyer's profile and decides whether to grant deeper access. If architect declines, deposit returns automatically. If granted, deposit credits toward full unlock.</p>
+        <div class="tier-percent">~10%<span class="small">Of total</span></div>
+      </div>
+
+      <div class="tier-card reveal delay-3">
+        <span class="tier-num">03</span>
+        <div>
+          <h4 class="tier-name">NDA + <em>partial unlock</em></h4>
+          <div class="tier-cost">Cost · <strong>30% of total · NDA signed</strong></div>
+        </div>
+        <p class="tier-unlocks"><strong>What unlocks:</strong> Full business model document. Market research summary. Execution roadmap. Direct architect conversation enabled. <em>Financial models and proprietary IP remain locked.</em> 5-day window before next tier.</p>
+        <div class="tier-percent">30%<span class="small">Paid</span></div>
+      </div>
+
+      <div class="tier-card reveal delay-4">
+        <span class="tier-num">04</span>
+        <div>
+          <h4 class="tier-name">Full <em>unlock</em></h4>
+          <div class="tier-cost">Cost · <strong>Remaining 70% · final</strong></div>
+        </div>
+        <p class="tier-unlocks"><strong>What unlocks:</strong> Complete documentation, financial models, frameworks, SOPs, sensitive IP. Architect's full contact. The ongoing relationship begins: acquire, partner, collaborate, or build with execution support. 7-day inspection window.</p>
+        <div class="tier-percent">100%<span class="small">Settled</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFUND POLICY -->
+<section class="refund-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">05</span><span class="line"></span><span class="name">Refund policy</span></div>
+      <h2 class="display lg">Refunds are <em>structured.</em><br>Not subjective.</h2>
+      <p class="lead">Most platforms either refund too easily, which lets buyers consume content and claim dissatisfaction, or refund too rarely, which destroys buyer trust. vvEntra uses documented eligibility criteria, applied consistently by moderation.</p>
+    </div>
+
+    <div class="refund-grid">
+      <div class="refund-card granted reveal">
+        <span class="role">— Refunds are granted when</span>
+        <h4>The architect <em>materially misrepresents</em> the opportunity</h4>
+        <ul>
+          <li>Documentation depth is materially less than advertised (e.g., promised 120 pages, delivered 40)</li>
+          <li>Content is plagiarised, AI-generated boilerplate, or duplicates a known existing opportunity</li>
+          <li>Architect made factually false claims about credentials, track record, or exit history</li>
+          <li>Critical promised sections are missing (e.g., financial model advertised but not included)</li>
+          <li>The opportunity is fundamentally different from what was previewed in Tier 0–2</li>
+        </ul>
+      </div>
+
+      <div class="refund-card denied reveal delay-1">
+        <span class="role">— Refunds are NOT granted when</span>
+        <h4>The buyer's <em>circumstances or opinions</em> change after access</h4>
+        <ul>
+          <li>Buyer simply disagrees with the strategy or market thesis</li>
+          <li>Buyer's market view differs from the architect's</li>
+          <li>Buyer changes their mind after consuming the content</li>
+          <li>Buyer claims they "already knew" the idea (subjective, unverifiable)</li>
+          <li>Buyer's investment priorities shift after due diligence</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISPUTE TIMELINE -->
+<section class="dispute-section">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-marker"><span class="num">06</span><span class="line"></span><span class="name">Dispute resolution</span><span class="line"></span></div>
+      <h2 class="display lg">When things go wrong, they are resolved in <em>five days.</em></h2>
+      <p class="lead" style="text-align:center;">A documented SLA. Equal voice for both sides. Clear evidence requirements. No black-box decisions. Resolution within five business days, every time.</p>
+    </div>
+
+    <div class="timeline reveal delay-1">
+      <div class="timeline-node">
+        <div class="dot">01</div>
+        <h5>Dispute raised</h5>
+        <span class="time">Day 0</span>
+        <p>Buyer submits dispute within inspection window with specific evidence of misrepresentation.</p>
+      </div>
+      <div class="timeline-node">
+        <div class="dot">02</div>
+        <h5>Architect responds</h5>
+        <span class="time">Day 1–2</span>
+        <p>Architect has 48 hours to submit counter-evidence and contextual response.</p>
+      </div>
+      <div class="timeline-node">
+        <div class="dot">03</div>
+        <h5>Moderation review</h5>
+        <span class="time">Day 3–4</span>
+        <p>vvEntra team reviews both submissions against documented refund criteria.</p>
+      </div>
+      <div class="timeline-node">
+        <div class="dot">04</div>
+        <h5>Decision rendered</h5>
+        <span class="time">Day 5</span>
+        <p>Outcome communicated to both parties with reasoning. No black-box decisions.</p>
+      </div>
+      <div class="timeline-node">
+        <div class="dot">✓</div>
+        <h5>Resolution executed</h5>
+        <span class="time">Within 24h</span>
+        <p>Refund processed, payment released, or partial settlement applied based on findings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE TIER -->
+<section class="guarantee-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">07</span><span class="line"></span><span class="name">Premium tier</span></div>
+      <h2 class="display lg">For high-value deals, the platform itself <em>guarantees</em> the payment.</h2>
+      <p class="lead">On transactions above $10,000, vvEntra steps in as the guarantor. Architects receive settlement even during disputes. Buyers receive a premium verification status. Risk transfers from the parties to the platform.</p>
+    </div>
+
+    <div class="guarantee-grid">
+      <div class="guarantee-card reveal">
+        <span class="badge">⬩ For architects</span>
+        <h3>Guaranteed <em>settlement.</em><br>Even during disputes.</h3>
+        <p>When you list a premium opportunity, vvEntra commits to settling your payment within 48 hours of full unlock, regardless of dispute status. The platform absorbs the risk while disputes are reviewed.</p>
+        <ul>
+          <li>Payment within 48 hours of unlock</li>
+          <li>Platform absorbs dispute risk up to cap</li>
+          <li>Priority dispute review by senior moderators</li>
+          <li>Premium architect badge on profile</li>
+          <li>Coverage cap up to $50,000 per transaction</li>
+        </ul>
+      </div>
+
+      <div class="guarantee-card reveal delay-1">
+        <span class="badge">⬩ For buyers</span>
+        <h3>Premium <em>verification.</em><br>Priority access.</h3>
+        <p>Premium-verified buyers gain access to the highest-tier opportunities and earn faster trust from architects. Your verification badge signals serious intent and reduces friction at every tier of access.</p>
+        <ul>
+          <li>Premium buyer badge on profile</li>
+          <li>Access to senior architect tier opportunities</li>
+          <li>Architect approval typically within 4 hours</li>
+          <li>Higher unlock limits per quarter</li>
+          <li>Priority placement in deal flow recommendations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-marker"><span class="num">08</span><span class="line"></span><span class="name">Infrastructure partners</span></div>
+      <h2 class="display lg">Built on the same rails as <em>Stripe</em>, <em>Razorpay</em>, and major exchanges.</h2>
+      <p class="lead">vvEntra does not reinvent payment infrastructure. We use the same regulated payment processors, escrow providers, and KYC systems that power global commerce. Your money flows through battle-tested rails.</p>
+    </div>
+
+    <div class="partners-grid reveal delay-1">
+      <div class="partner-card">
+        <span class="nm"><em>Stripe</em> Connect</span>
+        <span class="role">— Global payments + escrow</span>
+      </div>
+      <div class="partner-card">
+        <span class="nm"><em>Razorpay</em> Route</span>
+        <span class="role">— India transactions</span>
+      </div>
+      <div class="partner-card">
+        <span class="nm"><em>Persona</em> KYC</span>
+        <span class="role">— Identity verification</span>
+      </div>
+      <div class="partner-card">
+        <span class="nm"><em>Tazapay</em></span>
+        <span class="role">— Cross-border escrow</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container-narrow">
+    <div class="section-head center reveal">
+      <div class="section-marker"><span class="num">09</span><span class="line"></span><span class="name">Frequently asked</span><span class="line"></span></div>
+      <h2 class="display lg">The questions <em>everyone asks</em> before their first transaction.</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What happens if the architect disappears after I pay?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">If the architect becomes unresponsive after escrow is funded, vvEntra automatically returns the funds to the buyer within 7 days of inactivity. The architect's listing is suspended and their account is flagged. Because every architect is KYC-verified with a verified bank account, fraudulent disappearance is rare and consequences are real.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What stops a buyer from accessing the content and then claiming a refund?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">Three safeguards. First, refunds are granted only against documented criteria, not buyer's remorse. Second, frivolous disputes trigger account warnings and eventually access loss. Third, every buyer has a public reputation score visible to architects, so a pattern of disputes is visible before architects grant access. Bad actors get filtered out within a few transactions.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What is vvEntra's platform commission?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">Standard tier: 12% platform commission on the gross transaction value. Premium Guarantee tier: 18%, which includes the platform-backed guarantee, premium verification, and priority dispute resolution. There are no hidden fees. The architect sees the full commission deducted at settlement; the buyer pays the listed price.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          How long does the architect wait to receive funds after a buyer unlocks?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">Standard tier: Funds release at the end of the 7-day buyer inspection window, plus 24–48 hours for bank settlement. Total typically 8–9 days from buyer unlock to architect's bank account. Premium Guarantee tier: Architects receive settlement within 48 hours of unlock, regardless of dispute status.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Can I make partial payments instead of unlocking everything at once?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">Yes. The staged reveal mechanism is designed exactly for this. You commit a small refundable deposit at Tier 2, pay 30% at Tier 3 to access partial content, and pay the remaining 70% at Tier 4 for full unlock. You can stop at any tier with progressively smaller exposure. This is the same way M&A deals are structured in the real world.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Is my data and identity confidential?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">Yes. KYC data is held by our regulated identity verification partners (Persona / DigiLocker), encrypted at rest and in transit. vvEntra sees only verification status, not raw documents. Your conversations with architects or buyers are private and not shared publicly. The only public information on your profile is what you explicitly choose to show: name, role, verified badges, reputation score, transaction count.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What jurisdictions does vvEntra operate in?
+          <span class="ic">+</span>
+        </div>
+        <div class="faq-a">vvEntra operates globally for cross-border transactions through our regulated escrow partners. India transactions are processed through Razorpay Route under Indian financial regulations. US, UK, EU, and SEA transactions are processed through Stripe Connect and Tazapay. Currency conversion is handled automatically at interbank rates.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="final">
+  <div class="container">
+    <div class="brand-stamp reveal">
+      <svg class="logo-mark lg" viewBox="0 0 64 64" aria-hidden="true">
+        <path class="w-fill" d="M14 16 L22 48 L32 28 L42 48 L50 16 L42 16 L37 36 L32 22 L27 36 L22 16 Z"/>
+      </svg>
+    </div>
+    <div class="reveal delay-1"><span class="eyebrow" style="justify-content:center;display:inline-flex;">Trust is the platform</span></div>
+    <h2 class="display xl reveal delay-2">Now you know <em>exactly</em> how it works.</h2>
+    <p class="lead reveal delay-3">Every dollar protected. Every IP gated. Every dispute resolved within five days. Trust is not a tagline at vvEntra. It is the architecture.</p>
+    <div class="final-ctas reveal delay-3">
+      <a class='btn btn-orange' href='/#cta'>Apply for access <span class="arrow">→</span></a>
+      <a href="#home" data-route="home" class="btn btn-outline">Back to homepage <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+    </section>
+
+    
+
+    <!-- ===================================================================
+         VIEW 8: VERIFIED PROTOCOL FAQ (#faq)
+         Verbatim architecture from original vvEntra platform
+         =================================================================== -->
+    <section id="page-faq" class="c-view page" data-page="faq">
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="eyebrow reveal">Questions answered · honestly</span>
+      <h1 class="display xl reveal delay-1">Everything you need <em>before</em><br>your first transaction.</h1>
+      <p class="lead reveal delay-2">vvEntra works differently from any platform you've used before. These are the questions every serious buyer and architect asks. Direct answers, no marketing fluff. Pick your side below.</p>
+
+      <div class="faq-search reveal delay-3">
+        <svg class="faq-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>
+        <input id="faq-search-input" type="text" placeholder="Search questions...">
+        <span class="count" id="faq-count">46 questions</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TAB SWITCHER -->
+<section class="tab-section">
+  <div class="container-narrow">
+    <div class="tabs-wrap" id="tabs-wrap" data-tab="buyer">
+      <div class="tab-indicator"></div>
+      <button class="tab-btn active" data-tab="buyer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        As a Buyer
+      </button>
+      <button class="tab-btn" data-tab="architect">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18M5 3v10a7 7 0 0 0 14 0V3"/><circle cx="12" cy="20" r="1.5"/></svg>
+        As an Architect
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ MAIN -->
+<section class="faq-main">
+  <div class="container-narrow">
+
+    <!-- ========== BUYER TRACK ========== -->
+    <div class="faq-track active" id="track-buyer">
+
+      <div class="faq-intro reveal">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        </div>
+        <div>
+          <h3>For <em>buyers and investors</em></h3>
+          <p>You have capital, execution capacity, and a thesis. What you need is conviction-ready opportunities and a process you can trust. These answers walk through how vvEntra protects your money and helps you make better unlock decisions.</p>
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; margin-bottom: 3.5rem;">
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🪪</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">1. Identity & Reputation Verification</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            Every architect and buyer is a verified human with public stake. Government ID (Aadhaar / passport), penny-drop bank ownership, LinkedIn capacity, and a strict one-person-one-account policy.
-          </p>
-        </div>
-
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🏦</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">2. Escrow Custody on Every Transaction</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            Money never moves directly from buyer to seller. Every dollar is held in regulated escrow before it reaches the architect. Releases only upon satisfaction during the 7-day inspection window.
-          </p>
-        </div>
-
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🔒</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">3. Staged Reveal: Four Progressive Tiers</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            Buyers do not pay full price at once: Tier 0 (Free Preview) → Tier 1 (Verified Thesis) → Tier 2 ($100–$500 Deposit) → Tier 3 (NDA + 30% Partial Unlock) → Tier 4 (Remaining 70% Full Unlock).
-          </p>
-        </div>
-
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">⚖️</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">4. Clear Dispute Resolution (5-Day SLA)</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            Disputes are resolved within five business days by vvEntra moderation using documented criteria. Documented evidence required. Not for subjective buyer’s remorse.
-          </p>
-        </div>
-
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">🛡️</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">5. Platform Guarantee (Deals &gt; $10k)</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            For transactions above $10,000, vvEntra itself guarantees payment within 48 hours. Architects receive guaranteed settlement; buyers receive verified premium standing. Up to $50,000 coverage cap.
-          </p>
-        </div>
-
-        <div class="c-stat-card">
-          <div style="font-size: 1.6rem; margin-bottom: 0.5rem;">📑</div>
-          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">6. Minimum 90-Page Documentation Depth</h3>
-          <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6;">
-            Every listing undergoes manual moderation review. Must include a 30+ page business model, 25+ page execution workflows/SOPs, verified demand signals, financial models, and a 24-month roadmap.
-          </p>
-        </div>
-      </div>
-
-      <!-- Documented Refund Criteria -->
-      <div class="c-card" style="padding: 2.25rem; margin-bottom: 3rem;">
-        <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem;">Refunds are structured. Not subjective.</h2>
-        <p style="font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
-          vvEntra uses documented eligibility criteria, applied consistently by moderation, so buyers are protected against misrepresentation and architects are protected against bad-faith reversals.
-        </p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-          <div style="background: rgba(34, 197, 94, 0.04); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-sm); padding: 1.5rem;">
-            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--color-success); margin-bottom: 0.75rem;">Eligible for Escrow Refund:</h4>
-            <ul style="list-style: none; font-size: 0.86rem; display: flex; flex-direction: column; gap: 0.6rem;">
-              <li>✓ Documentation depth materially less than advertised (e.g., promised 110 pages, delivered 35)</li>
-              <li>✓ Content is plagiarised, duplicate, or AI boilerplate</li>
-              <li>✓ Architect made factually false claims about credentials or exit track record</li>
-              <li>✓ Critical promised deliverables missing (e.g. financial model promised but omitted)</li>
-              <li>✓ Opportunity fundamentally differs from Tier 0–2 previews</li>
-            </ul>
+      <!-- BUYER CAT 1: GETTING STARTED -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">01</span>
+            <h3 class="cat-title">Getting <em>started</em></h3>
           </div>
-
-          <div style="background: rgba(220, 38, 38, 0.04); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: var(--radius-sm); padding: 1.5rem;">
-            <h4 style="font-size: 0.95rem; font-weight: 700; color: #DC2626; margin-bottom: 0.75rem;">NOT Eligible for Refund (Subjective):</h4>
-            <ul style="list-style: none; font-size: 0.86rem; display: flex; flex-direction: column; gap: 0.6rem;">
-              <li>✕ Buyer simply disagrees with the strategic market thesis</li>
-              <li>✕ Buyer changes their mind after consuming the 90+ page playbook</li>
-              <li>✕ Buyer claims they "already knew" the opportunity (unverifiable)</li>
-              <li>✕ Buyer’s internal investment committee shifts corporate priorities</li>
-              <li>✕ Failure to reach agreement on discretionary post-unlock advisory terms</li>
-            </ul>
+          <span class="cat-count">5 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Who is vvEntra built for as a buyer?</span><span class="ic">+</span></div>
+            <div class="faq-a">vvEntra is built for <strong>operators, investors, founders, and strategic buyers</strong> who command capital and execution capacity but lack the time to research and validate opportunities from scratch. If you're a PE director, family office principal, VC partner, serial founder, or corporate strategist looking for execution-ready business opportunities outside your existing deal flow, this platform is built for you. We are <em>not</em> built for first-time investors, hobbyists, or anyone looking for "ideas to brainstorm with friends."</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How do I get access? Is this open or invitation-only?</span><span class="ic">+</span></div>
+            <div class="faq-a">vvEntra is currently in <strong>private launch</strong>. Access is by application or by referral from an existing member. The application reviews your professional background, deployment capacity, and intent. We're intentionally selective because the architects who list here only do so because the buyer pool is verified. Expect a 3-5 business day review of your application. Some applicants receive immediate approval; others may be asked for additional verification.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What does "buyer capacity verification" actually require?</span><span class="ic">+</span></div>
+            <div class="faq-a">We need proof that you have realistic capacity to act on opportunities you unlock. Acceptable forms include: <ul><li>A recent bank statement showing minimum balance equivalent to typical deal sizes</li><li>A letter from your CA or auditor confirming investment capacity</li><li>Company registration documents if you're a registered fund or family office</li><li>LinkedIn verification of your role (CEO, Partner, Director at firm)</li><li>For institutional buyers: GST/PAN and entity verification</li></ul>This is not a wealth check. It's a <em>seriousness filter</em>. We're confirming you can credibly transact, not how much you're worth.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Does it cost anything to join as a buyer?</span><span class="ic">+</span></div>
+            <div class="faq-a">Joining as a verified buyer is <strong>free</strong>. You pay only when you unlock an opportunity. There is no subscription, no monthly fee, no annual membership. You pay per transaction. Some premium opportunities may carry additional deposit requirements, and the Tier 2 interest deposit is refundable. The only cost of access is the one-time KYC verification process.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How do I find the right opportunities for my thesis?</span><span class="ic">+</span></div>
+            <div class="faq-a">Three ways. <strong>First</strong>, browse the marketplace filtered by sector, geography, deal size, and execution stage. <strong>Second</strong>, set up a thesis profile that surfaces matching opportunities in your dashboard as they go live. <strong>Third</strong>, request introductions to senior architects in your target sector, which gives you first-look on opportunities they're preparing to list. Most active buyers use all three.</div>
           </div>
         </div>
       </div>
 
-      <div style="text-align: center; margin-top: 2rem;">
-        <a href="#faq" class="c-btn c-btn--secondary">View Detailed Transaction FAQ →</a>
+      <!-- BUYER CAT 2: PAYMENT & TRUST -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">02</span>
+            <h3 class="cat-title">Payment & <em>trust</em></h3>
+          </div>
+          <span class="cat-count">7 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How is my money protected when I pay?</span><span class="ic">+</span></div>
+            <div class="faq-a">Every payment is held in <em>escrow</em>. Your money is never transferred directly to the architect. It sits in a regulated escrow account operated by vvEntra and our payment partners (Stripe Connect, Razorpay Route, Tazapay for cross-border). The architect only receives funds after your 7-day inspection window closes and you've confirmed satisfaction. If you raise a documented dispute during the window, funds are frozen until vvEntra moderation resolves it. <span class="tag">7-day window</span><span class="tag">Escrow protected</span></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if I pay for an opportunity and it turns out to be junk?</span><span class="ic">+</span></div>
+            <div class="faq-a">This is exactly what the dispute mechanism protects against. If the architect <strong>materially misrepresented</strong> the opportunity (less depth than advertised, plagiarised content, false credentials, missing promised sections), you raise a dispute within the 7-day inspection window with specific evidence. vvEntra moderation reviews both sides and issues a decision within 5 business days. If you win the dispute, you receive a full refund. The architect's listing is pulled and their account is flagged. <strong>Note:</strong> Disputes are about <em>misrepresentation</em>, not about whether you personally agree with the strategy.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Why can't I just pay the full amount and see everything immediately?</span><span class="ic">+</span></div>
+            <div class="faq-a">Because that's the model that has killed every previous idea marketplace. Once you've seen the full IP, you cannot un-see it, which makes refunds impossible to administer fairly. The <em>staged reveal</em> exists to protect both sides. You pay progressively as your conviction grows. You can exit at Tier 2 or Tier 3 with proportionally smaller exposure if the opportunity doesn't feel right. By the time you commit the final 70% at Tier 4, you've already seen the business model, market research, and execution roadmap. The unknown is much smaller.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What payment methods do you accept?</span><span class="ic">+</span></div>
+            <div class="faq-a">For Indian buyers: UPI, NEFT, RTGS, IMPS, credit and debit cards, net banking through Razorpay. For international buyers: credit and debit cards (Visa, Mastercard, Amex), ACH (US), SEPA (EU), and wire transfers through Stripe Connect. Cross-border transactions are processed through Tazapay with automatic currency conversion at interbank rates. <strong>We do not accept cryptocurrency</strong> at this stage.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What's the Tier 2 "interest deposit" and what happens to it?</span><span class="ic">+</span></div>
+            <div class="faq-a">The Tier 2 interest deposit ($100-500 depending on the opportunity's listed price) is a <strong>refundable signal of serious intent</strong>. You pay it to request deeper access to the opportunity. The architect reviews your buyer profile and decides whether to grant access. If the architect <em>declines</em>, your deposit is automatically refunded within 48 hours. If the architect <em>grants</em> access, your deposit is credited toward your Tier 3 unlock. Either way, you don't lose the money. It exists to filter out tire-kickers.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I get a refund if I just change my mind?</span><span class="ic">+</span></div>
+            <div class="faq-a">No. This is the most important policy on the platform, and we say it directly. Refunds are <em>not</em> issued for: changing your mind after viewing content, disagreeing with the strategy, claiming you "already knew" the idea, or your investment priorities shifting. Refunds <em>are</em> issued for material misrepresentation by the architect. We hold this line because the opposite policy creates a perverse incentive: buyers consume IP, then claim dissatisfaction, then ask for their money back. That destroys architect trust and would kill the marketplace within a quarter.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What is the vvEntra Premium Guarantee for buyers?</span><span class="ic">+</span></div>
+            <div class="faq-a">On premium-tier deals (typically above $10,000), buyers can opt into the <em>Premium Guarantee</em> for additional protection. As a Premium buyer you receive: priority dispute review by senior moderators, a verified premium badge on your profile, faster architect approval (typically within 4 hours), higher unlock limits per quarter, and priority placement in deal flow recommendations. The Premium tier carries a higher platform commission (18% vs 12%), but for serious capital deployment it's a credible signal to architects that you transact at scale.</div>
+          </div>
+        </div>
       </div>
+
+      <!-- BUYER CAT 3: USING THE PLATFORM -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">03</span>
+            <h3 class="cat-title">Using the <em>platform</em></h3>
+          </div>
+          <span class="cat-count">6 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How do I know if an architect is credible?</span><span class="ic">+</span></div>
+            <div class="faq-a">Every architect's profile shows: government ID verification status, bank verification status, exit history with verification, professional background, number of opportunities listed, number successfully closed, average buyer rating, and verified credentials. Senior architects also display LinkedIn-verified employment history and may carry additional badges (ex-McKinsey, ex-Anthropic, etc.). The <em>track record</em> on the platform is itself the strongest signal. An architect with 8 closed deals and a 4.8 rating is far more credible than one with no history, regardless of background claims.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I talk to the architect before I commit to anything?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes, at Tier 1 (verified access, free) you can send <em>structured questions</em> to the architect using templated prompts. At Tier 3 (NDA + partial unlock) full direct conversation opens, including the ability to schedule a call. Direct contact information (email, phone) is only shared at Tier 4 after full unlock. This staged communication exists to protect both sides: architects can't be drowned in unserious inquiries, and buyers always have a channel to ask substantive questions before paying.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What does "execution support" mean for an opportunity?</span><span class="ic">+</span></div>
+            <div class="faq-a">Many architects offer optional <strong>execution support</strong> alongside their listed opportunity. This can include: hands-on advisory during the first 90 days of execution, an introduction to operational partners or specialists, technical setup support if the opportunity requires specific tooling, or in some cases, the architect themselves joining as a co-founder or strategic advisor. Execution support is negotiated separately at Tier 4 unlock. It's not included in the listing price by default but is often the most valuable part of the relationship.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if I want to acquire the architect's involvement as well?</span><span class="ic">+</span></div>
+            <div class="faq-a">This is common with senior architects. After Tier 4 unlock, the relationship between buyer and architect transitions to direct dialogue. You can negotiate any of: equity advisory roles, operational partnerships, co-founder arrangements, or full acquisition of the architect's involvement. These arrangements are handled directly between you and the architect and are not facilitated by vvEntra. Some of our most successful transactions have resulted in the architect becoming a full operating partner with the buyer.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Is there exclusivity? Can the same opportunity be sold twice?</span><span class="ic">+</span></div>
+            <div class="faq-a">Every opportunity is sold to a <strong>single buyer</strong>. Once you complete Tier 4 unlock, the listing is automatically removed from the public marketplace and the architect is contractually prevented from re-listing or selling the same opportunity to anyone else. You receive exclusivity over the documented opportunity and its core IP. The architect may continue to advise on the execution but cannot resell the underlying playbook.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How do I download the materials after I unlock?</span><span class="ic">+</span></div>
+            <div class="faq-a">After Tier 4 unlock, all documents are accessible through your secure <em>vault</em> on the vvEntra dashboard. You can download PDFs, view embedded financial models, and access all frameworks. Some sensitive materials (proprietary tools, code, contracts) may be accessible only through the vault and not downloadable for confidentiality reasons. Your vault access is permanent for any opportunity you've unlocked. You retain access even if you choose to deactivate your account later.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUYER CAT 4: DISPUTES & EDGE CASES -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">04</span>
+            <h3 class="cat-title">Disputes & <em>edge cases</em></h3>
+          </div>
+          <span class="cat-count">6 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How exactly do I raise a dispute?</span><span class="ic">+</span></div>
+            <div class="faq-a">Within your 7-day inspection window, you click <em>Raise Dispute</em> on the opportunity in your dashboard. You'll be asked to specify: which refund eligibility criterion was violated (with evidence), what was advertised vs what was delivered, any communication with the architect that's relevant. The architect is notified and has 48 hours to respond with counter-evidence. vvEntra moderation reviews both submissions and renders a decision within 5 business days from your initial submission. <span class="tag">Day 0–5</span><span class="tag">5-day SLA</span></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What happens if the architect disappears after I pay?</span><span class="ic">+</span></div>
+            <div class="faq-a">If the architect becomes unresponsive after your escrow is funded (defined as no response within 7 days of unlock and your direct outreach), vvEntra automatically returns your funds in full. The architect's listing is suspended, their account is flagged, and they lose access until they respond. Because every architect is KYC-verified with a verified Indian or international bank account, fraudulent disappearance is rare. The verification process exists precisely to make this consequence real.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if I find out the opportunity has already been executed by someone else?</span><span class="ic">+</span></div>
+            <div class="faq-a">This falls under <em>misrepresentation</em>, which is a valid refund cause. If you can demonstrate that the opportunity was already publicly known, executed, or sold elsewhere before you unlocked it, you have grounds for a full refund. Submit evidence: links to the existing execution, dates of prior listings, or public records. vvEntra moderation reviews and if the claim is valid, you receive a refund and the architect's listing is removed. Architects who knowingly list pre-executed opportunities lose platform access permanently.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I dispute the documentation depth vs what was promised?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes, and this is one of the most common valid dispute grounds. The opportunity preview shows documentation metrics (pages, frameworks, financial models). If you unlock and find materially fewer pages, missing frameworks, or absent financial models, that's a refund-eligible discrepancy. <em>Material</em> is defined as 30% or more shortfall vs advertised. Small variations (a few pages short of the listed count) typically don't qualify for full refund but may result in partial refund or platform credit.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if I disagree with the dispute outcome?</span><span class="ic">+</span></div>
+            <div class="faq-a">You can request a <strong>senior review</strong> within 7 days of the initial decision. A senior moderator (typically with legal or M&A background) re-examines the case with fresh eyes and either upholds or reverses the original decision. Senior review outcomes are final. We do this because consistent dispute decisions are how the platform earns trust over time, but we also recognise the initial review isn't infallible. About 12% of senior reviews reverse the original decision.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if my issue isn't covered by the standard refund criteria?</span><span class="ic">+</span></div>
+            <div class="faq-a">Reach out to vvEntra support directly. Genuinely unique situations (legal issues, jurisdictional complexity, special circumstances) are reviewed case by case by our operations team. We don't promise refunds for these, but we'll always investigate, communicate transparently about why we can or cannot help, and document the case for future policy improvements. Most edge cases are resolved through platform credit or partial settlement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== ARCHITECT TRACK ========== -->
+    <div class="faq-track" id="track-architect">
+
+      <div class="faq-intro reveal">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18M5 3v10a7 7 0 0 0 14 0V3"/><circle cx="12" cy="20" r="1.5"/></svg>
+        </div>
+        <div>
+          <h3>For <em>architects and opportunity creators</em></h3>
+          <p>You see opportunities that others miss. You structure operational systems, validate markets, and build frameworks. vvEntra is the platform where your intelligence becomes a market. These answers walk through listing, pricing, protection, and how you actually get paid.</p>
+        </div>
+      </div>
+
+      <!-- ARCH CAT 1: LISTING & APPROVAL -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">01</span>
+            <h3 class="cat-title">Listing & <em>approval</em></h3>
+          </div>
+          <span class="cat-count">6 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Who can become an architect on vvEntra?</span><span class="ic">+</span></div>
+            <div class="faq-a">vvEntra is built for <strong>operators, COOs, founders, ex-consultants, sector specialists, and researchers</strong> who can produce execution-ready business opportunities with operational depth. We're not for content creators, blog writers, or anyone repackaging public information. The depth requirement (minimum 90 pages per listing) is the first filter. If you've actually built businesses, run operations, or worked deeply enough in a sector to map its inefficiencies, you'll meet the bar.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What's required for an opportunity to be approved?</span><span class="ic">+</span></div>
+            <div class="faq-a">Every listing must include: <ul><li>A business model document (minimum 30 pages)</li><li>Execution system with workflows and SOPs (minimum 25 pages)</li><li>Market research with validated demand signals (minimum 15 pages)</li><li>At least one financial model</li><li>Risk map and mitigation strategy</li><li>An operational roadmap covering at least 24 months</li></ul>Total minimum: <strong>90 pages of operational depth</strong>. Quality reviews check originality, factual accuracy, internal consistency, and execution viability. About 40% of submissions are rejected on first review, usually for shallow depth or generic frameworks.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How long does the approval process take?</span><span class="ic">+</span></div>
+            <div class="faq-a">First-time listings typically take <strong>5-7 business days</strong> for moderation review. This includes depth audit, plagiarism check, factual verification, and quality benchmarking. For architects with track record on the platform (3+ successful listings), reviews are expedited to 2-3 business days. If we request changes, you have unlimited revisions but each revision restarts the review clock. Approved listings go live within 24 hours of approval.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What does "Senior Architect" status mean and how do I earn it?</span><span class="ic">+</span></div>
+            <div class="faq-a">Senior Architect status is earned through track record. The criteria: 3 successfully closed opportunities, average buyer rating of 4.5 or higher, no upheld disputes in your history, and at least 12 months on the platform. Senior Architects receive: priority listing placement, expedited review, higher commission share (90% vs 88% for standard tier), access to private buyer networks for high-value deals, and the verified senior badge that significantly increases buyer trust. Roughly 18% of architects on the platform hold Senior status.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I list multiple opportunities at once?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes. Standard architects can have up to 5 active listings simultaneously. Senior architects have no cap. We do recommend focusing on quality over quantity, especially early on. Architects with 10+ shallow listings tend to under-perform architects with 2 deeply-structured ones. The reputation algorithm weighs the average quality of your listings, so a single weak listing can drag down the visibility of your stronger ones.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if my opportunity is rejected? Can I appeal?</span><span class="ic">+</span></div>
+            <div class="faq-a">Rejections come with specific feedback: what was missing, what was inadequate, what needs to be revised. You can address the feedback and resubmit at no cost. If you believe the rejection was incorrect, you can request a <strong>senior moderator review</strong> within 14 days. Senior review either upholds the rejection (with additional reasoning) or overturns it. About 8% of appeals succeed. The process is honest, not adversarial; our goal is to get good opportunities live, not to keep them out.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARCH CAT 2: PRICING & EARNINGS -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">02</span>
+            <h3 class="cat-title">Pricing & <em>earnings</em></h3>
+          </div>
+          <span class="cat-count">6 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How much should I price my opportunity at?</span><span class="ic">+</span></div>
+            <div class="faq-a">The vvEntra dashboard shows you sector-specific pricing benchmarks. Average unlock values currently sit at: <strong>Fintech SMB $7.2k, Healthtech $6.8k, AI Workflow $5.4k, D2C Ayurveda $4.8k, Climate Industry $4.4k, B2B SaaS $3.2k</strong>. Your specific price depends on documentation depth, your architect tier, market demand for the sector, and the scale of the opportunity. Underpricing is the most common mistake. A serious 120-page opportunity with financial models should not be priced below $3,000.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What's vvEntra's commission?</span><span class="ic">+</span></div>
+            <div class="faq-a">Standard tier: <strong>12% platform commission</strong>. Premium Guarantee tier: <strong>18%</strong> (includes guaranteed settlement, premium positioning, priority dispute support). For Senior Architects, the standard rate drops to 10%. Commission is deducted at settlement, not at unlock. There are no hidden fees, no listing fees, no monthly charges. You see the full commission deducted from your final settlement and the buyer pays the listed price.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">When do I actually receive my money?</span><span class="ic">+</span></div>
+            <div class="faq-a">Standard tier: Funds release at the end of the buyer's 7-day inspection window, plus 24-48 hours for bank settlement. Total: <strong>8-9 days from buyer's full unlock to your bank account</strong>. Premium Guarantee tier: settlement within <strong>48 hours of unlock</strong>, regardless of any dispute status. The platform absorbs the dispute risk during inspection in exchange for the higher commission. Most architects who handle high-volume or high-value deals use Premium Guarantee for predictable cash flow.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How do I get paid? What payment methods are available?</span><span class="ic">+</span></div>
+            <div class="faq-a">For Indian architects: direct bank transfer (NEFT/RTGS) to your verified Indian bank account. International architects: bank transfer (SWIFT/ACH/SEPA depending on geography), Wise transfer (lower fees for smaller amounts), Stripe Express dashboard for US/EU. Cross-border architects can also opt to receive USD or hold balance in vvEntra and withdraw in larger batches to reduce conversion fees. Tax documentation (1099 / Form 16 / equivalent) is auto-generated at year-end.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I offer execution support alongside the opportunity for extra income?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes, and this is often where senior architects earn the most. You can list optional <strong>execution support packages</strong> alongside your opportunity: hourly advisory ($150-500/hour), 90-day execution support ($5,000-25,000), or equity-based advisor arrangements. These are negotiated directly with the buyer after Tier 4 unlock and processed through vvEntra (with platform commission). Many of our top-earning architects make 2-3x more from execution support than from the initial unlock.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What about taxes on my earnings?</span><span class="ic">+</span></div>
+            <div class="faq-a">You are responsible for all taxes on your vvEntra earnings. We do not deduct TDS or withholding tax at source unless legally required in your jurisdiction. We provide: detailed transaction history exportable as CSV, annual income summary documents, GST invoices where applicable for Indian architects, and Form 1099 / equivalent for US-based architects. Consult your accountant for jurisdiction-specific tax treatment. We strongly recommend keeping a separate bank account for vvEntra income to simplify accounting.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARCH CAT 3: IP PROTECTION -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">03</span>
+            <h3 class="cat-title">IP <em>protection</em></h3>
+          </div>
+          <span class="cat-count">5 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How is my IP protected before a buyer pays?</span><span class="ic">+</span></div>
+            <div class="faq-a">This is the core architecture of the platform. <strong>Nothing of substance is visible until payment moves into escrow.</strong> Tier 0 (public) shows only sector, scale, depth metrics, your credentials. Tier 1 (free, verified) shows opportunity title and one-paragraph thesis. Tier 2 (refundable deposit) gates the next reveal. Tier 3 (NDA + 30% paid) reveals business model and execution roadmap. Tier 4 (full payment) reveals financial models and proprietary IP. <em>You control what unlocks at each tier.</em> A buyer cannot accidentally see your full opportunity. <span class="tag">NDA gated</span><span class="tag">Staged reveal</span></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if a buyer screenshots or downloads my content and shares it?</span><span class="ic">+</span></div>
+            <div class="faq-a">Every Tier 3 and Tier 4 access is gated by a binding NDA with documented signatures. Document watermarking embeds the buyer's verified identity into every page they download. If your IP appears elsewhere, you can submit evidence through our IP enforcement channel. Confirmed leaks result in: legal action against the buyer (vvEntra supports with documentation), permanent account suspension, public blacklisting from the platform, and financial penalties as defined in our terms. Real-world precedent: 0 confirmed leak cases in the platform's history. The verification + accountability architecture creates strong deterrence.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I reject a buyer who wants access to my opportunity?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes, absolutely. At Tier 2 (when a buyer pays the interest deposit), <strong>you review their profile before access is granted</strong>. You see their verification status, capacity confirmation, transaction history, ratings from other architects, and their stated thesis. If they don't feel right, you decline and their deposit is automatically refunded. There's no penalty for declining buyers. Some architects accept 80% of requests; others accept only 30%. Both approaches work depending on the sensitivity of the opportunity.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Who owns the IP after the buyer unlocks?</span><span class="ic">+</span></div>
+            <div class="faq-a">This depends on what you've defined in your listing. By default, vvEntra unlocks transfer <strong>execution rights, not ownership</strong>. The buyer receives the right to execute the opportunity exclusively (you can't sell the same opportunity again), but you retain authorship of the materials. For full IP transfer (including the right to claim the work as their own, modify it, or resell), this is a separate premium listing option with different pricing. Most architects use the standard execution-rights model.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I list opportunities anonymously?</span><span class="ic">+</span></div>
+            <div class="faq-a">Partially. Your real name is shared only at Tier 4 unlock with the verified buyer. At Tier 0-3, buyers see your <em>architect profile</em> (e.g., "Senior architect, ex-consulting, 2 successful exits, 4.9 rating") without your real name. This is standard practice and protects your identity while still allowing buyers to evaluate credibility. Full anonymity (where your name is never revealed) is not supported because it would prevent post-unlock relationships and execution support, which is where most of the value flows.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARCH CAT 4: DISPUTES & SUPPORT -->
+      <div class="faq-category">
+        <div class="cat-header">
+          <div class="cat-header-left">
+            <span class="cat-num">04</span>
+            <h3 class="cat-title">Disputes & <em>support</em></h3>
+          </div>
+          <span class="cat-count">5 questions</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What happens if a buyer raises a frivolous dispute?</span><span class="ic">+</span></div>
+            <div class="faq-a">If a buyer raises a dispute outside our documented refund criteria (e.g., they just don't like the strategy), vvEntra moderation rules in your favor. Funds release to you normally. The buyer's account is flagged. <strong>Repeated frivolous disputes lead to buyer account suspension</strong>. About 6% of all disputes are deemed frivolous. We do this because architect trust is what keeps the marketplace alive. If buyers could refund-fish, no serious architect would list here.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">How can I respond to a dispute against my opportunity?</span><span class="ic">+</span></div>
+            <div class="faq-a">When a buyer raises a dispute, you receive a notification with their specific claim and any submitted evidence. You have <strong>48 hours to respond</strong> with counter-evidence: documentation of what was advertised vs delivered, communication history showing what the buyer agreed to, evidence of the depth or completeness of your work. vvEntra moderation reviews both submissions and decides within 5 business days from the original dispute submission.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">If a dispute is upheld against me, what happens?</span><span class="ic">+</span></div>
+            <div class="faq-a">If moderation rules in the buyer's favor: the buyer receives a full refund, your listing is removed from the marketplace, and your architect account is flagged. The flag is visible on your profile until you have 3 subsequent successful transactions. A first upheld dispute is recoverable. Two upheld disputes within 12 months trigger a senior review of your account, and three trigger permanent suspension. This is strict on purpose; serial misrepresentation hurts the entire marketplace.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">What if I need help structuring my first opportunity?</span><span class="ic">+</span></div>
+            <div class="faq-a">vvEntra offers an optional <em>architect onboarding session</em> for new architects: 30 minutes with a senior architect or platform team member who reviews your draft opportunity and gives structural feedback. Free for first-time architects. We also publish a detailed <strong>Architect Playbook</strong> covering listing structure, pricing strategy, what buyers want to see, and how to position yourself for senior tier. Many of our top architects spent significant time on the first listing and shipped subsequent listings 4-5x faster.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q"><span class="q-text">Can I withdraw my opportunity after it's listed?</span><span class="ic">+</span></div>
+            <div class="faq-a">Yes, with conditions. You can pause or remove a listing at any time before a buyer reaches Tier 3 (NDA + partial payment). Once a buyer is at Tier 3, you can't withdraw without their agreement, because they've committed financially. If a buyer is at Tier 4, the opportunity is in their unlock window and cannot be withdrawn at all. You're free to delist for any reason: change of strategy, decided to execute it yourself, market shifted. Just communicate clearly through the platform.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NO RESULTS -->
+    <div class="no-results" id="no-results">
+      <h2 class="display lg">No questions match <em>your search.</em></h2>
+      <p>Try a different keyword, or scroll through the full list above.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- STILL NEED HELP -->
+<section class="contact-section">
+  <div class="container-narrow">
+    <div class="contact-card reveal">
+      <span class="eyebrow">Still need help?</span>
+      <h2 class="display lg">Didn't find your <em>answer?</em></h2>
+      <p class="lead" style="text-align:center;">We're a small team and we answer founder-style: directly, quickly, no support-bot routing. Pick the channel that works for you.</p>
+      <div class="channels">
+        <div class="channel">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </div>
+          <span class="ttl">Email us</span>
+          <span class="desc">hello@vventra.com</span>
+        </div>
+        <div class="channel">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </div>
+          <span class="ttl">Live chat</span>
+          <span class="desc">Mon-Sat · 9am-9pm IST</span>
+        </div>
+        <div class="channel">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <span class="ttl">Schedule a call</span>
+          <span class="desc">Premium tier · 15 min</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem;">
+        <a class='btn btn-orange' href='/#cta'><span class="cta-text"></span> <span class="arrow">→</span></a>
+        <a href="#trust" data-route="trust" class="btn btn-outline">Read trust policy <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
     </section>
 
     <!-- ===================================================================
-         VIEW 9: TRANSACTION & DILIGENCE FAQ (#faq)
+         VIEW 9: TERMS & CONDITIONS (#terms)
+         Verbatim architecture from original vvEntra platform
          =================================================================== -->
-    <section id="page-faq" class="c-view">
-      <div class="c-section-header" style="text-align: center; display: block; margin-bottom: 3rem;">
-        <h1 class="c-section-header__title">Frequently Asked Questions</h1>
-        <p class="c-section-header__sub">Key regulatory, legal, and settlement guidelines for institutional buyers and asset operators</p>
-      </div>
+    <section id="page-terms" class="c-view page terms-page" data-page="terms">
+<div class="container" style="max-width:760px; padding-top:5rem; padding-bottom:6rem;">
 
-      <div class="c-faq-grid">
-        <!-- Buyer FAQ Column -->
-        <div>
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--color-brand-primary);">
-            <h2 style="font-size: 1.15rem; font-weight: 700;">For Institutional Buyers & Capital Allocators</h2>
-          </div>
+    <div class="section-head reveal" style="margin-bottom:3rem;">
+      <div class="section-marker"><span class="num">03</span><span class="line"></span><span class="name">Platform terms</span></div>
+      <h1 class="display lg">Terms and <em>policy.</em></h1>
+      <p class="lead" style="max-width:560px;">These are the rules that govern every interaction on vvEntra. Read them before you participate. By applying for access, you agree to these terms.</p>
+      <span style="font-size:.8rem; color:var(--text-faint);">Last updated: June 2026 · Version 1.0</span>
+    </div>
 
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> How is buyer capital protected during due diligence?</h3>
-            <p class="c-faq-a">All buyer funds are deposited directly into neutral, regulated banking escrow accounts. The operator cannot access these funds during your 7-day inspection window. If deliverables materially deviate from verified specifications, funds are refunded in full under our documented SLA.</p>
-          </div>
+    <div class="terms-body reveal delay-1">
 
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> What occurs during the technical diligence review session?</h3>
-            <p class="c-faq-a">Upon 10% escrow deposit confirmation, you receive direct calendar booking access to the operating principal. Under a binding bilateral Non-Disclosure Agreement (NDA), you conduct a 45-minute technical audit examining architecture schematics, accounting records, live integrations, and supplier contracts.</p>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> What are the specific criteria for receiving a 100% escrow refund?</h3>
-            <p class="c-faq-a">Refunds are automatically approved if: (1) deliverable documentation is materially less than stated (fewer than 90 pages or missing operational frameworks), (2) advertised financial models or vendor rosters are omitted, or (3) the operator fails to respond to technical inquiries within the 48-hour SLA window.</p>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> Can I purchase the intellectual property directly without ongoing operator involvement?</h3>
-            <p class="c-faq-a">Yes. At closing, buyers select from three transaction structures: Asset Transfer Only (direct clean IP buyout), Strategic Advisory (retaining the operator for weekly oversight), or Full Operating Partnership (90/10 milestone-based execution partnership).</p>
-          </div>
-        </div>
-
-        <!-- Operator / Seller FAQ Column -->
-        <div>
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--color-success);">
-            <h2 style="font-size: 1.15rem; font-weight: 700;">For Asset Operators & Sellers</h2>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> How are proprietary operational blueprints protected prior to payment?</h3>
-            <p class="c-faq-a">Core operational IP—including source code repositories, vendor agreements, and financial cash-flow models—is never publicly exposed. Buyers only see sanitized executive abstracts until they complete identity verification, execute a mutual NDA, and place 10% cash deposit into regulated escrow.</p>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> What is the mandatory 90-page documentation threshold?</h3>
-            <p class="c-faq-a">vvEntra exclusively lists institutional-grade operational assets. Submissions must include complete procedural workflows (SOPs), technical data schemas, three-statement financial models, and risk mitigation registers. Abstract pitch decks without operational depth are systematically rejected.</p>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> What fees does vvEntra charge asset operators?</h3>
-            <p class="c-faq-a">Intake and technical audits are 100% free upfront. vvEntra retains a flat 10% facility commission strictly upon successful escrow clearance and buyer approval. Operating principals retain 90% of all gross deal proceeds.</p>
-          </div>
-
-          <div class="c-faq-card">
-            <h3 class="c-faq-q"><span>Q:</span> How and when are seller transaction payouts settled?</h3>
-            <p class="c-faq-a">Payouts are cleared within 7 business days of buyer milestone approval or conclusion of the 7-day inspection window. Settlements are transferred directly to verified commercial bank accounts via FedWire, SWIFT, or domestic ACH rails.</p>
-          </div>
+      <div class="terms-section">
+        <div class="terms-section-num">01</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Platform role</h2>
+          <p>vvEntra is a facilitator. We connect opportunity creators with execution-focused buyers and operators. We are not a party to any transaction, investment agreement, or business arrangement made through the platform.</p>
+          <p>We do not guarantee the success or failure of any opportunity listed. We do not provide investment, legal, or financial advice. Every participant is responsible for conducting their own due diligence before committing capital or entering any agreement.</p>
         </div>
       </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">02</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Architect responsibility</h2>
+          <p>Architects must submit original content. You may not list a business system, model, or blueprint that you do not own or have the right to sell. Duplicate listings of the same core opportunity are prohibited.</p>
+          <p>All documentation you submit must be accurate to the best of your knowledge. Deliberately misleading buyers, inflating metrics, or misrepresenting the nature of an opportunity is grounds for immediate account removal and forfeiture of any pending payments.</p>
+          <p>Once a buyer has unlocked your listing, you are expected to engage in good faith: respond to messages within a reasonable timeframe, conduct the agreed meeting within the 7-day window, and provide the documentation package exactly as listed.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">03</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Buyer responsibility</h2>
+          <p>Buyers may not copy, redistribute, resell, or repurpose any documentation or IP accessed through vvEntra without a completed full-payment transaction and explicit agreement with the architect. The unlock fee grants access to review materials, not ownership of the IP.</p>
+          <p>All materials accessed through an unlock are covered by mutual NDA. Buyers agree to maintain confidentiality for a period of no less than 24 months from the date of access.</p>
+          <p>Buyers who repeatedly unlock and reject without engaging in meetings or providing substantive feedback may have their access reviewed. Patterns of bad-faith engagement will result in account suspension.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">04</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Payment terms</h2>
+          <p>All transactions on vvEntra follow a two-stage structure. The unlock fee (10% of the listed price) is required to access documents and open the buyer-seller portal. The remaining amount is committed only after a meeting has been conducted and both parties agree to proceed.</p>
+          <p>All payments are held in escrow and are not released to the architect until the buyer approves delivery at each milestone. vvEntra takes a platform fee of 10% from each transaction. Architects receive 90% of the agreed engagement value.</p>
+          <p>Payments are processed in USD. Tax obligations arising from any transaction are the sole responsibility of each party in their respective jurisdictions.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">05</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Refund policy</h2>
+          <p>The unlock fee is non-refundable once you have accessed the document package. You are paying for access to confidential strategic material and the architect's time. The act of opening the portal constitutes access.</p>
+          <p>A refund of the unlock fee may be granted in the following circumstances only: the document package delivered does not match the table of contents shown pre-unlock, the listing contained materially false or fabricated information, or fraud is confirmed by vvEntra's review team.</p>
+          <p>The following are not grounds for a refund: the buyer changes their mind after reviewing the documents, the opportunity is not a fit for the buyer's current priorities, or the buyer and architect fail to reach agreement on engagement terms.</p>
+          <p>If a buyer rejects post-unlock and the listing is subsequently unlocked by a second buyer, the first buyer will receive a partial goodwill credit of 5% of their unlock fee. This credit applies to a future unlock on the platform and is not paid out in cash.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">06</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">7-day engagement window</h2>
+          <p>Once a buyer unlocks an opportunity, both parties have 7 calendar days to conduct a meeting and proceed to terms. If no meeting takes place and no terms are accepted within this window, the offer is automatically cancelled.</p>
+          <p>The unlock fee is not returned in the event of an automatic cancellation. The listing may re-enter the marketplace at the architect's discretion. The buyer may submit a new unlock request if the listing becomes available again.</p>
+          <p>The 7-day clock begins from the moment the unlock payment clears, not from the time the buyer opens the portal.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">07</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Intellectual property</h2>
+          <p>Ownership of the opportunity, blueprint, and all associated documentation remains with the architect until a full-payment transaction is completed. Unlocking grants a confidential review licence only.</p>
+          <p>Upon completion of the full engagement payment, IP transfer terms are governed by the signed agreement between the buyer and architect. vvEntra is not a party to that agreement and does not assume liability for any IP dispute arising from it.</p>
+          <p>Architects retain the right to list new, original opportunities at any time. Listing the same core opportunity more than once, or listing an opportunity that was previously sold to another buyer, is prohibited.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">08</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Dispute handling</h2>
+          <p>Either party may raise a formal dispute within 7 calendar days of a milestone delivery or payment release event. Disputes must be submitted through the platform. Off-platform disputes are not considered by vvEntra.</p>
+          <p>vvEntra reviews all evidence submitted through the platform: messages, call records, documents, and milestone records. Both parties will be given the opportunity to submit their account before a decision is made.</p>
+          <p>In the early stage of the platform, vvEntra's decision is final. Disputed funds remain in escrow until resolution. Resolutions may result in full release to either party or a split based on evidence.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">09</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Account policy</h2>
+          <p>Each individual may hold only one vvEntra account. Creating duplicate accounts, sharing credentials, or circumventing the one-person-one-account policy will result in permanent removal of all accounts associated with the individual.</p>
+          <p>Accounts are non-transferable. You may not sell, assign, or otherwise transfer your vvEntra account or any rights associated with it to any other person or entity.</p>
+          <p>vvEntra reserves the right to suspend or terminate any account that violates these terms, engages in fraudulent activity, or causes harm to other members of the platform. In cases of termination for cause, pending payments may be forfeited.</p>
+        </div>
+      </div>
+
+      <div class="terms-section">
+        <div class="terms-section-num">10</div>
+        <div class="terms-section-content">
+          <h2 class="terms-h2">Privacy and data</h2>
+          <p>vvEntra collects only the information necessary to operate the platform: account details, verification documents, transaction records, and platform activity. We do not sell your data to third parties.</p>
+          <p>Verification documents are encrypted in transit and at rest. They are accessed only by the verification team and are not visible to any other user, architect, or buyer on the platform.</p>
+          <p>Messages, call records, and documents exchanged through the platform are retained for the purpose of dispute resolution. Participants should conduct all material communications through the platform for this reason.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="terms-footer reveal" style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <span style="font-size:.82rem; color:var(--text-faint);">© 2026 vvEntra. All rights reserved. These terms are subject to change. Continued use of the platform constitutes acceptance of the current version.</span>
+      <a href="#apply" data-route="apply" class="btn btn-orange btn-sm">Apply for access <span class="arrow">→</span></a>
+    </div>
+
+  </div>
     </section>
+
+  
 
   </main>
 

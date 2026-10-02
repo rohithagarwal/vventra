@@ -355,6 +355,13 @@
     renderPerspectiveContent();
     renderDashboard();
     SettlementCalculator.updateUI();
+
+    const wantedTab = role === 'architect' ? 'architect' : 'buyer';
+    const wantedTabBtn = document.querySelector(`#page-faq .tab-btn[data-tab="${wantedTab}"]`);
+    if (wantedTabBtn && !wantedTabBtn.classList.contains('active')) {
+      wantedTabBtn.click();
+    }
+
     if (notify) {
       showNotification(`Switched perspective to ${role === 'investor' ? 'Institutional Buyer' : 'Asset Operator / Seller'}`);
     }
@@ -912,61 +919,212 @@
   };
 
   // ===================================================================
-  // 7D. THE PLAYBOOK CONTROLLER (#playbook)
   // ===================================================================
-  let activePlaybookChapterId = 'ch-01';
-
-  function renderPlaybook(chapterId = activePlaybookChapterId) {
-    const container = DOM.get('#playbook-content-container');
-    if (!container) return;
-
-    activePlaybookChapterId = chapterId;
-
-    DOM.getAll('#playbook-chapter-tabs .c-playbook-tab').forEach(tab => {
-      tab.classList.toggle('is-active', tab.dataset.chapter === chapterId);
+  // 7D. AUTHENTIC PAGE CONTROLLERS (Playbook, Trust, FAQ, Terms)
+  // Verbatim interactive functionality from original vvEntra platform
+  // ===================================================================
+  const globalRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        globalRevealObserver.unobserve(e.target);
+      }
     });
+  }, { threshold: 0.10 });
 
-    const chapter = VVENTRA_DATA.playbookChapters.find(ch => ch.id === chapterId) || VVENTRA_DATA.playbookChapters[0];
-    const isInvestor = State.role === 'investor';
+  function observePageReveals(scopeSelector) {
+    const scope = document.querySelector(scopeSelector) || document;
+    scope.querySelectorAll('.reveal:not(.in)').forEach(el => globalRevealObserver.observe(el));
+    setTimeout(() => {
+      scope.querySelectorAll('.reveal:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight + 250) el.classList.add('in');
+      });
+    }, 150);
+  }
 
-    container.innerHTML = `
-      <div class="c-playbook-card">
-        <div class="c-badge c-badge--brand" style="margin-bottom: 0.75rem;">Chapter ${chapter.id.replace('ch-', '')} · ${isInvestor ? 'Investor Lens' : 'Architect Lens'}</div>
-        <h2 class="c-playbook-card__title">${chapter.title}</h2>
-        <p class="c-playbook-card__summary">${chapter.summary}</p>
-        
-        <h4 style="font-size: 0.82rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1rem;">
-          Mandatory Operating Takeaways (${isInvestor ? 'For Investors & Buyers' : 'For Architects & Creators'}):
-        </h4>
-        <ul class="c-playbook-takeaways">
-          ${chapter.takeaways.map(t => `<li>${t}</li>`).join('')}
-        </ul>
-      </div>
-    `;
+  let playbookInitialized = false;
+  function initPlaybookPage() {
+    const page = DOM.get('#page-playbook');
+    if (!page) return;
+
+    if (!playbookInitialized) {
+      // Role toggle in hero
+      const pbRoleToggle = page.querySelector('#role-toggle');
+      if (pbRoleToggle) {
+        pbRoleToggle.querySelectorAll('.role-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            setPerspective(btn.dataset.role);
+          });
+        });
+      }
+
+      // Progress nav tracking and smooth scroll
+      const steps = page.querySelectorAll('.prog-step');
+      const chapters = page.querySelectorAll('.chapter');
+
+      function updateActiveStep() {
+        let active = null;
+        chapters.forEach(ch => {
+          const r = ch.getBoundingClientRect();
+          if (r.top < 250) active = ch.id;
+        });
+        steps.forEach(s => {
+          s.classList.toggle('active', s.dataset.target === active);
+        });
+      }
+
+      window.addEventListener('scroll', updateActiveStep, { passive: true });
+      updateActiveStep();
+
+      steps.forEach(s => {
+        s.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById(s.dataset.target);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      playbookInitialized = true;
+    }
+
+    observePageReveals('#page-playbook');
+  }
+
+  let faqInitialized = false;
+  function initFaqPage() {
+    const page = DOM.get('#page-faq');
+    if (!page) return;
+
+    if (!faqInitialized) {
+      // FAQ Accordion
+      page.querySelectorAll('.faq-q').forEach(q => {
+        q.addEventListener('click', () => {
+          const item = q.parentElement;
+          const wasOpen = item.classList.contains('open');
+          page.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+          if (!wasOpen) item.classList.add('open');
+        });
+      });
+
+      // Tab switcher
+      const tabsWrap = DOM.get('#tabs-wrap');
+      const tabBtns = page.querySelectorAll('.tab-btn');
+      const tracks = {
+        buyer: DOM.get('#track-buyer'),
+        architect: DOM.get('#track-architect')
+      };
+
+      function updateFaqCount() {
+        const activeTrack = page.querySelector('.faq-track.active');
+        if (!activeTrack) return;
+        const total = activeTrack.querySelectorAll('.faq-item').length;
+        const countEl = DOM.get('#faq-count');
+        if (countEl) countEl.textContent = `${total} questions`;
+      }
+
+      function runFaqSearch(query) {
+        query = query.toLowerCase().trim();
+        const activeTrack = page.querySelector('.faq-track.active');
+        if (!activeTrack) return;
+        const items = activeTrack.querySelectorAll('.faq-item');
+        const categories = activeTrack.querySelectorAll('.faq-category');
+        const noResults = DOM.get('#no-results');
+        let matchCount = 0;
+
+        if (!query) {
+          items.forEach(item => item.style.display = '');
+          categories.forEach(cat => cat.style.display = '');
+          if (noResults) noResults.classList.remove('show');
+          updateFaqCount();
+          return;
+        }
+
+        items.forEach(item => {
+          const qText = item.querySelector('.q-text')?.textContent.toLowerCase() || '';
+          const aText = item.querySelector('.faq-a')?.textContent.toLowerCase() || '';
+          if (qText.includes(query) || aText.includes(query)) {
+            item.style.display = '';
+            matchCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        categories.forEach(cat => {
+          const visibleItems = cat.querySelectorAll('.faq-item:not([style*="display: none"])');
+          cat.style.display = visibleItems.length === 0 ? 'none' : '';
+        });
+
+        if (noResults) {
+          noResults.classList.toggle('show', matchCount === 0);
+        }
+
+        const countEl = DOM.get('#faq-count');
+        if (countEl) {
+          countEl.textContent = `${matchCount} ${matchCount === 1 ? 'question' : 'questions'}`;
+        }
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.tab;
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (tabsWrap) tabsWrap.setAttribute('data-tab', target);
+          Object.keys(tracks).forEach(k => {
+            if (tracks[k]) tracks[k].classList.toggle('active', k === target);
+          });
+          page.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+
+          const searchInput = DOM.get('#faq-search-input');
+          if (searchInput && searchInput.value) {
+            searchInput.value = '';
+            runFaqSearch('');
+          }
+          updateFaqCount();
+
+          const targetRole = target === 'buyer' ? 'investor' : 'architect';
+          if (State.role !== targetRole) {
+            setPerspective(targetRole);
+          }
+        });
+      });
+
+      const searchInput = DOM.get('#faq-search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', e => runFaqSearch(e.target.value));
+      }
+
+      faqInitialized = true;
+    }
+
+    // Align active tab with current State.role
+    const wantedTab = State.role === 'architect' ? 'architect' : 'buyer';
+    const wantedBtn = page.querySelector(`.tab-btn[data-tab="${wantedTab}"]`);
+    if (wantedBtn && !wantedBtn.classList.contains('active')) {
+      wantedBtn.click();
+    }
+
+    observePageReveals('#page-faq');
+  }
+
+  function initTrustPage() {
+    observePageReveals('#page-trust');
+  }
+
+  function initTermsPage() {
+    observePageReveals('#page-terms');
+  }
+
+  function renderPlaybook() {
+    initPlaybookPage();
   }
 
   function setupPlaybookControls() {
-    DOM.getAll('#playbook-chapter-tabs .c-playbook-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        renderPlaybook(tab.dataset.chapter);
-      });
-    });
-
-    const pbInvBtn = DOM.get('#pb-role-investor');
-    const pbArchBtn = DOM.get('#pb-role-architect');
-
-    if (pbInvBtn) {
-      pbInvBtn.addEventListener('click', () => {
-        setPerspective('investor');
-        renderPlaybook();
-      });
-    }
-    if (pbArchBtn) {
-      pbArchBtn.addEventListener('click', () => {
-        setPerspective('architect');
-        renderPlaybook();
-      });
-    }
+    initPlaybookPage();
   }
 
   // ===================================================================
@@ -1172,7 +1330,13 @@
     } else if (viewName === 'browse') {
       renderMarketplace();
     } else if (viewName === 'playbook') {
-      renderPlaybook();
+      initPlaybookPage();
+    } else if (viewName === 'trust') {
+      initTrustPage();
+    } else if (viewName === 'faq') {
+      initFaqPage();
+    } else if (viewName === 'terms') {
+      initTermsPage();
     } else if (viewName === 'listing') {
       renderAssetDetail(State.activeAssetId);
     } else if (viewName === 'pricing') {
@@ -1180,6 +1344,8 @@
     } else if (viewName === 'purchase') {
       renderDiligencePanel(State.activeAssetId);
     }
+
+    observePageReveals('#page-' + viewName);
   }
 
   // ===================================================================
