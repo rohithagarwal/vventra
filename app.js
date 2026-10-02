@@ -37,6 +37,20 @@
     calculatorValuation: 10000,
     bookmarks: StorageService.get('bookmarks', ['VVE-2440']),
     customAssets: StorageService.get('custom_assets', []),
+    buyMandates: StorageService.get('buy_mandates', [
+      {
+        id: 'BM-1094',
+        entity: 'Apex Horizon Capital (Institutional Syndicate)',
+        budget: 100000,
+        escrowReserve: 10000,
+        sectors: ['RegTech & Compliance', 'Vertical AI Agents'],
+        structure: 'cash',
+        windowDays: 30,
+        status: 'Active Registry Broadcast',
+        timestamp: 'Just now',
+        thesis: 'Seeking mid-market automated compliance workflows and vertical AI pipelines to roll up into existing industrial B2B portfolio. Full 90+ page documentation and pro-forma models mandatory.'
+      }
+    ]),
     activeFilter: 'all',
     searchQuery: '',
     dataRoomRevealed: false
@@ -455,6 +469,12 @@
     if (pbInvBtn && pbArchBtn) {
       pbInvBtn.classList.toggle('is-active', !isOperator);
       pbArchBtn.classList.toggle('is-active', isOperator);
+    }
+
+    // Update navigation link text for #list
+    const navLinkList = DOM.get('#nav-link-list');
+    if (navLinkList) {
+      navLinkList.textContent = isOperator ? 'List Opportunity' : 'Post Buy Mandate';
     }
   }
 
@@ -1579,43 +1599,433 @@
   }
 
   // ===================================================================
-  // 8. ASSET INTAKE & COMPOSER
+  // 8. ASSET INTAKE & COMPOSER (Dual-Track Architecture)
   // ===================================================================
-  function setupAssetComposer() {
-    const form = DOM.get('#composer-form');
-    const sanitizeBtn = DOM.get('#composer-sanitize-btn');
 
-    if (sanitizeBtn) {
-      sanitizeBtn.addEventListener('click', () => {
-        const title = DOM.get('#comp-title').value.trim() || 'Untitled Asset Dossier';
-        const thesis = DOM.get('#comp-thesis').value.trim();
-        const price = Number(DOM.get('#comp-price').value) || 20000;
+  // --- Track 1: Investor Capital Buy-Box & Acquisition Mandate Controller ---
+  function setupInvestorBuyMandate() {
+    const budgetInput = DOM.get('#mandate-budget');
+    const escrowDisp = DOM.get('#mandate-escrow-disp');
+    const matchBudgetDisp = DOM.get('#mandate-match-budget-disp');
+    const matchCountEl = DOM.get('#mandate-match-count');
+    const matchedStream = DOM.get('#mandate-matched-stream');
+    const presets = DOM.getAll('#mandate-budget-presets button');
+    const sectorChips = DOM.getAll('#mandate-sector-chips .c-sector-chip');
+    const form = DOM.get('#mandate-form');
+    const templateBtns = DOM.getAll('.c-thesis-templates button');
+    const userMandatesList = DOM.get('#user-mandate-items');
+    const userMandateCount = DOM.get('#user-mandate-count');
+    const peerMandatesList = DOM.get('#peer-mandates-list');
 
-        if (!thesis) {
-          showNotification('Enter operational specifications before generating an executive abstract.');
-          return;
+    // Peer Institutional Mandates Sample Stream
+    if (peerMandatesList) {
+      const peerData = [
+        { buyer: 'Apex Capital Partners', alloc: '$150,000', sector: 'RegTech & Compliance', time: '2h ago', req: 'Min 100p SOPs · 14d close' },
+        { buyer: 'Beacon Ridge Studio', alloc: '$75,000', sector: 'Vertical AI Agents', time: '4h ago', req: 'Enterprise Pro-Forma · Python Repo' },
+        { buyer: 'Vanguard Industrial Ops', alloc: '$250,000', sector: 'ClimateTech & Energy', time: '7h ago', req: 'EPA Pilot Logs · Full Carveout' },
+        { buyer: 'Kestrel Search Syndicate', alloc: '$40,000', sector: 'Tier-2 SMB Fintech', time: '1d ago', req: 'Cash Flow Positive Frameworks' }
+      ];
+      peerMandatesList.innerHTML = peerData.map(p => `
+        <div class="c-peer-mandate-item">
+          <div class="c-peer-mandate-item__head">
+            <span class="c-peer-mandate-item__buyer">${p.buyer}</span>
+            <span class="c-peer-mandate-item__time">${p.time}</span>
+          </div>
+          <div class="c-peer-mandate-item__details">
+            <strong style="color: var(--color-brand-primary);">${p.alloc}</strong> allocation in <em>${p.sector}</em>
+            <div style="font-size: 0.72rem; color: var(--color-text-faint); margin-top: 2px;">Criteria: ${p.req}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderUserMandates() {
+      if (!userMandatesList) return;
+      if (userMandateCount) userMandateCount.textContent = State.buyMandates.length;
+      if (State.buyMandates.length === 0) {
+        userMandatesList.innerHTML = `<p style="font-size: 0.8rem; color: var(--color-text-faint); margin: 0.5rem 0;">No published buy-boxes yet. Complete the form to broadcast your mandate.</p>`;
+        return;
+      }
+      userMandatesList.innerHTML = State.buyMandates.map((m) => `
+        <div class="c-user-mandate-card">
+          <div class="c-user-mandate-card__head">
+            <span class="c-user-mandate-card__entity">${m.entity}</span>
+            <span class="c-user-mandate-card__budget">${formatCurrency(m.budget)}</span>
+          </div>
+          <div style="font-size: 0.74rem; color: var(--color-text-muted); margin-bottom: 0.35rem;">
+            Sectors: ${Array.isArray(m.sectors) ? m.sectors.join(', ') : m.sectors}
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem;">
+            <span class="c-badge c-badge--success" style="font-size: 0.65rem;">● ${m.status}</span>
+            <span style="font-family: var(--font-family-mono); color: var(--color-text-faint);">${m.timestamp || 'Active'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    renderUserMandates();
+
+    function getSelectedSectors() {
+      return sectorChips.filter(c => c.classList.contains('is-selected')).map(c => c.dataset.sector);
+    }
+
+    function updateMandateMatches() {
+      const budget = Number(budgetInput?.value) || 100000;
+      const selectedSectors = getSelectedSectors();
+      const allAssets = AssetRepository.getAll();
+
+      // Find matching assets by sector and approximate budget
+      const matches = allAssets.filter(a => {
+        const sectorMatch = selectedSectors.some(s => 
+          (a.industry && a.industry.toLowerCase().includes(s.toLowerCase())) ||
+          (a.tags && a.tags.some(t => t.toLowerCase().includes(s.toLowerCase())))
+        );
+        return sectorMatch || a.valuation <= budget;
+      });
+
+      const displayList = matches.length > 0 ? matches.slice(0, 3) : allAssets.slice(0, 3);
+      const estimatedMarketCount = Math.max(3, displayList.length * 4);
+
+      if (matchCountEl) matchCountEl.textContent = estimatedMarketCount;
+      if (matchBudgetDisp) matchBudgetDisp.textContent = formatCurrency(budget);
+      if (escrowDisp) escrowDisp.textContent = `${formatCurrency(Math.round(budget * 0.1))} (10%)`;
+
+      if (matchedStream) {
+        matchedStream.innerHTML = displayList.map(asset => `
+          <div class="c-matched-card">
+            <div class="c-matched-card__header">
+              <span class="c-matched-card__id">${asset.id}</span>
+              <span class="c-badge c-badge--outline" style="font-size: 0.68rem;">${asset.industry || 'Direct Ingestion'}</span>
+            </div>
+            <h4 class="c-matched-card__title">${asset.title}</h4>
+            <div class="c-matched-card__meta">
+              <span class="c-matched-card__price">${formatCurrency(asset.valuation)}</span>
+              <span style="font-size: 0.72rem; color: var(--color-text-faint);">Escrow: ${formatCurrency(asset.escrowDeposit || Math.round(asset.valuation * 0.1))}</span>
+              <a href="#listing?id=${asset.id}" class="c-btn c-btn--outline c-btn--xs" style="text-decoration: none;">Inspect Blueprint →</a>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    window.vveUpdateMandateMatches = updateMandateMatches;
+
+    // Presets
+    presets.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presets.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        if (budgetInput) {
+          budgetInput.value = btn.dataset.val;
+          updateMandateMatches();
         }
+      });
+    });
 
-        const previewWords = thesis.split(/\s+/).slice(0, 24).join(' ') + '…';
-        const deposit = Math.round(price * 0.10);
-
-        DOM.get('#comp-preview-box').style.display = 'block';
-        DOM.get('#comp-prev-title').textContent = title;
-        DOM.get('#comp-prev-lead').textContent = `Sanitized Executive Abstract: "${previewWords}"`;
-        DOM.get('#comp-prev-unlock').textContent = `Institutional Diligence Escrow: ${formatCurrency(deposit)} (10%)`;
-        showNotification('Sanitized Executive Summary generated with proprietary terms redacted.');
+    if (budgetInput) {
+      budgetInput.addEventListener('input', () => {
+        presets.forEach(b => {
+          b.classList.toggle('is-active', b.dataset.val === budgetInput.value);
+        });
+        updateMandateMatches();
       });
     }
 
+    // Sector Chips
+    sectorChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('is-selected');
+        // keep at least one selected
+        if (getSelectedSectors().length === 0) {
+          chip.classList.add('is-selected');
+        }
+        updateMandateMatches();
+      });
+    });
+
+    // Thesis Templates
+    templateBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tmpl = btn.dataset.template;
+        const textarea = DOM.get('#mandate-thesis');
+        if (!textarea) return;
+        if (tmpl === 'rollup') {
+          textarea.value = 'Seeking proven operational frameworks to roll up into our existing mid-market B2B portfolio. Require verified customer ICP workflows, regulatory audit templates, and sub-12 month payback models.';
+        } else if (tmpl === 'cashflow') {
+          textarea.value = 'Acquiring automated systems with high operating leverage. Seeking turnkey SOPs, validated unit gross margins >80%, and zero technical debt ready for operator takeover.';
+        } else if (tmpl === 'ai') {
+          textarea.value = 'Looking for vertical AI agent workflows with proprietary domain workflows in regulated sectors (OSHA, FDA, or cross-border VAT). Require full system architecture specs and pro-forma models.';
+        }
+        showNotification('Populated mandate deployment thesis template.');
+      });
+    });
+
+    // Form submit
     if (form) {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const title = DOM.get('#comp-title').value.trim();
-        const thesis = DOM.get('#comp-thesis').value.trim();
-        const price = Number(DOM.get('#comp-price').value) || 20000;
-        const industry = DOM.get('#comp-industry').value || 'Enterprise Software';
+        const budget = Number(budgetInput?.value) || 100000;
+        const sectors = getSelectedSectors();
+        const niche = DOM.get('#mandate-niche')?.value.trim();
+        const thesis = DOM.get('#mandate-thesis')?.value.trim();
+        const entity = DOM.get('#mandate-entity')?.value.trim() || 'Private Equity Principal';
+        const windowDays = DOM.get('#mandate-window')?.value || '30';
+        const structureEl = form.querySelector('input[name="mandate_structure"]:checked');
+        const structure = structureEl ? structureEl.value : 'cash';
 
-        if (!title || !thesis) {
+        if (!thesis) {
+          showNotification('Provide an acquisition thesis before broadcasting mandate.');
+          return;
+        }
+
+        const newId = `BM-${Math.floor(1000 + Math.random() * 9000)}`;
+        const newMandate = {
+          id: newId,
+          entity: entity,
+          budget: budget,
+          escrowReserve: Math.round(budget * 0.1),
+          sectors: sectors,
+          niche: niche,
+          structure: structure,
+          windowDays: windowDays,
+          status: 'Active Registry Broadcast',
+          timestamp: 'Just now',
+          thesis: thesis
+        };
+
+        State.buyMandates.unshift(newMandate);
+        StorageService.set('buy_mandates', State.buyMandates);
+        renderUserMandates();
+        showNotification(`Acquisition Mandate ${newId} published! 14 matching blueprints alerted confidentially.`);
+      });
+    }
+
+    updateMandateMatches();
+  }
+
+  // --- Track 2: Architect Opportunity Intake & AI Co-Pilot Controller ---
+  function setupAssetComposer() {
+    const form = DOM.get('#composer-form');
+    const priceInput = DOM.get('#comp-price');
+    const escrowDisp = DOM.get('#comp-calc-escrow');
+    const payoutDisp = DOM.get('#comp-calc-payout');
+    const feeDisp = DOM.get('#comp-calc-fee');
+    const prevTitle = DOM.get('#comp-prev-title');
+    const prevLead = DOM.get('#comp-prev-lead');
+    const prevUnlock = DOM.get('#comp-prev-unlock');
+
+    const sampleBtn = DOM.get('#btn-load-sample-architect');
+    const applyAiBtn = DOM.get('#btn-apply-ai-to-form');
+    const aiOutputLabel = DOM.get('#ai-output-label');
+    const aiOutputBody = DOM.get('#ai-output-body');
+    const aiReadinessScore = DOM.get('#ai-readiness-score');
+    const aiReadinessBar = DOM.get('#ai-readiness-bar');
+    const aiPillarClarity = DOM.get('#ai-pillar-clarity');
+    const aiPillarRedaction = DOM.get('#ai-pillar-redaction');
+    const aiStatusBadge = DOM.get('#ai-status-badge');
+
+    const btnPolishThesis = DOM.get('#btn-ai-polish-thesis');
+    const btnFormatFinancials = DOM.get('#btn-ai-format-financials');
+    const btnPreAudit = DOM.get('#btn-ai-preaudit');
+    const btnRedactIp = DOM.get('#btn-ai-redact-ip');
+    const toolBtns = [btnPolishThesis, btnFormatFinancials, btnPreAudit, btnRedactIp].filter(Boolean);
+
+    function updateEscrowMath() {
+      const price = Number(priceInput?.value) || 25000;
+      const escrow = Math.round(price * 0.10);
+      const payout = Math.round(price * 0.90);
+      const fee = escrow;
+
+      if (escrowDisp) escrowDisp.textContent = formatCurrency(escrow);
+      if (payoutDisp) payoutDisp.textContent = formatCurrency(payout);
+      if (feeDisp) feeDisp.textContent = formatCurrency(fee);
+      if (prevUnlock) prevUnlock.textContent = `Diligence Escrow: ${formatCurrency(escrow)} (10%)`;
+    }
+
+    if (priceInput) {
+      priceInput.addEventListener('input', updateEscrowMath);
+    }
+    updateEscrowMath();
+
+    // Cache of AI polished texts
+    const activeAiPolishData = {
+      title: 'Institutional RegTech Pipeline: Automated Environmental & Safety Compliance Matrix',
+      problem: 'US mid-market industrial manufacturing facilities face severe statutory penalty exposure under updated EPA/OSHA multi-jurisdiction mandates. Current compliance relies on fragmented spreadsheets and manual audit logs that fail 62% of surprise inspections, generating an estimated $340k in annual avoidable regulatory fines per plant cluster.',
+      solution: 'End-to-end operational ingestion matrix: automated sensor telemetry log validation, immutably timestamped compliance audit trails, 14 complete Standard Operating Procedures (SOPs), and pre-built API connectors for Tier-1 ERP systems. Documented architecture enables turnkey operator handover in under 14 days without core team dependency.',
+      economics: 'Addressable market of $2.4B across 14,000 mid-sized industrial facilities. Unit economics yield 84% gross margins with an average contract value (ACV) of $18,400. Buyer capital payback horizon calculated at 6.4 months post-handover.',
+      persona: 'Mid-Market Private Equity Industrial Roll-up looking to add compliance SaaS gross margins to portfolio holding companies, or enterprise software operators seeking adjacent vertical expansion.'
+    };
+
+    // Load authentic sample draft
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', () => {
+        const titleInput = DOM.get('#comp-title');
+        const probInput = DOM.get('#comp-thesis-problem');
+        const solInput = DOM.get('#comp-thesis-solution');
+        const econInput = DOM.get('#comp-thesis-economics');
+        const persInput = DOM.get('#comp-thesis-persona');
+        const metricInput = DOM.get('#comp-proof-metric');
+
+        if (titleInput) titleInput.value = 'Automated Regulatory Compliance Pipeline for Plant Operators';
+        if (probInput) probInput.value = 'Plant managers are drowning in paper audits for EPA and OSHA. Inspections happen without warning and paper logs get lost, causing thousands in fines.';
+        if (solInput) solInput.value = 'We built a 90 page step-by-step pipeline with sensors and checklist software. Everything is mapped out so any tech team can run it right away.';
+        if (econInput) econInput.value = 'Market is about 14,000 factories. We charge around $18k a year and margins are over 80%. An owner gets their money back in about 6 months.';
+        if (persInput) persInput.value = 'PE firms buying factories or software companies looking for a new product.';
+        if (metricInput) metricInput.value = 'Tested across 4 industrial pilot sites; 0 audit citations across 180 consecutive operating days.';
+
+        if (priceInput) priceInput.value = 35000;
+        updateEscrowMath();
+
+        if (prevTitle) prevTitle.textContent = 'Automated Regulatory Compliance Pipeline for Plant Operators';
+        if (prevLead) prevLead.textContent = 'Sanitized Executive Abstract: "Plant managers are drowning in paper audits for EPA and OSHA. Step-by-step pipeline with 14 SOPs ready for handover."';
+
+        if (aiReadinessScore) aiReadinessScore.textContent = '74 / 100';
+        if (aiReadinessBar) aiReadinessBar.style.width = '74%';
+        if (aiPillarClarity) {
+          aiPillarClarity.textContent = '○ Clarity: Needs Polish';
+          aiPillarClarity.classList.remove('is-pass');
+        }
+
+        showNotification('Sample raw draft loaded. Click "Polish Executive Thesis" to transform it into institutional PE grade.');
+        triggerAiTool('thesis');
+      });
+    }
+
+    function triggerAiTool(mode) {
+      toolBtns.forEach(b => b.classList.remove('is-active'));
+      if (aiStatusBadge) {
+        aiStatusBadge.textContent = '● Neural Polishing...';
+        aiStatusBadge.className = 'c-badge c-badge--warning';
+      }
+
+      setTimeout(() => {
+        if (aiStatusBadge) {
+          aiStatusBadge.textContent = '● Institutional Grade';
+          aiStatusBadge.className = 'c-badge c-badge--success';
+        }
+      }, 500);
+
+      if (mode === 'thesis') {
+        if (btnPolishThesis) btnPolishThesis.classList.add('is-active');
+        if (aiOutputLabel) aiOutputLabel.textContent = '✨ Institutional Executive Memorandum';
+        if (aiOutputBody) {
+          aiOutputBody.innerHTML = `
+            <div class="c-ai-stream-text">
+              <strong>EXECUTIVE MEMORANDUM · INVESTMENT COMMITTEE SUMMARY</strong><br><br>
+              <strong>1. Structural Asymmetry:</strong><br>
+              ${activeAiPolishData.problem}<br><br>
+              <strong>2. Architectural Deliverables:</strong><br>
+              ${activeAiPolishData.solution}<br><br>
+              <strong>3. Strategic Buyer Fit:</strong><br>
+              ${activeAiPolishData.persona}
+            </div>
+          `;
+        }
+        if (aiReadinessScore) aiReadinessScore.textContent = '96 / 100';
+        if (aiReadinessBar) aiReadinessBar.style.width = '96%';
+        if (aiPillarClarity) {
+          aiPillarClarity.textContent = '✓ Clarity: PE-Grade';
+          aiPillarClarity.classList.add('is-pass');
+        }
+      } else if (mode === 'financials') {
+        if (btnFormatFinancials) btnFormatFinancials.classList.add('is-active');
+        if (aiOutputLabel) aiOutputLabel.textContent = '📊 Formatted Financial Pro-Forma & Margins';
+        const price = Number(priceInput?.value) || 35000;
+        if (aiOutputBody) {
+          aiOutputBody.innerHTML = `
+            <div class="c-ai-stream-text">
+              <strong>STRUCTURED FINANCIAL RETURN PROFILE</strong><br><br>
+              ● <strong>Total Addressable Market (TAM):</strong> $2.4B (14,000 verified industrial facilities)<br>
+              ● <strong>Average Contract Value (ACV):</strong> $18,400 / annual recurring enterprise contract<br>
+              ● <strong>Gross Margin Profile:</strong> 84% (software delivery & data ingestion)<br>
+              ● <strong>Capital Payback Timeline:</strong> 6.4 Months post-closing<br>
+              ● <strong>Asset Acquisition Valuation:</strong> ${formatCurrency(price)}<br>
+              ● <strong>Statutory Escrow Unlock:</strong> ${formatCurrency(Math.round(price * 0.1))} (10% neutral custody)<br>
+              ● <strong>Net Architect Settlement:</strong> ${formatCurrency(Math.round(price * 0.9))} (90% wire on day 7)
+            </div>
+          `;
+        }
+      } else if (mode === 'preaudit') {
+        if (btnPreAudit) btnPreAudit.classList.add('is-active');
+        if (aiOutputLabel) aiOutputLabel.textContent = '🛡️ Red-Flag Pre-Audit Diligence Result';
+        if (aiOutputBody) {
+          aiOutputBody.innerHTML = `
+            <div class="c-ai-stream-text">
+              <strong>INVESTMENT COMMITTEE RED-FLAG AUDIT: PASSED (0 Critical)</strong><br><br>
+              ✓ <strong>Documentation Threshold:</strong> 90+ Pages verified (Includes 14 SOPs and 3-statement model)<br>
+              ✓ <strong>Handover Independence:</strong> System contains explicit vendor transition protocols<br>
+              ✓ <strong>Legal Governance:</strong> Structured for bilateral NDA and 7-day statutory escrow custody<br>
+              ✓ <strong>Advisory Warranty:</strong> 15 hours dedicated architect transition included<br>
+              ⚠️ <em>Minor Advisory:</em> Ensure customer pilot NDA does not disclose factory names before bilateral escrow execution.
+            </div>
+          `;
+        }
+      } else if (mode === 'redact') {
+        if (btnRedactIp) btnRedactIp.classList.add('is-active');
+        if (aiOutputLabel) aiOutputLabel.textContent = '🔒 Sanitized Public Teaser & NDA Shield';
+        if (aiOutputBody) {
+          aiOutputBody.innerHTML = `
+            <div class="c-ai-stream-text">
+              <strong>PUBLIC MARKETPLACE TEASER (NDA-PROTECTED PREVIEW)</strong><br><br>
+              <strong>Asset:</strong> Automated Regulatory Compliance Pipeline for Plant Operators<br>
+              <strong>Scope:</strong> Turnkey compliance automation for industrial manufacturers facing updated EPA/OSHA audit mandates. Includes complete customer ICP, operational data schema, and land-and-expand commercial model.<br><br>
+              <div style="background: var(--color-bg-alt); padding: 0.6rem; border-radius: 4px; font-size: 0.78rem;">
+                <strong>Proprietary Identifiers Masked:</strong><br>
+                [REDACTED: Factory Cohort Client List], [REDACTED: Direct GitHub Repository URL], and [REDACTED: Pricing API Keys] remain gated in secure Data Room until 10% escrow deposit.
+              </div>
+            </div>
+          `;
+        }
+        if (aiPillarRedaction) {
+          aiPillarRedaction.textContent = '✓ NDA Redacted (Shielded)';
+          aiPillarRedaction.classList.add('is-pass');
+        }
+        if (prevLead) {
+          prevLead.textContent = 'Sanitized Executive Abstract: "Turnkey compliance automation for industrial manufacturers facing updated EPA/OSHA audit mandates. Proprietary schemas NDA-gated."';
+        }
+      }
+    }
+
+    if (btnPolishThesis) btnPolishThesis.addEventListener('click', () => triggerAiTool('thesis'));
+    if (btnFormatFinancials) btnFormatFinancials.addEventListener('click', () => triggerAiTool('financials'));
+    if (btnPreAudit) btnPreAudit.addEventListener('click', () => triggerAiTool('preaudit'));
+    if (btnRedactIp) btnRedactIp.addEventListener('click', () => triggerAiTool('redact'));
+
+    // Apply AI to form
+    if (applyAiBtn) {
+      applyAiBtn.addEventListener('click', () => {
+        const titleInput = DOM.get('#comp-title');
+        const probInput = DOM.get('#comp-thesis-problem');
+        const solInput = DOM.get('#comp-thesis-solution');
+        const econInput = DOM.get('#comp-thesis-economics');
+        const persInput = DOM.get('#comp-thesis-persona');
+
+        if (titleInput) titleInput.value = activeAiPolishData.title;
+        if (probInput) probInput.value = activeAiPolishData.problem;
+        if (solInput) solInput.value = activeAiPolishData.solution;
+        if (econInput) econInput.value = activeAiPolishData.economics;
+        if (persInput) persInput.value = activeAiPolishData.persona;
+
+        if (prevTitle) prevTitle.textContent = activeAiPolishData.title;
+        if (prevLead) prevLead.textContent = `Sanitized Executive Abstract: "${activeAiPolishData.problem.slice(0, 120)}…"`;
+
+        showNotification('Applied institutional AI refinement to listing fields.');
+      });
+    }
+
+    // Submission handler
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = DOM.get('#comp-title')?.value.trim();
+        const problem = DOM.get('#comp-thesis-problem')?.value.trim();
+        const solution = DOM.get('#comp-thesis-solution')?.value.trim();
+        const economics = DOM.get('#comp-thesis-economics')?.value.trim();
+        const persona = DOM.get('#comp-thesis-persona')?.value.trim();
+        const price = Number(priceInput?.value) || 25000;
+        const industry = DOM.get('#comp-industry')?.value || 'RegTech & Compliance';
+
+        if (!title || !problem || !solution) {
           showNotification('Complete all mandatory asset documentation fields.');
           return;
         }
@@ -1624,46 +2034,47 @@
         const newAsset = {
           id: newId,
           title: title,
-          summary: thesis.slice(0, 110) + '…',
+          summary: problem.slice(0, 120) + '…',
           industry: industry,
-          tags: [industry, 'Direct Intake'],
+          tags: [industry, 'Architect Certified'],
           status: 'Audited & Active',
           targetJurisdiction: 'North America / EU',
           capitalRequirement: '$30,000 - $70,000',
-          implementationTimeline: '60 - 90 Days',
+          implementationTimeline: '14 - 30 Days',
           valuation: price,
           escrowDeposit: Math.round(price * 0.10),
-          trustRating: 96,
+          trustRating: 98,
           pageCount: 104,
-          frameworkCount: 16,
+          frameworkCount: 14,
           operator: {
-            name: 'Operator Entity (Verified)',
-            title: 'Licensed Asset Principal',
+            name: 'Architect Entity (Verified)',
+            title: 'Licensed Systems Architect',
             verifiedIdentity: true,
             historicalTransactions: 'Audited Registry Record',
             peerReviewScore: 5.0,
             totalCompletedTransfers: 1
           },
           commercialParameters: {
-            addressableMarket: '$2.5B Market Sector',
+            addressableMarket: economics || '$2.4B Market Sector',
             targetMarginImprovement: '3.5x Operating Expansion',
-            paybackPeriod: '6 Months'
+            paybackPeriod: '6.4 Months'
           },
-          executiveAbstract: thesis,
-          operationalProblem: 'Operational workflows systematized to eliminate executive management bottlenecks.',
-          solutionArchitecture: 'Documented procedural matrix and integration architecture ready for team handover.',
-          commercialModel: 'Enterprise licensing agreements and operational transfer milestones.',
+          executiveAbstract: `${problem} ${solution}`,
+          operationalProblem: problem,
+          solutionArchitecture: solution,
+          commercialModel: economics || 'Enterprise licensing and operational handover.',
           riskFactors: 'Operational change-management variance and deployment timeline dependencies.',
           deliverablesPackage: [
             'Operational Systems Architecture 90+ Page Specification (PDF)',
             'Three-Statement Financial Pro-Forma & Cashflow Model (XLSX)',
-            'Operational Master Services & Transition Agreement (DOCX)'
+            '14 Documented Standard Operating Procedures (SOPs) & Integration Maps',
+            'Vendor & Supplier Direct Transition Agreements (DOCX)'
           ]
         };
 
         State.customAssets.unshift(newAsset);
         StorageService.set('custom_assets', State.customAssets);
-        showNotification(`Asset ${newId} registered successfully in the transaction repository.`);
+        showNotification(`Asset Blueprint ${newId} registered successfully in the transaction repository.`);
         window.location.hash = `#listing?id=${newId}`;
       });
     }
@@ -1984,6 +2395,7 @@
     renderTickerTape();
     QuadrantMatrixController.init();
     SectorIntelligenceAPI.init();
+    setupInvestorBuyMandate();
     setupAssetComposer();
     setupDiligenceWorkflow();
     setupDemandChartControls();

@@ -41,7 +41,7 @@
           <li><a href="#pricing" class="c-nav__link">Pricing & Flow</a></li>
           <li><a href="#faq" class="c-nav__link">FAQ</a></li>
           <li><a href="#terms" class="c-nav__link">Terms</a></li>
-          <li><a href="#list" class="c-nav__link">List Opportunity</a></li>
+          <li><a href="#list" class="c-nav__link" id="nav-link-list">Post Buy Mandate</a></li>
         </ul>
       </nav>
 
@@ -2525,88 +2525,486 @@
     
 
     <!-- ===================================================================
-         VIEW 6: ASSET INTAKE & COMPOSER (#list)
+         VIEW 6: INTAKE & REGISTRATION (#list)
+         Dual-Perspective Architecture:
+         - [data-role="investor"]: Capital Buy-Box & Acquisition Mandate Composer
+         - [data-role="architect"]: Opportunity Architecture Intake + AI Co-Pilot
          =================================================================== -->
     <section id="page-list" class="c-view">
-      <div class="c-section-header">
-        <div>
-          <h1 class="c-section-header__title">Asset Intake & Registration</h1>
-          <p class="c-section-header__sub">Package operational assets for technical audit. Minimum 90-page documentation required.</p>
+
+      <!-- ===============================================================
+           TRACK 1: INVESTOR & BUYER ACQUISITION MANDATE COMPOSER
+           =============================================================== -->
+      <div class="intake-track intake-track--investor">
+        <div class="c-section-header">
+          <div>
+            <div class="c-perspective-mode-pill">
+              <span>● Institutional Capital Desk</span>
+              <span class="c-perspective-mode-pill__action" onclick="window.vveSetPerspective('architect')">Need to list an opportunity? Switch to Architect ↗</span>
+            </div>
+            <h1 class="c-section-header__title">Post Capital Deployment Buy-Box</h1>
+            <p class="c-section-header__sub">Specify your acquisition target, committed capital budget, and diligence criteria. Accredited architects with matching 90+ page blueprints are alerted confidentially under bilateral NDA.</p>
+          </div>
+        </div>
+
+        <div class="l-mandate-split">
+          <!-- Buy Mandate Composer Form -->
+          <div class="c-card c-card--institutional">
+            <form id="mandate-form">
+              <div class="c-mandate-section-header">
+                <span class="c-mandate-step-badge">01</span>
+                <div>
+                  <h3 class="c-mandate-step-title">Capital Allocation & Financing Structure</h3>
+                  <p class="c-mandate-step-desc">Define your liquidity envelope ready for technical diligence and closing.</p>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <label class="c-form-label">Committed Deployment Allocation (USD)</label>
+                <div class="c-budget-presets" id="mandate-budget-presets">
+                  <button type="button" class="c-preset-pill" data-val="25000">$25,000</button>
+                  <button type="button" class="c-preset-pill" data-val="50000">$50,000</button>
+                  <button type="button" class="c-preset-pill is-active" data-val="100000">$100,000</button>
+                  <button type="button" class="c-preset-pill" data-val="250000">$250,000</button>
+                  <button type="button" class="c-preset-pill" data-val="500000">$500,000+</button>
+                </div>
+                <div style="position: relative; margin-top: 0.5rem;">
+                  <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-family: var(--font-family-mono); color: var(--color-text-faint); font-weight: 600;">$</span>
+                  <input type="number" id="mandate-budget" class="c-form-input" style="padding-left: 2rem; font-family: var(--font-family-mono); font-size: 1.1rem; font-weight: 600;" value="100000" min="5000" max="5000000" step="5000" required>
+                </div>
+                <div class="c-mandate-escrow-pill">
+                  <span>🔒 Max Immediate Diligence Escrow Reserve:</span>
+                  <strong id="mandate-escrow-disp">$10,000 (10%)</strong>
+                  <span class="c-mandate-escrow-note">· 100% protected in neutral banking custody during inspection</span>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <label class="c-form-label">Transaction & Consideration Structure</label>
+                <div class="c-dealtype-grid">
+                  <label class="c-radio-card">
+                    <input type="radio" name="mandate_structure" value="cash" checked>
+                    <div class="c-radio-card__inner">
+                      <span class="c-radio-card__title">100% Cash Purchase</span>
+                      <span class="c-radio-card__desc">Full IP transfer upon 7-day escrow inspection clearance.</span>
+                    </div>
+                  </label>
+                  <label class="c-radio-card">
+                    <input type="radio" name="mandate_structure" value="staged">
+                    <div class="c-radio-card__inner">
+                      <span class="c-radio-card__title">Staged Tranches</span>
+                      <span class="c-radio-card__desc">50% at blueprint handover, 50% post-operational pilot validation.</span>
+                    </div>
+                  </label>
+                  <label class="c-radio-card">
+                    <input type="radio" name="mandate_structure" value="hybrid">
+                    <div class="c-radio-card__inner">
+                      <span class="c-radio-card__title">Retainer + Advisory</span>
+                      <span class="c-radio-card__desc">Base asset acquisition plus ongoing operating architect retainer.</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="c-mandate-section-header" style="margin-top: 2rem;">
+                <span class="c-mandate-step-badge">02</span>
+                <div>
+                  <h3 class="c-mandate-step-title">Target Industry Verticals & Sector Specialization</h3>
+                  <p class="c-mandate-step-desc">Select sectors where your operating teams command execution capacity.</p>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <label class="c-form-label">Target Verticals (Select multiple)</label>
+                <div class="c-sector-chips" id="mandate-sector-chips">
+                  <button type="button" class="c-sector-chip is-selected" data-sector="RegTech & Compliance">RegTech & Compliance</button>
+                  <button type="button" class="c-sector-chip is-selected" data-sector="Vertical AI Agents">Vertical AI Agents</button>
+                  <button type="button" class="c-sector-chip" data-sector="Enterprise Software">Enterprise Software</button>
+                  <button type="button" class="c-sector-chip" data-sector="Tier-2 SMB Fintech">Tier-2 SMB Fintech</button>
+                  <button type="button" class="c-sector-chip" data-sector="Digital Commerce">Digital Commerce</button>
+                  <button type="button" class="c-sector-chip" data-sector="ClimateTech & Energy">ClimateTech & Energy</button>
+                  <button type="button" class="c-sector-chip" data-sector="Healthcare Systems">Healthcare Systems</button>
+                  <button type="button" class="c-sector-chip" data-sector="Supply Chain & Logistics">Supply Chain & Logistics</button>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <label for="mandate-niche" class="c-form-label">Specific Niche, Sub-Vertical or Functional Keywords</label>
+                <input type="text" id="mandate-niche" class="c-form-input" placeholder="e.g., Mid-market EPA audit workflows, FDA tracking, automated reconciliation">
+              </div>
+
+              <div class="c-mandate-section-header" style="margin-top: 2rem;">
+                <span class="c-mandate-step-badge">03</span>
+                <div>
+                  <h3 class="c-mandate-step-title">Acquisition Thesis & Operating Mandate</h3>
+                  <p class="c-mandate-step-desc">Detail what you are looking to acquire rather than build from scratch.</p>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+                  <label for="mandate-thesis" class="c-form-label" style="margin: 0;">Deployment Thesis & Operational Criteria</label>
+                  <div class="c-thesis-templates">
+                    <span style="font-size: 0.72rem; color: var(--color-text-faint); margin-right: 0.4rem;">Template:</span>
+                    <button type="button" class="c-text-pill-btn" data-template="rollup">PE Roll-Up</button>
+                    <button type="button" class="c-text-pill-btn" data-template="cashflow">Operator Cashflow</button>
+                    <button type="button" class="c-text-pill-btn" data-template="ai">Vertical AI</button>
+                  </div>
+                </div>
+                <textarea id="mandate-thesis" class="c-form-textarea" required placeholder="Describe your operating hypothesis: e.g., Seeking complete operating frameworks to roll up into our existing industrial B2B portfolio. Requires verified customer ICP workflows, regulatory audit templates, and sub-12 month payback models."></textarea>
+              </div>
+
+              <div class="c-mandate-section-header" style="margin-top: 2rem;">
+                <span class="c-mandate-step-badge">04</span>
+                <div>
+                  <h3 class="c-mandate-step-title">Mandatory Diligence & Governance Thresholds</h3>
+                  <p class="c-mandate-step-desc">Set minimum requirements architects must satisfy before receiving introductions.</p>
+                </div>
+              </div>
+
+              <div class="c-form-group">
+                <div class="c-checklist-grid">
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" checked disabled>
+                    <span><strong>Minimum 90+ Page Systems Architecture Specification</strong> (Platform Standard)</span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="mandate-req-fin" checked>
+                    <span><strong>3-Statement Financial Pro-Forma & Unit Economics Model</strong> (.xlsx)</span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="mandate-req-sops" checked>
+                    <span><strong>12+ Standard Operating Procedures (SOPs) & Integration Maps</strong></span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="mandate-req-advisory" checked>
+                    <span><strong>15 Hours Dedicated Post-Closing Architect Advisory Transition</strong></span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                  <label for="mandate-window" class="c-form-label">Target Execution Window</label>
+                  <select id="mandate-window" class="c-form-select">
+                    <option value="14">14 Days Rapid Close (Escrow Priority)</option>
+                    <option value="30" selected>30 Days Standard Inspection</option>
+                    <option value="60">60 Days Phased Transition</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="mandate-entity" class="c-form-label">Buyer Entity & Accreditation</label>
+                  <input type="text" id="mandate-entity" class="c-form-input" required value="Apex Horizon Capital (Institutional Syndicate)">
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem;">
+                <button type="submit" class="c-btn c-btn--primary c-btn--full" id="mandate-submit-btn" style="padding: 0.9rem; font-size: 0.95rem;">
+                  Publish Acquisition Mandate to Private Registry →
+                </button>
+                <p style="font-size: 0.76rem; color: var(--color-text-faint); text-align: center; margin-top: 0.6rem;">
+                  🛡️ Zero capital deducted upon posting. Diligence escrow is only funded upon bilateral NDA execution and asset inspection terms.
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Matching Intelligence & Peer Activity Sidebar -->
+          <div>
+            <!-- Live Blueprint Matching Engine -->
+            <div class="c-matching-box">
+              <div class="c-matching-box__header">
+                <div>
+                  <div class="c-matching-box__tag">● LIVE INVENTORY MATCHING</div>
+                  <h3 class="c-matching-box__title"><span id="mandate-match-count">14</span> Blueprints Match This Mandate</h3>
+                </div>
+                <div class="c-badge c-badge--success" id="mandate-match-badge">Active Pipeline</div>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+                Accredited opportunities currently in registry matching your selected budget (<strong id="mandate-match-budget-disp">$100,000</strong>) and sector coverage:
+              </p>
+              
+              <div class="c-matched-cards-stream" id="mandate-matched-stream">
+                <!-- Dynamically rendered top matching blueprint cards -->
+              </div>
+            </div>
+
+            <!-- Active Peer Mandates Stream -->
+            <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-surface);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 0.6rem;">
+                <h4 style="font-size: 0.85rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin: 0;">Institutional Peer Buy-Boxes</h4>
+                <span class="c-badge c-badge--outline">Live Feed</span>
+              </div>
+              <div class="c-peer-mandates-list" id="peer-mandates-list">
+                <!-- Peer buy mandates feed -->
+              </div>
+            </div>
+
+            <!-- Published Mandates Manager (User's posted mandates) -->
+            <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-alt); border: 1px dashed var(--color-border-default);" id="user-mandates-panel">
+              <h4 style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem;">Your Active Published Buy-Boxes (<span id="user-mandate-count">1</span>)</h4>
+              <div id="user-mandate-items">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="l-composer-split">
-        <!-- Asset Intake Form -->
-        <div class="c-card">
-          <form id="composer-form">
-            <div class="c-form-group">
-              <label for="comp-title" class="c-form-label">Asset Title</label>
-              <input type="text" id="comp-title" class="c-form-input" required placeholder="e.g., Automated Regulatory Compliance Pipeline for Plant Operators">
-            </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-              <div>
-                <label for="comp-industry" class="c-form-label">Industry Vertical</label>
-                <select id="comp-industry" class="c-form-select">
-                  <option value="Enterprise Software">Enterprise Software</option>
-                  <option value="RegTech">RegTech</option>
-                  <option value="Fintech">Fintech</option>
-                  <option value="Digital Commerce">Digital Commerce</option>
-                  <option value="ClimateTech">ClimateTech</option>
-                  <option value="Healthcare & Consumer">Healthcare & Consumer</option>
-                </select>
-              </div>
-              <div>
-                <label for="comp-price" class="c-form-label">Asset Valuation (USD)</label>
-                <input type="number" id="comp-price" class="c-form-input" required min="3000" max="100000" value="25000">
-              </div>
+      <!-- ===============================================================
+           TRACK 2: ARCHITECT & CREATOR ASSET INTAKE + AI CO-PILOT
+           =============================================================== -->
+      <div class="intake-track intake-track--architect">
+        <div class="c-section-header">
+          <div>
+            <div class="c-perspective-mode-pill">
+              <span>● Opportunity Architect Studio</span>
+              <span class="c-perspective-mode-pill__action" onclick="window.vveSetPerspective('investor')">Need to post capital buy-box? Switch to Investor ↗</span>
             </div>
-
-            <div class="c-form-group">
-              <label for="comp-thesis" class="c-form-label">Operational Methodology & Technical Architecture</label>
-              <textarea id="comp-thesis" class="c-form-textarea" required placeholder="Detail the operational workflows, technical data pipelines, and verified financial unit economics. Proprietary identifiers will be redacted for public previews."></textarea>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-              <button type="button" class="c-btn c-btn--secondary c-btn--full" id="composer-sanitize-btn">
-                Generate Sanitized Executive Abstract
-              </button>
-              <button type="submit" class="c-btn c-btn--primary c-btn--full" id="composer-submit-btn">
-                Submit Asset Dossier to Registry →
-              </button>
-            </div>
-          </form>
+            <h1 class="c-section-header__title">Opportunity Blueprint Intake & Packaging</h1>
+            <p class="c-section-header__sub">Package strategic operational assets for institutional technical audit. Minimum 90 pages of documentation required. Real-time AI Co-Pilot refines your draft into private equity investment committee standards.</p>
+          </div>
         </div>
 
-        <!-- Sanitized Dossier Preview -->
-        <div>
-          <h3 style="font-size: 0.85rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1rem;">Public Dossier Preview</h3>
+        <div class="l-composer-split">
+          <!-- Authentic Architect Intake Form -->
+          <div class="c-card c-card--institutional">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 0.75rem;">
+              <div>
+                <span style="font-family: var(--font-family-mono); font-size: 0.72rem; color: var(--color-brand-primary); text-transform: uppercase; font-weight: 600;">DILIGENCE SPECIFICATION FORM</span>
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0.15rem 0 0 0;">Dossier Architecture Questionnaire</h3>
+              </div>
+              <button type="button" class="c-btn c-btn--outline c-btn--sm" id="btn-load-sample-architect">
+                📋 Load Sample Draft
+              </button>
+            </div>
 
-          <div class="c-asset-card" id="comp-preview-box" style="display: none; border-color: var(--color-brand-primary);">
-            <div class="c-asset-card__header">
-              <span class="c-asset-card__id">SUBMISSION DRAFT</span>
-              <span class="c-badge c-badge--warning">Pending Audit</span>
-            </div>
-            <h3 class="c-asset-card__title" id="comp-prev-title">Asset Dossier Title</h3>
-            <p class="c-asset-card__summary" id="comp-prev-lead">Sanitized summary preview will render here...</p>
-            <div style="background: var(--color-bg-alt); padding: 0.8rem; border-radius: var(--radius-xs); margin: 0.8rem 0; font-size: 0.8rem;">
-              <span style="font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; font-size: 0.7rem; display: block; margin-bottom: 2px;">Proprietary Identifiers Redacted:</span>
-              <span style="filter: blur(4px); user-select: none;">Vendor identity, customer cohorts, and proprietary source code schemas remain NDA-gated.</span>
-            </div>
-            <div class="c-asset-card__footer">
-              <span style="font-weight: 700; font-family: var(--font-family-mono);" id="comp-prev-unlock">Diligence Escrow: $2,500</span>
-              <span class="c-badge c-badge--success">Ready for Review</span>
-            </div>
+            <form id="composer-form">
+              <!-- Field 1: Asset Title -->
+              <div class="c-form-group">
+                <label for="comp-title" class="c-form-label">Asset Title (Institutional Convention)</label>
+                <input type="text" id="comp-title" class="c-form-input" required placeholder="e.g., Automated Regulatory Compliance Pipeline for Plant Operators">
+                <span class="c-form-hint">Avoid marketing buzzwords. Use structural, systems-oriented naming.</span>
+              </div>
+
+              <!-- Field 2 & 3: Industry Vertical & Valuation -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                  <label for="comp-industry" class="c-form-label">Industry Vertical</label>
+                  <select id="comp-industry" class="c-form-select">
+                    <option value="RegTech & Compliance">RegTech & Compliance</option>
+                    <option value="Vertical AI Agents">Vertical AI Agents</option>
+                    <option value="Enterprise Software">Enterprise Software</option>
+                    <option value="Tier-2 SMB Fintech">Tier-2 SMB Fintech</option>
+                    <option value="Digital Commerce">Digital Commerce</option>
+                    <option value="ClimateTech & Energy">ClimateTech & Energy</option>
+                    <option value="Healthcare Systems">Healthcare Systems</option>
+                    <option value="Supply Chain & Logistics">Supply Chain & Logistics</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="comp-price" class="c-form-label">Asset Valuation (USD)</label>
+                  <input type="number" id="comp-price" class="c-form-input" required min="3000" max="250000" value="25000" step="1000">
+                </div>
+              </div>
+
+              <!-- Real-time Escrow & Payout Breakdown -->
+              <div class="c-escrow-breakdown-card">
+                <div class="c-escrow-breakdown-card__col">
+                  <span class="c-escrow-breakdown-card__label">Buyer Unlock Escrow (10%)</span>
+                  <span class="c-escrow-breakdown-card__val" id="comp-calc-escrow">$2,500</span>
+                </div>
+                <div class="c-escrow-breakdown-card__col">
+                  <span class="c-escrow-breakdown-card__label">Architect Net Payout (90%)</span>
+                  <span class="c-escrow-breakdown-card__val" style="color: var(--color-success);" id="comp-calc-payout">$22,500</span>
+                </div>
+                <div class="c-escrow-breakdown-card__col">
+                  <span class="c-escrow-breakdown-card__label">Platform Custody Fee (10%)</span>
+                  <span class="c-escrow-breakdown-card__val" id="comp-calc-fee">$2,500</span>
+                </div>
+              </div>
+
+              <!-- Diligence Question 1: Operational Problem & Structural Gap -->
+              <div class="c-form-group">
+                <label for="comp-thesis-problem" class="c-form-label">
+                  1. Structural Market Gap & Operational Problem
+                </label>
+                <textarea id="comp-thesis-problem" class="c-form-textarea" required placeholder="What operational breakdown or market asymmetry does this blueprint solve? Why have incumbents failed to resolve it?"></textarea>
+                <span class="c-form-hint">Addressable pain point, manual labor waste, or regulatory penalty exposure.</span>
+              </div>
+
+              <!-- Diligence Question 2: Solution Architecture & Workflows -->
+              <div class="c-form-group">
+                <label for="comp-thesis-solution" class="c-form-label">
+                  2. Systems Architecture & Handover Workflows
+                </label>
+                <textarea id="comp-thesis-solution" class="c-form-textarea" required placeholder="Detail the documented procedural workflows, integration APIs, and step-by-step systems ready for buyer handover."></textarea>
+                <span class="c-form-hint">Must substantiate how the acquirer can operate this without you.</span>
+              </div>
+
+              <!-- Diligence Question 3: Commercial Model & Payback Economics -->
+              <div class="c-form-group">
+                <label for="comp-thesis-economics" class="c-form-label">
+                  3. Commercial Model, Margins & Payback Horizon
+                </label>
+                <textarea id="comp-thesis-economics" class="c-form-textarea" required placeholder="Outline addressable market (TAM), pricing architecture, unit gross margins, and estimated buyer capital payback timeline."></textarea>
+              </div>
+
+              <!-- Diligence Question 4: Target Buyer Persona -->
+              <div class="c-form-group">
+                <label for="comp-thesis-persona" class="c-form-label">
+                  4. Target Buyer Profile & Acquisition Fit
+                </label>
+                <input type="text" id="comp-thesis-persona" class="c-form-input" required placeholder="e.g., Mid-market Private Equity Roll-Up with existing manufacturing portfolio, or Independent Operator with $100k-$500k liquidity">
+              </div>
+
+              <!-- Documentation Depth Checklist -->
+              <div class="c-form-group">
+                <label class="c-form-label">Mandatory Documentation Depth Checklist (Minimum 90-Page Standard)</label>
+                <div class="c-checklist-grid">
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="chk-doc-90" checked required>
+                    <span><strong>90+ Page Systems Architecture Specification</strong> (Comprehensive Dossier PDF)</span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="chk-doc-fin" checked required>
+                    <span><strong>3-Statement Financial Pro-Forma & Cash Flow Model</strong> (.xlsx)</span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="chk-doc-sops" checked required>
+                    <span><strong>12+ Standard Operating Procedures (SOPs) & Integration Maps</strong></span>
+                  </label>
+                  <label class="c-checkbox-item">
+                    <input type="checkbox" id="chk-doc-support" checked required>
+                    <span><strong>15 Hours Dedicated Post-Escrow Advisory Support Guarantee</strong></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Operational Proof & Feasibility -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                  <label for="comp-proof-type" class="c-form-label">Operational Proof Type</label>
+                  <select id="comp-proof-type" class="c-form-select">
+                    <option value="pilot">Pilot Run Production Logs</option>
+                    <option value="loi">Customer LOIs & Waitlist Pipeline</option>
+                    <option value="audit">Third-Party Accounting / Legal Audit</option>
+                    <option value="regulatory">Regulatory Pilot Exemption Memo</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="comp-proof-metric" class="c-form-label">Key Metric / Validation Signal</label>
+                  <input type="text" id="comp-proof-metric" class="c-form-input" placeholder="e.g., $180k operating cost reduction across 3 plants">
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button type="submit" class="c-btn c-btn--primary c-btn--full" id="composer-submit-btn" style="padding: 0.9rem; font-size: 0.95rem;">
+                  Submit Asset Blueprint to Registry Audit →
+                </button>
+              </div>
+            </form>
           </div>
 
-          <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-alt);">
-            <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Disclosure & Confidentiality Protocol:</h4>
-            <p style="font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.6;">
-              Public previews allow institutional buyers to verify TAM validity, technical depth, and operational rigor without compromising trade secrets prior to bilateral NDA execution and escrow deposit.
-            </p>
+          <!-- AI Dossier Polisher & Co-Pilot Panel -->
+          <div>
+            <div class="c-ai-polisher">
+              <div class="c-ai-polisher__header">
+                <div class="c-ai-polisher__title-group">
+                  <span class="c-ai-polisher__icon">✨</span>
+                  <div>
+                    <h3 class="c-ai-polisher__title">vvEntra AI Dossier Co-Pilot</h3>
+                    <p class="c-ai-polisher__subtitle">Private Equity Committee Refinement Engine</p>
+                  </div>
+                </div>
+                <span class="c-badge c-badge--success" id="ai-status-badge">● Ready to Polish</span>
+              </div>
+
+              <!-- Live Institutional Readiness Meter -->
+              <div class="c-readiness-meter">
+                <div class="c-readiness-meter__header">
+                  <span class="c-readiness-meter__title">Institutional Diligence Readiness</span>
+                  <strong class="c-readiness-meter__score" id="ai-readiness-score">74 / 100</strong>
+                </div>
+                <div class="c-readiness-meter__bar">
+                  <div class="c-readiness-meter__fill" id="ai-readiness-bar" style="width: 74%;"></div>
+                </div>
+                <div class="c-readiness-meter__pillars">
+                  <span class="c-pill-tag is-pass">✓ 90+ Page Depth</span>
+                  <span class="c-pill-tag is-pass">✓ Escrow Calibrated</span>
+                  <span class="c-pill-tag" id="ai-pillar-clarity">○ Clarity: Moderate</span>
+                  <span class="c-pill-tag" id="ai-pillar-redaction">○ NDA Redaction: Pending</span>
+                </div>
+              </div>
+
+              <!-- Interactive Polish Action Toolbelt -->
+              <div class="c-ai-toolbelt">
+                <span class="c-ai-toolbelt__label">Select AI Transformation Mode:</span>
+                <div class="c-ai-toolbelt__grid">
+                  <button type="button" class="c-ai-tool-btn is-active" id="btn-ai-polish-thesis">
+                    <span class="c-ai-tool-btn__icon">✨</span>
+                    <span class="c-ai-tool-btn__text">Polish Executive Thesis</span>
+                  </button>
+                  <button type="button" class="c-ai-tool-btn" id="btn-ai-format-financials">
+                    <span class="c-ai-tool-btn__icon">📊</span>
+                    <span class="c-ai-tool-btn__text">Structure Financials</span>
+                  </button>
+                  <button type="button" class="c-ai-tool-btn" id="btn-ai-preaudit">
+                    <span class="c-ai-tool-btn__icon">🛡️</span>
+                    <span class="c-ai-tool-btn__text">Red-Flag Pre-Audit</span>
+                  </button>
+                  <button type="button" class="c-ai-tool-btn" id="btn-ai-redact-ip">
+                    <span class="c-ai-tool-btn__icon">🔒</span>
+                    <span class="c-ai-tool-btn__text">Redact Sensitive IP</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- AI Output Display with Streaming / Formatted Results -->
+              <div class="c-ai-output-box">
+                <div class="c-ai-output-box__header">
+                  <span class="c-ai-output-box__label" id="ai-output-label">✨ Institutional Executive Memorandum</span>
+                  <button type="button" class="c-btn c-btn--primary c-btn--xs" id="btn-apply-ai-to-form">
+                    ⚡ Apply to Form
+                  </button>
+                </div>
+                <div class="c-ai-output-box__body" id="ai-output-body">
+                  <p style="color: var(--color-text-faint); font-style: italic; font-size: 0.85rem;">
+                    Click any tool above or load a sample draft to generate private-equity grade thesis language, structured unit economics, and anonymized public teasers.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Public Dossier Marketplace Teaser Card (Real-Time Preview) -->
+              <div style="margin-top: 1.5rem;">
+                <h4 style="font-size: 0.82rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 0.75rem;">
+                  Live Public Teaser Card (What Investors See in Registry)
+                </h4>
+                <div class="c-asset-card" id="comp-preview-box" style="border-color: var(--color-brand-primary);">
+                  <div class="c-asset-card__header">
+                    <span class="c-asset-card__id">SUBMISSION PREVIEW</span>
+                    <span class="c-badge c-badge--warning">Pending Audit</span>
+                  </div>
+                  <h3 class="c-asset-card__title" id="comp-prev-title">Automated Regulatory Compliance Pipeline</h3>
+                  <p class="c-asset-card__summary" id="comp-prev-lead">
+                    Sanitized executive abstract with proprietary vendor specifics and client identities shielded.
+                  </p>
+                  <div style="background: var(--color-bg-alt); padding: 0.8rem; border-radius: var(--radius-xs); margin: 0.8rem 0; font-size: 0.8rem;">
+                    <span style="font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; font-size: 0.7rem; display: block; margin-bottom: 2px;">Proprietary Identifiers Redacted:</span>
+                    <span style="filter: blur(4px); user-select: none;">Vendor identity, customer cohorts, and proprietary source code schemas remain NDA-gated.</span>
+                  </div>
+                  <div class="c-asset-card__footer">
+                    <span style="font-weight: 700; font-family: var(--font-family-mono);" id="comp-prev-unlock">Diligence Escrow: $2,500</span>
+                    <span class="c-badge c-badge--success">90+ Pages Audited</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
     </section>
 
     <!-- ===================================================================
