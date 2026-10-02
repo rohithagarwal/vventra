@@ -669,6 +669,9 @@
         const y = originY - yNorm * plotHeight;
 
         const isSelected = s.id === this.selectedSectorId;
+        const matchesSearch = !this.searchQuery || 
+          (s.name && s.name.toLowerCase().includes(this.searchQuery)) || 
+          (s.code && s.code.toLowerCase().includes(this.searchQuery));
         const matchesFilter = this.activeFilter === 'all' || 
           s.quadrant === this.activeFilter || 
           (this.activeFilter === 'niche' && (s.quadrant === 'niche' || s.quadrant === 'out_of_favor'));
