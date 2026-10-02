@@ -358,35 +358,35 @@
         </div>
       </div>
 
-      <!-- 6 KPI Telemetry Strip -->
+      <!-- 6 KPI Telemetry Strip (Website-Native Telemetry) -->
       <div class="c-stats-grid" id="dash-kpi-grid" style="margin-bottom: 2.5rem;">
         <div class="c-stat-card">
-          <div class="c-stat-card__label">● Live Listings</div>
+          <div class="c-stat-card__label">● Live Blueprints</div>
           <div class="c-stat-card__val" id="dash-kpi-1">184</div>
-          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +12 new today</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">Min 90p Audited Depth</div>
         </div>
         <div class="c-stat-card">
-          <div class="c-stat-card__label">● Active Now</div>
+          <div class="c-stat-card__label">● Active Buyer Searches</div>
           <div class="c-stat-card__val" id="dash-kpi-2">87</div>
-          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +14% vs avg</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">Active on Exchange</div>
         </div>
         <div class="c-stat-card">
-          <div class="c-stat-card__label">New This Week</div>
+          <div class="c-stat-card__label">New Buy Mandates</div>
           <div class="c-stat-card__val" id="dash-kpi-3">42</div>
-          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +18% WoW</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">Accredited PE / Studios</div>
         </div>
         <div class="c-stat-card">
-          <div class="c-stat-card__label">Architects Online</div>
-          <div class="c-stat-card__val" id="dash-kpi-4">247</div>
-          <div style="font-size: 0.76rem; color: var(--color-brand-primary); font-weight: 600; margin-top: 4px;">Verified Operators</div>
+          <div class="c-stat-card__label">Committed Buyer Capital</div>
+          <div class="c-stat-card__val" id="dash-kpi-4">$4,850,000</div>
+          <div style="font-size: 0.76rem; color: var(--color-brand-primary); font-weight: 600; margin-top: 4px;">In Active Buy-Boxes</div>
         </div>
         <div class="c-stat-card">
-          <div class="c-stat-card__label">Avg Unlock Valuation</div>
-          <div class="c-stat-card__val" id="dash-kpi-5">$4,300</div>
-          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ 22% MoM</div>
+          <div class="c-stat-card__label">Active Diligence Escrow</div>
+          <div class="c-stat-card__val" id="dash-kpi-5">$1,420,000</div>
+          <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">In 7-Day Neutral Custody</div>
         </div>
         <div class="c-stat-card">
-          <div class="c-stat-card__label">Deals Closed</div>
+          <div class="c-stat-card__label">Settled Transactions</div>
           <div class="c-stat-card__val" id="dash-kpi-6">37</div>
           <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">100% Escrow Cleared</div>
         </div>
@@ -398,7 +398,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem;">
               <span class="c-badge c-badge--neutral">Market Positioning Intelligence</span>
-              <span class="c-badge c-badge--success" id="matrix-api-badge">● Live Benchmark (14 Sectors)</span>
+              <span class="c-badge c-badge--success" id="matrix-api-badge">● Live Exchange Telemetry (14 Sectors)</span>
             </div>
             <h2 class="c-section-header__title">Strategic Opportunity Quadrant (Arbitrage Gap Analysis)</h2>
             <p class="c-section-header__sub">
@@ -408,7 +408,7 @@
           </div>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
             <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="btn-open-api-modal">
-              ⚡ Connect Free Live API
+              ⚡ Telemetry Settings
             </button>
             <button type="button" class="c-btn c-btn--outline c-btn--sm" id="btn-sim-ticks">
               ▶ Stream Live Ticks
@@ -430,12 +430,12 @@
           </div>
         </div>
 
-        <!-- Matrix Split View: Interactive Graph + Detail Sidebar -->
-        <div class="l-dashboard-split">
-          <div class="c-card" style="padding: 1.25rem; position: relative; overflow: visible;">
-            <!-- Interactive SVG Plot -->
-            <div id="quadrant-chart-wrapper" style="position: relative; width: 100%; min-height: 480px;">
-              <svg id="quadrant-matrix-svg" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; display: block;">
+        <!-- Expansive Matrix Split View: Large Graph + Inspector Sidebar -->
+        <div class="l-quadrant-layout">
+          <div class="c-quadrant-chart-card">
+            <!-- Expansive Interactive SVG Plot -->
+            <div id="quadrant-chart-wrapper" class="c-quadrant-chart-wrapper">
+              <svg id="quadrant-matrix-svg" viewBox="0 0 1150 640" preserveAspectRatio="xMidYMid meet" class="c-quad-svg">
                 <!-- Populated via JavaScript dynamically -->
               </svg>
 
@@ -444,40 +444,40 @@
             </div>
 
             <!-- Quadrant Summary Legend Strip -->
-            <div class="c-quad-legend" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-border-subtle); font-size: 0.78rem;">
+            <div class="c-quad-legend" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--color-border-subtle); font-size: 0.78rem;">
               <div style="display: flex; align-items: flex-start; gap: 8px;">
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #D04A15; margin-top: 3px; flex-shrink: 0;"></span>
+                <span style="width: 14px; height: 14px; border-radius: 50%; background: #D04A15; margin-top: 2px; flex-shrink: 0;"></span>
                 <div>
                   <strong>Arbitrage Surge (Top-Left)</strong>
-                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 80-100 · Supply &lt;20 · Max Seller Pricing Leverage</div>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 75-100 · Supply &lt;20 · Max Seller Pricing Leverage</div>
                 </div>
               </div>
               <div style="display: flex; align-items: flex-start; gap: 8px;">
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #059669; margin-top: 3px; flex-shrink: 0;"></span>
+                <span style="width: 14px; height: 14px; border-radius: 50%; background: #059669; margin-top: 2px; flex-shrink: 0;"></span>
                 <div>
                   <strong>Institutional Stars (Top-Right)</strong>
-                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 80-100 · Supply 20+ · Scaled Transaction Velocity</div>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 75-100 · Supply 20+ · Scaled Transaction Velocity</div>
                 </div>
               </div>
               <div style="display: flex; align-items: flex-start; gap: 8px;">
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #2563EB; margin-top: 3px; flex-shrink: 0;"></span>
+                <span style="width: 14px; height: 14px; border-radius: 50%; background: #2563EB; margin-top: 2px; flex-shrink: 0;"></span>
                 <div>
                   <strong>Emerging Niches (Bottom-Left)</strong>
-                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;80 · Supply &lt;20 · Uncontested Territory</div>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;75 · Supply &lt;20 · Uncontested Territory</div>
                 </div>
               </div>
               <div style="display: flex; align-items: flex-start; gap: 8px;">
-                <span style="width: 12px; height: 12px; border-radius: 50%; background: #6B7280; margin-top: 3px; flex-shrink: 0;"></span>
+                <span style="width: 14px; height: 14px; border-radius: 50%; background: #6B7280; margin-top: 2px; flex-shrink: 0;"></span>
                 <div>
                   <strong>High Competition (Bottom-Right)</strong>
-                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;80 · Supply 25+ · Buyer Price Leverage</div>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;75 · Supply 25+ · Buyer Price Leverage</div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Dynamic Sidebar: Selected Sector Deep-Dive & Arbitrage Ranking -->
-          <div class="c-card" id="quadrant-sidebar-panel" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+          <div class="c-quad-inspector-card" id="quadrant-sidebar-panel">
             <!-- Populated via JavaScript on load and node click -->
           </div>
         </div>
@@ -516,17 +516,19 @@
 
           <div style="margin-top: 2rem; border-top: 1px solid var(--color-border-subtle); padding-top: 1.2rem;">
             <h4 style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase; margin-bottom: 0.8rem;">Recent Transaction Activity</h4>
-            <div class="c-feed-item">
-              <div class="c-feed-dot"></div>
-              <div><strong>VVE-2440</strong> diligence deposit placed by Private Search Fund ($2,800 escrow committed)</div>
-            </div>
-            <div class="c-feed-item">
-              <div class="c-feed-dot"></div>
-              <div><strong>VVE-2436</strong> Technical review completed; milestone schedule authorized</div>
-            </div>
-            <div class="c-feed-item">
-              <div class="c-feed-dot"></div>
-              <div><strong>VVE-2438</strong> Mutual NDA executed; Virtual Data Room access granted</div>
+            <div id="dashboard-recent-feed">
+              <div class="c-feed-item">
+                <div class="c-feed-dot"></div>
+                <div><strong>VVE-2440</strong> diligence deposit placed by Private Search Fund ($2,800 escrow committed)</div>
+              </div>
+              <div class="c-feed-item">
+                <div class="c-feed-dot"></div>
+                <div><strong>VVE-2436</strong> Technical review completed; milestone schedule authorized</div>
+              </div>
+              <div class="c-feed-item">
+                <div class="c-feed-dot"></div>
+                <div><strong>VVE-2438</strong> Mutual NDA executed; Virtual Data Room access granted</div>
+              </div>
             </div>
           </div>
         </div>
@@ -584,7 +586,7 @@
           <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">Streaming Deal Flow</h3>
           <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1.2rem;">Live transaction milestones broadcast across verified participants</p>
 
-          <div class="c-feed">
+          <div class="c-feed" id="streaming-deal-flow-list">
             <div class="c-feed-item">
               <span class="c-badge c-badge--neutral" style="font-family: var(--font-family-mono);">VVE-2440</span>
               <div style="flex: 1; margin: 0 0.5rem;">

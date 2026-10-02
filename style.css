@@ -2120,11 +2120,44 @@ input, select, textarea {
 }
 
 /* ===================================================================
-   VENTURE INTELLIGENCE & TERMINAL ENHANCEMENTS
+   VENTURE INTELLIGENCE & EXPANSIVE TERMINAL MATRIX
    =================================================================== */
+.l-quadrant-layout {
+  display: grid;
+  grid-template-columns: 2.85fr 1.15fr;
+  gap: 1.75rem;
+  align-items: stretch;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 1150px) {
+  .l-quadrant-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.c-quadrant-chart-card {
+  padding: 1.5rem;
+  position: relative;
+  overflow: visible;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.c-quadrant-chart-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+}
+
 .c-quad-svg {
   width: 100%;
   height: auto;
+  min-height: 580px;
   display: block;
 }
 
@@ -2135,22 +2168,33 @@ input, select, textarea {
 
 .c-quad-node {
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .c-quad-node:hover circle.node-core {
-  stroke-width: 3.5px;
+  stroke-width: 4px;
   stroke: #FFFFFF;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
 }
 
 .c-quad-node.is-dimmed {
-  opacity: 0.18;
+  opacity: 0.15;
 }
 
 .c-quad-node.is-focused circle.node-core {
   stroke-width: 4px;
   stroke: #FFFFFF;
+}
+
+.c-quad-inspector-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
 }
 
 .c-quad-tooltip {
@@ -4876,8 +4920,8 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
 }
 .tabs-wrap {
   display: flex; justify-content: center; gap: 0;
-  background: var(--bg-paper);
-  border: 1px solid var(--line-strong); border-radius: 100px;
+  background: var(--color-bg-alt, #F4F4F1);
+  border: 1px solid var(--color-border-strong, rgba(0, 0, 0, 0.16)); border-radius: 100px;
   padding: .35rem; max-width: 520px; margin: 0 auto;
   position: relative;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -4885,21 +4929,40 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
 .tab-btn {
   flex: 1; padding: .75rem 1.5rem;
   font-size: .88rem; font-weight: 500;
-  color: var(--text-muted); border-radius: 100px;
+  color: var(--color-text-muted, #555555); border-radius: 100px;
   background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
-  transition: color .25s var(--ease); position: relative; z-index: 2;
+  transition: color .25s var(--ease), background .25s var(--ease); position: relative; z-index: 2;
   display: flex; align-items: center; justify-content: center; gap: .5rem;
 }
-.tab-btn.active { color: #FFFFFF !important; font-weight: 600; }
-.tab-btn:not(.active) { color: var(--text-muted) !important; font-weight: 500; }
-.tab-btn:hover:not(.active) { color: var(--text) !important; }
+.tab-btn.active { 
+  color: #FFFFFF !important; 
+  font-weight: 600; 
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.tabs-wrap[data-tab="buyer"] .tab-btn[data-tab="buyer"].active {
+  background: var(--orange, #E2571B);
+}
+.tabs-wrap[data-tab="architect"] .tab-btn[data-tab="architect"].active {
+  background: var(--green, #16A34A);
+}
+.tab-btn:not(.active) { 
+  color: var(--color-text-main, #141412) !important; 
+  font-weight: 500; 
+  background: transparent;
+}
+[data-theme="dark"] .tab-btn:not(.active) {
+  color: var(--color-text-muted, #CCCCCC) !important;
+}
+.tab-btn:hover:not(.active) { 
+  color: var(--color-brand-primary, #E2571B) !important; 
+}
 .tab-indicator {
   position: absolute; top: .35rem; bottom: .35rem;
   left: .35rem; width: calc(50% - .35rem);
-  background: var(--role); border-radius: 100px;
+  border-radius: 100px;
   transition: transform .35s var(--ease-out), background .3s var(--ease); z-index: 1;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
@@ -4911,7 +4974,7 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
   transform: translateX(100%);
   background: var(--green, #16A34A);
 }
-.tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: currentColor; }
 
 /* FAQ CONTENT */
 .faq-main { padding: 3rem 0 5rem; background: var(--bg); }

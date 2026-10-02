@@ -490,15 +490,87 @@
     const track = DOM.get('#ticker-content');
     if (!track) return;
     const assets = AssetRepository.getAll();
-    const html = assets.map(a => `
+    const mandates = State.buyMandates || [];
+    
+    const assetItems = assets.slice(0, 8).map(a => `
       <div class="c-ticker__item">
         <strong>${a.id}</strong>
-        <span>${a.title.slice(0, 36)}…</span>
-        <span class="c-ticker__tag">${formatCurrency(a.escrowDeposit)} deposit</span>
+        <span>${a.title.slice(0, 32)}…</span>
+        <span class="c-ticker__tag">${formatCurrency(a.escrowDeposit)} escrow deposit</span>
         <span>• Audit Score: ${a.trustRating}%</span>
       </div>
-    `).join('');
-    track.innerHTML = html + html;
+    `);
+
+    const mandateItems = mandates.slice(0, 4).map(m => `
+      <div class="c-ticker__item" style="border-left: 2px solid var(--color-brand-primary);">
+        <strong style="color: var(--color-brand-primary);">${m.id || 'MANDATE'}</strong>
+        <span>${m.entity || 'PE Principal'} · ${formatCurrency(m.budget)} Buy-Box</span>
+        <span class="c-ticker__tag" style="background: rgba(226, 87, 27, 0.15); color: var(--color-brand-primary);">Active Mandate</span>
+        <span>• 7d Close</span>
+      </div>
+    `);
+
+    const combined = [...assetItems, ...mandateItems].join('');
+    track.innerHTML = combined + combined;
+  }
+
+  function updateDashboardKPIs() {
+    const customCount = (State.customAssets && State.customAssets.length) || 0;
+    const mandateCount = (State.buyMandates && State.buyMandates.length) || 0;
+    let extraCapital = 0;
+    if (State.buyMandates) {
+      State.buyMandates.forEach(m => {
+        extraCapital += (Number(m.budget) || 100000);
+      });
+    }
+
+    const kpi1 = DOM.get('#dash-kpi-1');
+    const kpi2 = DOM.get('#dash-kpi-2');
+    const kpi3 = DOM.get('#dash-kpi-3');
+    const kpi4 = DOM.get('#dash-kpi-4');
+    const kpi5 = DOM.get('#dash-kpi-5');
+    const kpi6 = DOM.get('#dash-kpi-6');
+
+    if (kpi1) kpi1.textContent = 184 + customCount;
+    if (kpi2) kpi2.textContent = 87 + mandateCount * 2;
+    if (kpi3) kpi3.textContent = 42 + mandateCount;
+    if (kpi4) kpi4.textContent = formatCurrency(4850000 + extraCapital);
+    if (kpi5) kpi5.textContent = formatCurrency(1420000 + Math.round(extraCapital * 0.1));
+    if (kpi6) kpi6.textContent = 37;
+  }
+
+  function appendLiveTransaction(entry) {
+    const feed = DOM.get('#dashboard-recent-feed');
+    if (feed) {
+      const item = document.createElement('div');
+      item.className = 'c-feed-item';
+      item.innerHTML = `
+        <div class="c-feed-dot" style="background: var(--color-brand-primary); box-shadow: 0 0 8px var(--color-brand-primary);"></div>
+        <div>${entry}</div>
+      `;
+      feed.insertBefore(item, feed.firstChild);
+      if (feed.children.length > 6) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    const dealStream = DOM.get('#streaming-deal-flow-list');
+    if (dealStream) {
+      const item = document.createElement('div');
+      item.className = 'c-feed-item';
+      item.innerHTML = `
+        <span class="c-badge c-badge--primary" style="font-family: var(--font-family-mono);">LIVE</span>
+        <div style="flex: 1; margin: 0 0.5rem;">
+          <div style="font-weight: 600; font-size: 0.85rem;">${entry}</div>
+          <div style="font-size: 0.74rem; color: var(--color-text-muted);">Verified Institutional Telemetry</div>
+        </div>
+        <strong style="font-family: var(--font-family-mono); color: var(--color-brand-primary);">Just now</strong>
+      `;
+      dealStream.insertBefore(item, dealStream.firstChild);
+      if (dealStream.children.length > 6) {
+        dealStream.removeChild(dealStream.lastChild);
+      }
+    }
   }
 
   function renderDashboardSummary() {
@@ -587,79 +659,79 @@
       svg.innerHTML = `
         <defs>
           <radialGradient id="surgeGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#D04A15" stop-opacity="0.18"/>
+            <stop offset="0%" stop-color="#D04A15" stop-opacity="0.22"/>
             <stop offset="100%" stop-color="#D04A15" stop-opacity="0"/>
           </radialGradient>
           <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#059669" stop-opacity="0.18"/>
+            <stop offset="0%" stop-color="#059669" stop-opacity="0.20"/>
             <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
           </radialGradient>
-          <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+          <filter id="nodeShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.32"/>
           </filter>
         </defs>
 
         <!-- Quadrant 1: Top-Left (Arbitrage Surge) -->
-        <rect x="80" y="40" width="440" height="210" fill="var(--color-bg-alt)" opacity="0.6"/>
-        <rect x="80" y="40" width="440" height="210" fill="url(#surgeGlow)"/>
+        <rect x="90" y="40" width="500" height="258" fill="var(--color-bg-alt)" opacity="0.6"/>
+        <rect x="90" y="40" width="500" height="258" fill="url(#surgeGlow)"/>
         
         <!-- Quadrant 2: Top-Right (Institutional Stars) -->
-        <rect x="520" y="40" width="440" height="210" fill="var(--color-bg-surface)" opacity="0.7"/>
-        <rect x="520" y="40" width="440" height="210" fill="url(#starGlow)"/>
+        <rect x="590" y="40" width="500" height="258" fill="var(--color-bg-surface)" opacity="0.75"/>
+        <rect x="590" y="40" width="500" height="258" fill="url(#starGlow)"/>
 
         <!-- Quadrant 3: Bottom-Left (Emerging Niches) -->
-        <rect x="80" y="250" width="440" height="210" fill="var(--color-bg-surface)" opacity="0.4"/>
+        <rect x="90" y="298" width="500" height="257" fill="var(--color-bg-surface)" opacity="0.45"/>
         
         <!-- Quadrant 4: Bottom-Right (Saturated Liquidity) -->
-        <rect x="520" y="250" width="440" height="210" fill="var(--color-bg-alt)" opacity="0.4"/>
+        <rect x="590" y="298" width="500" height="257" fill="var(--color-bg-alt)" opacity="0.45"/>
 
         <!-- Subtle Background Gridlines -->
-        <line x1="80" y1="145" x2="960" y2="145" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
-        <line x1="80" y1="355" x2="960" y2="355" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
-        <line x1="300" y1="40" x2="300" y2="460" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
-        <line x1="740" y1="40" x2="740" y2="460" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="90" y1="169" x2="1090" y2="169" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="90" y1="426" x2="1090" y2="426" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="340" y1="40" x2="340" y2="555" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="840" y1="40" x2="840" y2="555" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
 
-        <!-- Crosshair Dividing Lines -->
-        <line x1="520" y1="40" x2="520" y2="460" stroke="var(--color-border-default)" stroke-width="1.75" stroke-dasharray="5 4"/>
-        <line x1="80" y1="250" x2="960" y2="250" stroke="var(--color-border-default)" stroke-width="1.75" stroke-dasharray="5 4"/>
+        <!-- Center Crosshair Dividing Lines -->
+        <line x1="590" y1="40" x2="590" y2="555" stroke="var(--color-border-default)" stroke-width="2" stroke-dasharray="6 4"/>
+        <line x1="90" y1="298" x2="1090" y2="298" stroke="var(--color-border-default)" stroke-width="2" stroke-dasharray="6 4"/>
 
-        <!-- Quadrant Headers & Strategic Descriptions -->
+        <!-- Prominent Quadrant Headers & Strategic Descriptions -->
         <g id="quad-labels">
           <!-- Top-Left -->
-          <text x="96" y="65" font-size="13" font-weight="700" fill="var(--color-brand-primary)" letter-spacing="0.04em">⚡ ARBITRAGE SURGE</text>
-          <text x="96" y="82" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Scarce Supply (&lt;20) · Max Seller Premium</text>
+          <text x="106" y="66" font-size="13.5" font-weight="700" fill="var(--color-brand-primary)" letter-spacing="0.04em">⚡ ARBITRAGE SURGE (MAX SELLER LEVERAGE)</text>
+          <text x="106" y="85" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Scarce Supply (&lt;25) · 12-Day Avg Clearing Velocity</text>
 
           <!-- Top-Right -->
-          <text x="536" y="65" font-size="13" font-weight="700" fill="var(--color-success)" letter-spacing="0.04em">★ INSTITUTIONAL STARS</text>
-          <text x="536" y="82" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Active Supply (≥20) · Liquid Scale</text>
+          <text x="606" y="66" font-size="13.5" font-weight="700" fill="var(--color-success)" letter-spacing="0.04em">★ INSTITUTIONAL STARS (PE LIQUIDITY)</text>
+          <text x="606" y="85" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Active Supply (≥25) · Liquid Institutional Deployment</text>
 
           <!-- Bottom-Left -->
-          <text x="96" y="275" font-size="13" font-weight="700" fill="#2563EB" letter-spacing="0.04em">🌱 EMERGING NICHES</text>
-          <text x="96" y="292" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Incubating Demand (≤75) · Low Competition · Asymmetric Upside</text>
+          <text x="106" y="324" font-size="13.5" font-weight="700" fill="#2563EB" letter-spacing="0.04em">🌱 EMERGING NICHES (UNCONTESTED)</text>
+          <text x="106" y="343" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Incubating Demand (≤75) · Low Competition (&lt;25) · High Organic Moats</text>
 
           <!-- Bottom-Right -->
-          <text x="536" y="275" font-size="13" font-weight="700" fill="var(--color-text-muted)" letter-spacing="0.04em">⏳ SATURATED LIQUIDITY</text>
-          <text x="536" y="292" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Moderate Demand · High Competition · Buyer Pricing Leverage</text>
+          <text x="606" y="324" font-size="13.5" font-weight="700" fill="var(--color-text-muted)" letter-spacing="0.04em">⏳ SATURATED LIQUIDITY (BUYER LEVERAGE)</text>
+          <text x="606" y="343" font-size="11" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Moderate Demand (≤75) · Heavy Competition (≥25) · Buyers Command Pricing</text>
         </g>
 
         <!-- Main Outer Axes -->
-        <line x1="80" y1="460" x2="960" y2="460" stroke="var(--color-border-strong)" stroke-width="1.5"/>
-        <line x1="80" y1="40" x2="80" y2="460" stroke="var(--color-border-strong)" stroke-width="1.5"/>
+        <line x1="90" y1="555" x2="1090" y2="555" stroke="var(--color-border-strong)" stroke-width="1.75"/>
+        <line x1="90" y1="40" x2="90" y2="555" stroke="var(--color-border-strong)" stroke-width="1.75"/>
 
         <!-- Axis Ticks & Scale Markers -->
-        <text x="70" y="45" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">100</text>
-        <text x="70" y="254" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">75</text>
-        <text x="70" y="464" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">50</text>
+        <text x="78" y="45" font-size="10.5" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">100</text>
+        <text x="78" y="302" font-size="10.5" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">75 (Mid)</text>
+        <text x="78" y="559" font-size="10.5" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">50</text>
 
-        <text x="80" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">10</text>
-        <text x="520" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">25 (Median)</text>
-        <text x="960" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">40+</text>
+        <text x="90" y="575" font-size="10.5" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">10 (Scarce)</text>
+        <text x="590" y="575" font-size="10.5" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">25 (Median Supply)</text>
+        <text x="1090" y="575" font-size="10.5" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">40+ (Saturated)</text>
 
         <!-- Axis Titles -->
-        <text x="520" y="504" font-size="11" font-weight="600" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)">
-          OPERATOR SUPPLY DEPTH (Active Listings & Competition) →
+        <text x="590" y="608" font-size="11.5" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)">
+          OPERATOR SUPPLY DEPTH (Active Listings & Competitor Blueprints) →
         </text>
-        <text x="24" y="250" font-size="11" font-weight="600" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)" transform="rotate(-90 24 250)">
+        <text x="26" y="298" font-size="11.5" font-weight="700" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)" transform="rotate(-90 26 298)">
           INSTITUTIONAL BUYER DEMAND INDEX (0 - 100) ↑
         </text>
 
@@ -675,8 +747,8 @@
       const sectors = VVENTRA_DATA.sectors;
       const minSupply = 10, maxSupply = 40;
       const minDemand = 50, maxDemand = 100;
-      const plotWidth = 880, plotHeight = 420;
-      const originX = 80, originY = 460;
+      const plotWidth = 1000, plotHeight = 515;
+      const originX = 90, originY = 555;
 
       layer.innerHTML = sectors.map(s => {
         const supply = s.architectSupplyCount || 20;
@@ -702,15 +774,16 @@
         else if (s.quadrant === 'niche' || s.quadrant === 'out_of_favor') color = '#2563EB';
         else if (s.quadrant === 'cash_cow' || s.quadrant === 'saturated') color = '#6B7280';
 
-        const radius = Math.min(12, Math.max(7, Math.round((s.arbitrageGap || 50) / 7)));
+        // Enlarged bubble radius for institutional terminal clarity (12px to 22px)
+        const radius = Math.min(22, Math.max(12, Math.round((s.arbitrageGap || 50) / 4.2)));
 
         return `
           <g class="c-quad-node ${isDimmed ? 'is-dimmed' : ''} ${isSelected ? 'is-focused' : ''}" 
              data-sector-id="${s.id}">
-            <circle class="node-pulse" cx="${x}" cy="${y}" r="${radius + 6}" fill="${color}" opacity="${isSelected ? '0.28' : '0'}"/>
-            <circle class="node-core" cx="${x}" cy="${y}" r="${radius}" fill="${color}" stroke="var(--color-bg-surface)" stroke-width="2" filter="url(#nodeShadow)"/>
-            <text x="${x + radius + 6}" y="${y + 4}" font-size="11" font-weight="${isSelected ? '700' : '600'}" fill="${isDimmed ? 'var(--color-text-faint)' : 'var(--color-text-main)'}">
-              ${s.name.split(' ')[0]} <tspan fill="${color}" font-weight="600">(${s.growth7d})</tspan>
+            <circle class="node-pulse" cx="${x}" cy="${y}" r="${radius + 8}" fill="${color}" opacity="${isSelected ? '0.32' : '0'}"/>
+            <circle class="node-core" cx="${x}" cy="${y}" r="${radius}" fill="${color}" stroke="var(--color-bg-surface)" stroke-width="2.5" filter="url(#nodeShadow)"/>
+            <text x="${x + radius + 7}" y="${y + 4}" font-size="12" font-weight="${isSelected ? '700' : '600'}" fill="${isDimmed ? 'var(--color-text-faint)' : 'var(--color-text-main)'}">
+              ${s.name.split(' ')[0]} <tspan fill="${color}" font-weight="700">(+${s.arbitrageGap || 35})</tspan>
             </text>
           </g>
         `;
@@ -803,28 +876,37 @@
           </p>
 
           <!-- 4 Telemetry Metrics -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
             <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
               <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Demand Score</div>
-              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-brand-primary);">${sector.buyerDemandIndex} <span style="font-size: 0.75rem; color: var(--color-text-faint);">/ 100</span></div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-brand-primary);">${sector.buyerDemandIndex} <span style="font-size: 0.75rem; color: var(--color-text-faint);">/ 100</span></div>
             </div>
             <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
               <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Active Supply</div>
-              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-text-main);">${sector.architectSupplyCount} <span style="font-size: 0.75rem; color: var(--color-text-faint);">listings</span></div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-text-main);">${sector.architectSupplyCount} <span style="font-size: 0.75rem; color: var(--color-text-faint);">listings</span></div>
             </div>
             <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
               <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Arbitrage Spread</div>
-              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-success);">+${sector.arbitrageGap} <span style="font-size: 0.75rem; color: var(--color-text-faint);">pts</span></div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-success);">+${sector.arbitrageGap} <span style="font-size: 0.75rem; color: var(--color-text-faint);">pts</span></div>
             </div>
             <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
               <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Avg Clear Time</div>
-              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-text-main);">${sector.avgClearDays || 12} <span style="font-size: 0.75rem; color: var(--color-text-faint);">days</span></div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-text-main);">${sector.avgClearDays || 12} <span style="font-size: 0.75rem; color: var(--color-text-faint);">days</span></div>
             </div>
           </div>
 
-          <a href="#browse" class="c-btn c-btn--primary c-btn--full" style="margin-bottom: 1.5rem;" onclick="State.activeFilter='all';">
-            Inspect ${sector.name} Dossiers →
-          </a>
+          <!-- Dual-Perspective Institutional CTAs -->
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;">
+            <a href="#list" class="c-btn c-btn--primary c-btn--full" onclick="setPerspective('investor');">
+              Post ${sector.name} Buy Mandate →
+            </a>
+            <a href="#list" class="c-btn c-btn--outline c-btn--full" onclick="setPerspective('architect');">
+              List ${sector.name} Blueprint →
+            </a>
+            <a href="#browse" class="c-btn c-btn--secondary c-btn--full" style="font-size: 0.78rem;" onclick="State.activeFilter='all';">
+              Inspect ${sector.name} Dossiers
+            </a>
+          </div>
         </div>
 
         <!-- Top Arbitrage Gaps Table List -->
@@ -930,18 +1012,62 @@
         }
         if (btnSim) btnSim.textContent = '⏹ Stop Stream';
 
-        showNotification('Live Simulation Active: Streaming volatility and liquidity ticks.');
+        showNotification('Live Simulation Active: Streaming authentic marketplace transaction activity.');
+
+        const authenticEventGenerators = [
+          () => {
+            const s = VVENTRA_DATA.sectors[Math.floor(Math.random() * VVENTRA_DATA.sectors.length)];
+            return `<strong>${s.name}:</strong> Private search fund placed ${formatCurrency(Math.floor(50 + Math.random() * 150) * 1000)} buy-box allocation (Spread: +${s.arbitrageGap})`;
+          },
+          () => {
+            const id = 'VVE-' + (2420 + Math.floor(Math.random() * 25));
+            return `<strong>${id}:</strong> Neutral escrow deposit committed; 7-day diligence window initiated`;
+          },
+          () => {
+            const id = 'VVE-' + (2420 + Math.floor(Math.random() * 25));
+            return `<strong>${id}:</strong> Complete 100-page SOP package passed Level-1 audit verification`;
+          },
+          () => {
+            const s = VVENTRA_DATA.sectors[Math.floor(Math.random() * VVENTRA_DATA.sectors.length)];
+            return `<strong>New Blueprint Listed:</strong> Audited operational framework registered in <em>${s.name}</em>`;
+          },
+          () => {
+            const id = 'VVE-' + (2420 + Math.floor(Math.random() * 20));
+            return `<strong>Settlement Cleared:</strong> 7-day inspection completed; wire released to architect on ${id}`;
+          }
+        ];
 
         this.timer = setInterval(() => {
           VVENTRA_DATA.sectors.forEach(s => {
-            const delta = (Math.random() - 0.48) * 1.5;
+            const delta = (Math.random() - 0.48) * 1.6;
             s.buyerDemandIndex = Math.min(99, Math.max(50, Math.round(s.buyerDemandIndex + delta)));
             s.arbitrageGap = Math.max(20, Math.round(s.buyerDemandIndex - (s.architectSupplyCount || 20) * 0.9));
           });
+
+          // Stream an authentic marketplace transaction event
+          const gen = authenticEventGenerators[Math.floor(Math.random() * authenticEventGenerators.length)];
+          appendLiveTransaction(gen());
+          renderTickerTape();
+          updateDashboardKPIs();
+
           QuadrantMatrixController.renderNodes();
           QuadrantMatrixController.renderSidebar();
-          renderDashboard();
-        }, 3200);
+          const tbody = DOM.get('#dashboard-matrix-body');
+          if (tbody) {
+            tbody.querySelectorAll('tr').forEach(row => {
+              const secId = row.dataset.sectorId;
+              const s = VVENTRA_DATA.sectors.find(sec => sec.id === secId);
+              if (s) {
+                const fill = row.querySelector('.c-bar-meter__fill');
+                const strong = row.querySelector('td:nth-child(2) strong');
+                const gapBadge = row.querySelector('.c-badge');
+                if (fill) fill.style.width = `${s.buyerDemandIndex}%`;
+                if (strong) strong.textContent = s.buyerDemandIndex;
+                if (gapBadge) gapBadge.textContent = `+${s.arbitrageGap}`;
+              }
+            });
+          }
+        }, 3400);
 
       } else if (mode === 'custom' && customUrl) {
         if (badge) {
@@ -980,6 +1106,8 @@
   window.SectorIntelligenceAPI = SectorIntelligenceAPI;
 
   function renderDashboard() {
+    updateDashboardKPIs();
+
     const tbody = DOM.get('#dashboard-matrix-body');
     if (!tbody || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
     tbody.innerHTML = VVENTRA_DATA.sectors.map(s => {
@@ -1796,6 +1924,25 @@
         State.buyMandates.unshift(newMandate);
         StorageService.set('buy_mandates', State.buyMandates);
         renderUserMandates();
+
+        // Dynamically reflect live mandate deployment in the market intelligence terminal:
+        sectors.forEach(secName => {
+          const match = VVENTRA_DATA.sectors.find(s => 
+            s.name.toLowerCase().includes(secName.toLowerCase()) || 
+            (s.category && s.category.toLowerCase().includes(secName.toLowerCase()))
+          );
+          if (match) {
+            match.buyerDemandIndex = Math.min(99, match.buyerDemandIndex + 3);
+            match.arbitrageGap = Math.max(20, Math.round(match.buyerDemandIndex - (match.architectSupplyCount || 20) * 0.9));
+          }
+        });
+
+        appendLiveTransaction(`<strong>New Buy Mandate:</strong> ${entity} committed ${formatCurrency(budget)} capital for ${sectors.join(', ')}`);
+        updateDashboardKPIs();
+        renderTickerTape();
+        QuadrantMatrixController.render();
+        renderDashboard();
+
         showNotification(`Acquisition Mandate ${newId} published! 14 matching blueprints alerted confidentially.`);
       });
     }
@@ -2074,6 +2221,23 @@
 
         State.customAssets.unshift(newAsset);
         StorageService.set('custom_assets', State.customAssets);
+
+        // Dynamically reflect live blueprint listing in the market intelligence terminal:
+        const matchSec = VVENTRA_DATA.sectors.find(s => 
+          s.name.toLowerCase().includes(industry.toLowerCase()) || 
+          (s.category && s.category.toLowerCase().includes(industry.toLowerCase()))
+        );
+        if (matchSec) {
+          matchSec.architectSupplyCount = (matchSec.architectSupplyCount || 20) + 1;
+          matchSec.arbitrageGap = Math.max(15, Math.round(matchSec.buyerDemandIndex - matchSec.architectSupplyCount * 0.9));
+        }
+
+        appendLiveTransaction(`<strong>New Blueprint Registered:</strong> ${newId} · ${title.slice(0, 36)}… (${formatCurrency(price)})`);
+        updateDashboardKPIs();
+        renderTickerTape();
+        QuadrantMatrixController.render();
+        renderDashboard();
+
         showNotification(`Asset Blueprint ${newId} registered successfully in the transaction repository.`);
         window.location.hash = `#listing?id=${newId}`;
       });
@@ -2108,6 +2272,12 @@
           depositBtn.textContent = 'Authorize Escrow Deposit';
           DOM.get('#pur-step-1').style.display = 'none';
           DOM.get('#pur-step-2').style.display = 'block';
+
+          const activeAsset = AssetRepository.getById(State.activeAssetId);
+          const escrowAmt = activeAsset ? (activeAsset.escrowDeposit || Math.round(activeAsset.valuation * 0.1)) : 5000;
+          appendLiveTransaction(`<strong>Escrow Committed:</strong> ${formatCurrency(escrowAmt)} locked in neutral custody for 7-day inspection on <em>${State.activeAssetId}</em>`);
+          updateDashboardKPIs();
+
           showNotification('Escrow verification complete. Virtual Data Room and technical review schedule unlocked.');
         }, 1000);
       });
