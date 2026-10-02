@@ -1,569 +1,795 @@
 /**
- * vvEntra · Institutional Venture Asset Database
- * Structured registry of verified operational assets, sector transaction metrics, and diligence records.
+ * ===================================================================
+ * vvEntra · Venture Intelligence & Opportunity Architecture Exchange
+ * Core Data Layer (True Authentic Architecture)
+ * ===================================================================
+ * "The people who can see opportunities clearly are rarely the same
+ *  people who can execute them at scale. We built the marketplace where
+ *  that gap closes — privately, structurally, and with escrow custody."
  */
 
 const VVENTRA_DATA = {
-  // Sector demand indices and transaction spreads based on institutional buyer allocations
+  platformStats: {
+    liveOpportunities: 184,
+    verifiedArchitects: 72,
+    activePEBuyers: 118,
+    medianUnlockRate: '$5,800',
+    avgClearTimeDays: 14,
+    totalEscrowCustodyVolume: '$42.8M',
+    trustScore: 99.4
+  },
+
+  // 14 Sectors Tracked by vvEntra Sector Index
   sectors: [
     {
       id: 'sec-01',
-      name: 'Automated Operations & Workflow Systems',
-      industry: 'Enterprise Software',
-      buyerDemandIndex: 94,
-      availableListings: 28,
-      marketGap: '+66 pts',
-      trailing7dChange: '+24%',
-      medianUnlockValuation: '$6,400',
-      status: 'high-demand'
+      code: 'REGTECH',
+      name: 'RegTech & Compliance',
+      category: 'Enterprise Governance',
+      growth7d: '+28.4%',
+      buyerDemandIndex: 88,
+      architectSupplyCount: 18,
+      arbitrageGap: 70, // High demand, low supply = biggest gap
+      quadrant: 'surge',
+      avgUnlockPrice: '$6,200',
+      avgClearDays: 12,
+      sparkline: [40, 48, 55, 62, 70, 78, 88]
     },
     {
       id: 'sec-02',
-      name: 'Regulatory Compliance Automation',
-      industry: 'RegTech',
-      buyerDemandIndex: 88,
-      availableListings: 22,
-      marketGap: '+66 pts',
-      trailing7dChange: '+19%',
-      medianUnlockValuation: '$7,200',
-      status: 'high-demand'
+      code: 'AI-WORKFLOW',
+      name: 'Vertical AI Agents',
+      category: 'Autonomous Workflows',
+      growth7d: '+34.2%',
+      buyerDemandIndex: 94,
+      architectSupplyCount: 24,
+      arbitrageGap: 70,
+      quadrant: 'star',
+      avgUnlockPrice: '$6,800',
+      avgClearDays: 9,
+      sparkline: [45, 52, 64, 72, 80, 89, 94]
     },
     {
       id: 'sec-03',
-      name: 'Commercial Underwriting Infrastructure',
-      industry: 'Fintech',
-      buyerDemandIndex: 86,
-      availableListings: 34,
-      marketGap: '+52 pts',
-      trailing7dChange: '+15%',
-      medianUnlockValuation: '$5,800',
-      status: 'active'
+      code: 'SMB-LENDING',
+      name: 'Tier-2 SMB Fintech',
+      category: 'Credit Infrastructure',
+      growth7d: '+19.6%',
+      buyerDemandIndex: 82,
+      architectSupplyCount: 21,
+      arbitrageGap: 61,
+      quadrant: 'star',
+      avgUnlockPrice: '$7,500',
+      avgClearDays: 14,
+      sparkline: [50, 56, 62, 68, 72, 77, 82]
     },
     {
       id: 'sec-04',
-      name: 'Industrial Telemetry & Environmental Auditing',
-      industry: 'ClimateTech',
-      buyerDemandIndex: 82,
-      availableListings: 31,
-      marketGap: '+51 pts',
-      trailing7dChange: '+12%',
-      medianUnlockValuation: '$8,500',
-      status: 'active'
+      code: 'D2C-WELLNESS',
+      name: 'Ayurveda & D2C Wellness',
+      category: 'Consumer Brands',
+      growth7d: '+16.8%',
+      buyerDemandIndex: 79,
+      architectSupplyCount: 26,
+      arbitrageGap: 53,
+      quadrant: 'cash_cow',
+      avgUnlockPrice: '$5,400',
+      avgClearDays: 16,
+      sparkline: [55, 60, 64, 69, 72, 76, 79]
     },
     {
       id: 'sec-05',
-      name: 'Clinical Health & Direct Sourcing Infrastructure',
-      industry: 'Healthcare & Consumer',
-      buyerDemandIndex: 79,
-      availableListings: 42,
-      marketGap: '+37 pts',
-      trailing7dChange: '+8%',
-      medianUnlockValuation: '$4,800',
-      status: 'stable'
+      code: 'INDUSTRIAL-IOT',
+      name: 'Heavy Industry Emissions',
+      category: 'Climate & Hardware',
+      growth7d: '+22.1%',
+      buyerDemandIndex: 86,
+      architectSupplyCount: 15,
+      arbitrageGap: 71,
+      quadrant: 'surge',
+      avgUnlockPrice: '$8,200',
+      avgClearDays: 11,
+      sparkline: [42, 49, 58, 66, 74, 80, 86]
     },
     {
       id: 'sec-06',
-      name: 'Multi-Modal Logistics Orchestration',
-      industry: 'Logistics',
-      buyerDemandIndex: 76,
-      availableListings: 45,
-      marketGap: '+31 pts',
-      trailing7dChange: '+6%',
-      medianUnlockValuation: '$6,900',
-      status: 'stable'
+      code: 'CREATOR-MKTP',
+      name: 'Specialty Creator Marketplaces',
+      category: 'Network Platforms',
+      growth7d: '+12.5%',
+      buyerDemandIndex: 68,
+      architectSupplyCount: 30,
+      arbitrageGap: 38,
+      quadrant: 'cash_cow',
+      avgUnlockPrice: '$4,200',
+      avgClearDays: 19,
+      sparkline: [52, 54, 58, 62, 64, 66, 68]
     },
     {
       id: 'sec-07',
-      name: 'Vertical ERP for Mid-Market Manufacturing',
-      industry: 'Industrial Software',
-      buyerDemandIndex: 84,
-      availableListings: 55,
-      marketGap: '+29 pts',
-      trailing7dChange: '+9%',
-      medianUnlockValuation: '$5,500',
-      status: 'stable'
+      code: 'HEALTH-OPS',
+      name: 'Outpatient Clinic OS',
+      category: 'Healthcare Operations',
+      growth7d: '+18.9%',
+      buyerDemandIndex: 81,
+      architectSupplyCount: 19,
+      arbitrageGap: 62,
+      quadrant: 'star',
+      avgUnlockPrice: '$6,900',
+      avgClearDays: 15,
+      sparkline: [48, 54, 61, 67, 72, 76, 81]
     },
     {
       id: 'sec-08',
-      name: 'Digital Distribution & Paid Community Infrastructure',
-      industry: 'Digital Commerce',
-      buyerDemandIndex: 70,
-      availableListings: 48,
-      marketGap: '+22 pts',
-      trailing7dChange: '+4%',
-      medianUnlockValuation: '$4,200',
-      status: 'stable'
+      code: 'AGRITECH',
+      name: 'Post-Harvest Supply Chain',
+      category: 'Agritech & Cold Chain',
+      growth7d: '+9.4%',
+      buyerDemandIndex: 62,
+      architectSupplyCount: 28,
+      arbitrageGap: 34,
+      quadrant: 'out_of_favor',
+      avgUnlockPrice: '$4,600',
+      avgClearDays: 24,
+      sparkline: [58, 59, 60, 61, 62, 61, 62]
     },
     {
       id: 'sec-09',
-      name: 'Outpatient Clinic Operating Systems',
-      industry: 'HealthTech',
-      buyerDemandIndex: 68,
-      availableListings: 50,
-      marketGap: '+18 pts',
-      trailing7dChange: '+2%',
-      medianUnlockValuation: '$5,100',
-      status: 'stable'
+      code: 'LOGISTICS-INFRA',
+      name: 'Micro-Warehousing Hubs',
+      category: 'Hyperlocal Fulfillment',
+      growth7d: '+14.1%',
+      buyerDemandIndex: 73,
+      architectSupplyCount: 25,
+      arbitrageGap: 48,
+      quadrant: 'cash_cow',
+      avgUnlockPrice: '$5,800',
+      avgClearDays: 18,
+      sparkline: [50, 54, 60, 65, 68, 70, 73]
     },
     {
       id: 'sec-10',
-      name: 'Agricultural Sensing Hardware & GIS',
-      industry: 'AgriTech',
-      buyerDemandIndex: 62,
-      availableListings: 52,
-      marketGap: '+10 pts',
-      trailing7dChange: '-1%',
-      medianUnlockValuation: '$4,500',
-      status: 'balanced'
+      code: 'CYBER-AUDIT',
+      name: 'Cloud Infrastructure Hardening',
+      category: 'Security Architecture',
+      growth7d: '+24.7%',
+      buyerDemandIndex: 87,
+      architectSupplyCount: 16,
+      arbitrageGap: 71,
+      quadrant: 'surge',
+      avgUnlockPrice: '$7,800',
+      avgClearDays: 13,
+      sparkline: [44, 51, 60, 68, 76, 82, 87]
     },
     {
       id: 'sec-11',
-      name: 'Distributed Network Access & Security',
-      industry: 'Cybersecurity',
-      buyerDemandIndex: 65,
-      availableListings: 60,
-      marketGap: '+5 pts',
-      trailing7dChange: '-3%',
-      medianUnlockValuation: '$7,000',
-      status: 'balanced'
+      code: 'EDTECH-VOC',
+      name: 'Blue-Collar Vocational Skills',
+      category: 'Applied Workforce Training',
+      growth7d: '+6.2%',
+      buyerDemandIndex: 54,
+      architectSupplyCount: 35,
+      arbitrageGap: 19,
+      quadrant: 'out_of_favor',
+      avgUnlockPrice: '$3,400',
+      avgClearDays: 28,
+      sparkline: [56, 55, 54, 55, 54, 53, 54]
     },
     {
       id: 'sec-12',
-      name: 'Automated Commercial Kitchen Equipment',
-      industry: 'Food Equipment',
-      buyerDemandIndex: 54,
-      availableListings: 58,
-      marketGap: '-4 pts',
-      trailing7dChange: '-5%',
-      medianUnlockValuation: '$6,200',
-      status: 'oversupplied'
+      code: 'MARTECH-CDP',
+      name: 'First-Party Consent Hubs',
+      category: 'Privacy Infrastructure',
+      growth7d: '+15.3%',
+      buyerDemandIndex: 75,
+      architectSupplyCount: 22,
+      arbitrageGap: 53,
+      quadrant: 'cash_cow',
+      avgUnlockPrice: '$5,900',
+      avgClearDays: 17,
+      sparkline: [52, 56, 62, 67, 70, 72, 75]
     },
     {
       id: 'sec-13',
-      name: 'Consumer Subscription Management Systems',
-      industry: 'Consumer Goods',
-      buyerDemandIndex: 42,
-      availableListings: 68,
-      marketGap: '-26 pts',
-      trailing7dChange: '-11%',
-      medianUnlockValuation: '$3,200',
-      status: 'oversupplied'
+      code: 'ENERGY-BATTERY',
+      name: 'Second-Life EV Battery Trading',
+      category: 'Clean Energy Circularity',
+      growth7d: '+29.8%',
+      buyerDemandIndex: 90,
+      architectSupplyCount: 12,
+      arbitrageGap: 78,
+      quadrant: 'surge',
+      avgUnlockPrice: '$9,100',
+      avgClearDays: 10,
+      sparkline: [40, 50, 62, 72, 80, 86, 90]
     },
     {
       id: 'sec-14',
-      name: 'Outbound Prospecting & Lead Data Brokering',
-      industry: 'Sales Operations',
-      buyerDemandIndex: 38,
-      availableListings: 74,
-      marketGap: '-36 pts',
-      trailing7dChange: '-16%',
-      medianUnlockValuation: '$2,800',
-      status: 'oversupplied'
+      code: 'GOVTECH',
+      name: 'Municipal Procurement Workflows',
+      category: 'Civic Infrastructure',
+      growth7d: '+8.1%',
+      buyerDemandIndex: 58,
+      architectSupplyCount: 20,
+      arbitrageGap: 38,
+      quadrant: 'out_of_favor',
+      avgUnlockPrice: '$5,100',
+      avgClearDays: 25,
+      sparkline: [52, 53, 55, 56, 57, 57, 58]
     }
   ],
 
-  // Audited Operational Asset Listings
+  // The 6 Authentic Opportunity Dossiers
   opportunities: [
     {
       id: 'VVE-2440',
-      title: 'Automated Inventory QA & Vendor Routing System for E-Commerce',
-      summary: 'A turnkey operational infrastructure engineered to automate catalogue QA, supplier handoffs, and inventory reconciliation for brands operating between $2M and $15M in annual GMV.',
-      industry: 'Digital Commerce',
-      tags: ['E-Commerce Operations', 'Inventory Automation', 'Supply Chain'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'United States, United Kingdom, Australia',
-      capitalRequirement: '$35,000 - $65,000',
-      implementationTimeline: '60 - 90 Days',
-      valuation: 28000,
-      escrowDeposit: 2800,
-      trustRating: 98,
-      pageCount: 114,
-      frameworkCount: 18,
-      operator: {
-        name: 'Amit Jain',
-        title: 'Former Vice President of Operations, 2x Exited E-Commerce Operator',
-        verifiedIdentity: true,
-        historicalTransactions: '$18M & $7.4M Strategic Exits',
-        peerReviewScore: 4.95,
-        totalCompletedTransfers: 7
+      code: 'AYUR-D2C',
+      title: 'Indian D2C Ayurveda Category Build-Out',
+      sector: 'Ayurveda & D2C Wellness',
+      sectorId: 'sec-04',
+      scale: '$1.2B TAM Runway',
+      geography: 'India / Southeast Asia',
+      unlockPrice: 5400,
+      executionCapEst: '$85,000 - $140,000',
+      targetHorizonMonths: 24,
+      documentationDepth: {
+        totalPages: 114,
+        businessModelPages: 38,
+        sopPages: 32,
+        marketResearchPages: 26,
+        financialModels: 3,
+        riskMaps: 2
       },
-      commercialParameters: {
-        addressableMarket: '$4.2B Mid-Market E-Commerce Operations',
-        targetMarginImprovement: '3.4x Operating Margin Expansion',
-        paybackPeriod: '5.2 Months'
+      architect: {
+        handle: 'arch-karnatak',
+        title: 'Senior Operating Architect',
+        verificationStatus: 'Govt ID + Bank Verified',
+        experience: 'Ex-FMCG Category Lead · 2 Exits ($18M cumulative)',
+        rating: 4.96,
+        unlocksCompleted: 14,
+        disputes: 0
       },
-      executiveAbstract: 'Mid-market consumer brands frequently face severe operational friction when scaling past $2M GMV due to manual intervention in product cataloging, supplier exception handling, and 3PL routing. This package provides the complete technical architecture, API integration specs, and SOP documentation required to transition operations to an autonomous 3-person team within 90 days.',
-      operationalProblem: 'Inventory data and supplier communications are fragmented across unmonitored messaging threads and ad-hoc spreadsheets. Operational exceptions require executive intervention, which directly compresses gross margins and depresses valuation multiples during institutional acquisition diligence.',
-      solutionArchitecture: 'A unified operational data pipeline integrating Shopify Plus, ERP systems (NetSuite/Cin7), and 3PL warehouse management systems with automated webhook error handling and decision trees.',
-      commercialModel: 'Enterprise deployment model with setup fee ($30,000) and recurring monthly maintenance SLA ($3,500/month) delivering 82% gross operating margin.',
-      riskFactors: 'Legacy ERP API rate limits, supplier onboarding cycle variance, and regional carrier protocol changes.',
-      deliverablesPackage: [
-        '114-Page Operational System Architecture & Specifications (PDF)',
-        'Three-Statement Financial Pro-Forma & Working Capital Model (XLSX)',
-        'Supplier Quality Assurance Protocol & Exception Decision Matrix (PDF)',
-        'Webhook Integration Schematics & Automation Scripts (JSON / Repo Access)',
-        'Post-Acquisition Operational Transition & Training Manual (PDF)'
-      ]
+      publicPreviewThesis: 'A complete category execution playbook for an under-served clinical wellness vertical with a $1.2B TAM growth runway. Operator-grade execution plan with direct botanical sourcing contracts, brand positioning, formulation supply chain, and omnichannel distribution mapped.',
+      gatedSummary: 'Includes detailed bill-of-materials for 6 initial SKUs, GMP manufacturing agreements with tier-1 certified labs in Kerala, clinical trial documentation outlines, customer acquisition cost benchmarks across 4 digital channels, and regulatory licensing pathway under AYUSH ministry.',
+      demandSignals: [
+        'Ayurveda category search intent up +42% YoY in Tier-1 & Tier-2 metros',
+        'Traditional pharmacy channel retail margin benchmarked at 38%',
+        'Customer repeat purchase rate modeled at 41% across cohort benchmarks'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 250,
+        tier3Partial: 1620, // 30%
+        tier4Full: 3780     // remaining 70%
+      }
     },
     {
       id: 'VVE-2438',
-      title: 'Standardized Botanical Extraction & Regulatory GTM Framework',
-      summary: 'A complete supply chain, clinical assay documentation, and regulatory compliance blueprint for clean-label herbal wellness brands entering premium export markets.',
-      industry: 'Healthcare & Consumer',
-      tags: ['Healthcare', 'Supply Chain', 'Regulatory Compliance'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'India, United Arab Emirates, North America',
-      capitalRequirement: '$50,000 - $120,000',
-      implementationTimeline: '90 - 120 Days',
-      valuation: 18500,
-      escrowDeposit: 1850,
-      trustRating: 96,
-      pageCount: 98,
-      frameworkCount: 14,
-      operator: {
-        name: 'Devika Sharma',
-        title: 'Former Head of Consumer Product Strategy, Dabur Healthcare',
-        verifiedIdentity: true,
-        historicalTransactions: '12 Commercial Brand Launches in APAC',
-        peerReviewScore: 4.92,
-        totalCompletedTransfers: 4
+      code: 'REGTECH-US',
+      title: 'B2B SaaS for Vertical Compliance, US Mid-Market',
+      sector: 'RegTech & Compliance',
+      sectorId: 'sec-01',
+      scale: '$420M SAM',
+      geography: 'United States Mid-Market',
+      unlockPrice: 4800,
+      executionCapEst: '$120,000 - $180,000',
+      targetHorizonMonths: 18,
+      documentationDepth: {
+        totalPages: 98,
+        businessModelPages: 32,
+        sopPages: 28,
+        marketResearchPages: 22,
+        financialModels: 2,
+        riskMaps: 2
       },
-      commercialParameters: {
-        addressableMarket: '$1.2B Standardized Herbal Formulations',
-        targetMarginImprovement: '68% Blended Product Gross Margin',
-        paybackPeriod: '8.4 Months'
+      architect: {
+        handle: 'arch-vanguard',
+        title: 'Enterprise Software Architect',
+        verificationStatus: 'Passport + Entity Verified',
+        experience: 'Former VP Product at Tier-1 GRC Provider',
+        rating: 4.92,
+        unlocksCompleted: 11,
+        disputes: 0
       },
-      executiveAbstract: 'Institutional buyers in the consumer health segment face persistent quality hurdles when attempting to scale botanical products internationally. This asset delivers verified GMP-certified supplier agreements, FDA/AYUSH regulatory filings, and standardized extraction protocols to ensure lab-verified consistency.',
-      operationalProblem: 'Unstandardized agricultural raw material sourcing leads to heavy metal variability and failed batch certifications, resulting in regulatory import rejections and high customer return rates.',
-      solutionArchitecture: 'Contracted agricultural co-operative supply network with pre-negotiated volume pricing, third-party laboratory verification workflows, and tamper-evident packaging specs.',
-      commercialModel: 'Direct-to-consumer replenishment subscription paired with commercial pharmacy distribution partnerships.',
-      riskFactors: 'Agricultural harvest yield seasonality and changing international heavy-metal threshold regulations.',
-      deliverablesPackage: [
-        'GMP Manufacturing Partner Contracts & Pre-Negotiated Terms (PDF)',
-        'FDA & AYUSH Export Regulatory Dossiers & Filing Protocols (PDF)',
-        'Standardized Batch-Testing Clinical Validation Schematics (PDF)',
-        'Unit Economics, Inventory Turnover, and Cash-Flow Model (XLSX)'
-      ]
+      publicPreviewThesis: 'An execution-ready compliance automation play for US mid-market industrial manufacturers facing new EPA/OSHA audit mandates. Includes Ideal Customer Profile (ICP), federal regulatory map, land-and-expand GTM motion, and pricing architecture validated against 47 customer discovery signals.',
+      gatedSummary: 'Contains 14 functional product wireframes, technical database schema for audit trail immutability, sales sequence scripts targeting VP of Health & Safety, contract templates with enterprise indemnity caps, and detailed unit economics showing a 9.2-month payback period.',
+      demandSignals: [
+        'Regulatory enforcement penalties increased 65% since federal guideline revisions',
+        'Mid-market industrial compliance software churn benchmarked under 4.1% annually',
+        'Average contract value validated between $18,000 and $36,000 ARR'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 250,
+        tier3Partial: 1440,
+        tier4Full: 3360
+      }
     },
     {
       id: 'VVE-2436',
-      title: 'Automated Regulatory Compliance Telemetry for Manufacturing Plants',
-      summary: 'An autonomous compliance monitoring system that ingests plant telemetry and generates validated filings for OSHA, ISO 9001, and environmental emission thresholds.',
-      industry: 'RegTech',
-      tags: ['Industrial AI', 'RegTech', 'Manufacturing Operations'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'United States (Midwest), Germany',
-      capitalRequirement: '$40,000 - $80,000',
-      implementationTimeline: '45 - 60 Days',
-      valuation: 32000,
-      escrowDeposit: 3200,
-      trustRating: 99,
-      pageCount: 132,
-      frameworkCount: 22,
-      operator: {
-        name: 'Dr. Marcus Vance',
-        title: 'Former Automation Systems Director, Siemens Industrial',
-        verifiedIdentity: true,
-        historicalTransactions: 'Co-Founder, Industrial Data Systems (Acquired 2023)',
-        peerReviewScore: 4.98,
-        totalCompletedTransfers: 9
+      code: 'AI-WORKFLOW',
+      title: 'AI Workflow Agent for Vertical Legal Operations',
+      sector: 'Vertical AI Agents',
+      sectorId: 'sec-02',
+      scale: '$680M TAM',
+      geography: 'North America / UK',
+      unlockPrice: 6200,
+      executionCapEst: '$75,000 - $110,000',
+      targetHorizonMonths: 12,
+      documentationDepth: {
+        totalPages: 128,
+        businessModelPages: 42,
+        sopPages: 36,
+        marketResearchPages: 30,
+        financialModels: 3,
+        riskMaps: 3
       },
-      commercialParameters: {
-        addressableMarket: '$3.8B Industrial Compliance Software',
-        targetMarginImprovement: '78% Audit Preparation Labor Reduction',
-        paybackPeriod: '3.1 Months'
+      architect: {
+        handle: 'arch-vector',
+        title: 'Principal Systems Architect',
+        verificationStatus: 'Govt ID + Audit Verified',
+        experience: 'Ex-Staff Engineer at Top Applied AI Research Lab',
+        rating: 4.98,
+        unlocksCompleted: 19,
+        disputes: 0
       },
-      executiveAbstract: 'Mid-sized manufacturing facilities expend thousands of engineering hours manually cross-referencing sensor logs and safety reports for statutory audits. This software and systems package automates ingestion, validation, and regulatory filing with verified audit trails.',
-      operationalProblem: 'Statutory non-compliance fines have increased by 40% year-over-year, yet mid-market plants cannot justify multimillion-dollar enterprise software implementations with multi-year rollout delays.',
-      solutionArchitecture: 'Containerized edge ingestion pipeline connecting to standard SCADA/PLC controllers with air-gapped local processing and automated XML reporting.',
-      commercialModel: 'Annual recurring license of $26,400 per facility with 94% retention rate and low ongoing support requirements.',
-      riskFactors: 'Plant IT air-gap policies and legacy serial sensor interface conversion challenges.',
-      deliverablesPackage: [
-        'Complete Telemetry Ingestion Architecture & Data Pipeline Spec (PDF)',
-        'ISO 9001 and OSHA Regulatory Rules Engine Codebase (GitHub Repo)',
-        'Commercial Enterprise Pilot Master Services Agreement Template (DOCX)',
-        'Security Architecture, Audit Logs & SOC2 Type II Readiness Blueprint (PDF)'
-      ]
+      publicPreviewThesis: 'Vertical-specific AI workflow agent targeting contract redlining and cross-jurisdictional compliance for mid-sized law firms. Includes prompt engineering library, agentic state-machine architecture, secure API integration spec, and a 24-month commercial rollout roadmap.',
+      gatedSummary: 'Features complete benchmark dataset of 5,000 sanitized commercial contracts, LangGraph orchestration design, zero data retention privacy architecture required by bar associations, and pilot customer outreach sequence with 42% initial reply rate.',
+      demandSignals: [
+        'Corporate legal counsel spending on AI tooling up +140% YoY',
+        'Manual contract review represents 28% of billable attorney overhead',
+        'Law firm willingness to pay benchmarked at $1,200 per attorney seat / month'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 300,
+        tier3Partial: 1860,
+        tier4Full: 4340
+      }
     },
     {
       id: 'VVE-2434',
-      title: 'Cash-Flow Commercial Underwriting Protocol for Tier-2 Enterprises',
-      summary: 'A credit scoring and underwriting engine utilizing real-time payment velocity and distributor invoices to evaluate uncollateralized working capital facilities.',
-      industry: 'Fintech',
-      tags: ['Credit Scoring', 'Commercial Lending', 'Underwriting'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'India (Tier-2 Industrial Hubs)',
-      capitalRequirement: '$100,000 - $250,000',
-      implementationTimeline: '90 - 150 Days',
-      valuation: 24000,
-      escrowDeposit: 2400,
-      trustRating: 95,
-      pageCount: 108,
-      frameworkCount: 16,
-      operator: {
-        name: 'Rohan Mehra',
-        title: 'Former Chief Credit Risk Officer, Non-Bank Financial Intermediary',
-        verifiedIdentity: true,
-        historicalTransactions: '$120M Commercial Credit Book Supervised',
-        peerReviewScore: 4.88,
-        totalCompletedTransfers: 5
+      code: 'SMB-CREDIT',
+      title: 'SMB Lending Infrastructure for Tier-2 Indian Cities',
+      sector: 'Tier-2 SMB Fintech',
+      sectorId: 'sec-03',
+      scale: '$3.4B Credit Gap',
+      geography: 'India (Tier-2 & Tier-3)',
+      unlockPrice: 7500,
+      executionCapEst: '$250,000 - $400,000',
+      targetHorizonMonths: 36,
+      documentationDepth: {
+        totalPages: 142,
+        businessModelPages: 46,
+        sopPages: 44,
+        marketResearchPages: 32,
+        financialModels: 4,
+        riskMaps: 3
       },
-      commercialParameters: {
-        addressableMarket: '$28B SME Credit Deficit',
-        targetMarginImprovement: '21.5% Net Portfolio IRR',
-        paybackPeriod: '12 Months'
+      architect: {
+        handle: 'arch-deccan',
+        title: 'Fintech Credit Architect',
+        verificationStatus: 'Aadhaar + CA Letter Verified',
+        experience: 'Former Chief Risk Officer at NBFC ($120M AUM)',
+        rating: 4.94,
+        unlocksCompleted: 8,
+        disputes: 0
       },
-      executiveAbstract: 'Traditional balance-sheet lending excludes cash-flow-rich informal businesses with limited tax records. This operational protocol pairs real-time digital payment reconciliation with anchor-distributor receivables tracking, holding defaults under 2.8%.',
-      operationalProblem: 'Standard automated digital lenders rely on credit bureau histories that are non-existent for regional distributors, leading to adverse selection and unsustainable non-performing asset rates.',
-      solutionArchitecture: 'Dual verification engine that ingests GST transactional records, bank statement data, and distributor confirmation APIs to establish dynamic credit limits.',
-      commercialModel: 'Risk-based loan interest spread (18-22% APR) with partner bank balance sheet syndication fees.',
-      riskFactors: 'Central bank statutory lending rule changes and seasonal inventory cycles.',
-      deliverablesPackage: [
-        'Proprietary Credit Risk Scoring Algorithm & Weighting Matrix (XLSX)',
-        'Co-Lending Financial Institution Legal Master Agreement (DOCX)',
-        'Anchor Distributor Onboarding & Collection Protocols (PDF)',
-        'Regulatory Compliance Checklist & Borrower Rights Disclosures (PDF)'
-      ]
+      publicPreviewThesis: 'A regulatory-grade credit assessment and distribution architecture for under-banked manufacturing SMBs in non-metro hubs. Includes proprietary cash-flow underwriting algorithm, distributor-led origination playbook, and a 36-month capital partnership roadmap.',
+      gatedSummary: 'Contains complete credit policy documentation, GST-based fraud detection rules, NBFC co-lending agreement templates, recovery workflow SOPs, and financial projections showing 19.4% portfolio IRR with sub-2.4% historical default assumptions.',
+      demandSignals: [
+        'Tier-2 manufacturing clusters face an estimated $3.4B formal credit deficit',
+        'Digital GST invoicing penetration reached 82% among target merchants',
+        'Institutional debt syndication partners willing to deploy capital at 11.5% cost of funds'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 400,
+        tier3Partial: 2250,
+        tier4Full: 5250
+      }
     },
     {
       id: 'VVE-2432',
-      title: 'Industrial Flue-Gas Spectrometry Appliance & Regulatory Reporting',
-      summary: 'A hardware and software system providing continuous particulate and emissions tracking with automated export for statutory carbon tax authorities.',
-      industry: 'ClimateTech',
-      tags: ['Hardware Engineering', 'Emissions Compliance', 'SaaS'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'European Union, North America',
-      capitalRequirement: '$75,000 - $180,000',
-      implementationTimeline: '120 - 180 Days',
-      valuation: 26500,
-      escrowDeposit: 2650,
-      trustRating: 97,
-      pageCount: 120,
-      frameworkCount: 19,
-      operator: {
-        name: 'Soren Lindqvist',
-        title: 'Former Principal Sensor Architect, ABB Industrial Automation',
-        verifiedIdentity: true,
-        historicalTransactions: '15 Awarded Patents in Gas Spectrometry',
-        peerReviewScore: 4.96,
-        totalCompletedTransfers: 6
+      code: 'EMISSIONS-IOT',
+      title: 'Industrial Emissions Monitoring for Heavy Manufacturing',
+      sector: 'Heavy Industry Emissions',
+      sectorId: 'sec-05',
+      scale: '$890M Regulatory Mandate',
+      geography: 'Global / Emerging Markets',
+      unlockPrice: 8200,
+      executionCapEst: '$180,000 - $300,000',
+      targetHorizonMonths: 24,
+      documentationDepth: {
+        totalPages: 106,
+        businessModelPages: 36,
+        sopPages: 30,
+        marketResearchPages: 24,
+        financialModels: 2,
+        riskMaps: 2
       },
-      commercialParameters: {
-        addressableMarket: '$6.5B EU CBAM Regulatory Sector',
-        targetMarginImprovement: '4.8x ROI vs Penalty Exposure',
-        paybackPeriod: '6.5 Months'
+      architect: {
+        handle: 'arch-helix',
+        title: 'Industrial Systems Engineer',
+        verificationStatus: 'Govt ID + Patent Verified',
+        experience: 'Ex-Director of IoT Engineering at Global Conglomerate',
+        rating: 4.89,
+        unlocksCompleted: 7,
+        disputes: 0
       },
-      executiveAbstract: 'The EU Carbon Border Adjustment Mechanism (CBAM) requires certified emissions tracking for industrial exporters. This package pairs an open-architecture optical sensor design with continuous compliance reporting software at a fraction of legacy CEMS cost.',
-      operationalProblem: 'Legacy Continuous Emission Monitoring Systems cost upwards of $120,000 per stack, creating capital roadblocks for mid-tier foundries and chemical processors facing regulatory shutdown deadlines.',
-      solutionArchitecture: 'Solid-state optical absorption hardware paired with an automated cloud ingestion hub generating verified XML records for national customs authorities.',
-      commercialModel: 'Hardware unit procurement margin ($8,500/unit) plus recurring annual calibration and reporting subscription ($16,800/year).',
-      riskFactors: 'Extreme thermal stack conditions requiring routine optical purging and extended national laboratory certification timelines.',
-      deliverablesPackage: [
-        'Complete Hardware Bill of Materials (BOM) & Electrical Schematics (CAD/PDF)',
-        'CBAM / EPA Telemetry Compliance Ingestion Software (Source Code Repository)',
-        'Anonymized Industrial Foundry Pilot Data & Calibration Reports (PDF)',
-        'Component Supply Chain Roster & 10-Year Reliability Model (XLSX)'
-      ]
+      publicPreviewThesis: 'A combined sensor hardware and software telemetry stack for continuous emissions monitoring in steel and cement processing plants. Includes Bill-of-Materials (BOM), sensor calibration protocols, regulatory compliance certifications, and an enterprise conversion pilot model.',
+      gatedSummary: 'Features complete hardware schematics using off-the-shelf optical sensors, edge telemetry firmware specifications, pollution board API integration workflows, and enterprise service contract templates with annual calibration SLA terms.',
+      demandSignals: [
+        'Mandatory continuous emissions telemetry enacted in 14 heavy industrial corridors',
+        'Hardware payback period for plant operators modeled under 7 months',
+        'Average pilot to enterprise contract conversion rate benchmarked at 72%'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 500,
+        tier3Partial: 2460,
+        tier4Full: 5740
+      }
     },
     {
       id: 'VVE-2430',
-      title: 'High-AOV Commercial Infrastructure for Specialized Knowledge Assets',
-      summary: 'A closed-ecosystem commerce and distribution framework designed for technical domain experts monetizing high-ticket ($500+) advisory cohorts and software assets.',
-      industry: 'Digital Commerce',
-      tags: ['Digital Products', 'Knowledge Infrastructure', 'Cohort Systems'],
-      status: 'Audited & Active',
-      targetJurisdiction: 'Global Remote',
-      capitalRequirement: '$20,000 - $45,000',
-      implementationTimeline: '30 - 60 Days',
-      valuation: 16000,
-      escrowDeposit: 1600,
-      trustRating: 94,
-      pageCount: 92,
-      frameworkCount: 15,
-      operator: {
-        name: 'Elena Rostova',
-        title: 'Commercial Director, 4x 7-Figure Digital Knowledge Platforms',
-        verifiedIdentity: true,
-        historicalTransactions: 'Scaled Technical Training Platform to $4.2M Run-Rate',
-        peerReviewScore: 4.90,
-        totalCompletedTransfers: 8
+      code: 'CREATOR-MKTP',
+      title: 'Specialty Marketplace for Technical Hardware Designers',
+      sector: 'Specialty Creator Marketplaces',
+      sectorId: 'sec-06',
+      scale: '$310M Niche TAM',
+      geography: 'North America / EU',
+      unlockPrice: 3900,
+      executionCapEst: '$50,000 - $90,000',
+      targetHorizonMonths: 14,
+      documentationDepth: {
+        totalPages: 92,
+        businessModelPages: 30,
+        sopPages: 28,
+        marketResearchPages: 22,
+        financialModels: 2,
+        riskMaps: 1
       },
-      commercialParameters: {
-        addressableMarket: '$1.8B High-Ticket Technical Education',
-        targetMarginImprovement: '48% Net Operating Margin',
-        paybackPeriod: '2.8 Months'
+      architect: {
+        handle: 'arch-cadence',
+        title: 'Marketplace Operations Architect',
+        verificationStatus: 'Passport + Stripe Verified',
+        experience: 'Founder with 1 Prior Marketplace Exit ($4.2M)',
+        rating: 4.95,
+        unlocksCompleted: 15,
+        disputes: 0
       },
-      executiveAbstract: 'Specialized technical practitioners generate high organic demand but lack enterprise sales qualification and student lifecycle infrastructure. This operational package provides end-to-end qualification funnels, automated community workflows, and institutional licensing playbooks.',
-      operationalProblem: 'Generic consumer course platforms have high churn rates and lack the legal protections, application gating, and billing infrastructure needed for enterprise-sponsored technical cohorts.',
-      solutionArchitecture: 'Application-gated qualification funnels with integrated identity verification, automated student progress tracking, and enterprise seat management.',
-      commercialModel: 'Direct student tuition alongside annual corporate licensing packages delivering 65% contribution margin.',
-      riskFactors: 'Domain expert personnel reliance and curriculum update requirements.',
-      deliverablesPackage: [
-        'Enterprise Application Funnel Copy, Scripts & Qualification Rubric (DOCX)',
-        'Student Lifecycle Operational Protocols & Automation Workflows (PDF)',
-        'Corporate Licensing Agreement & Master Services Contract (PDF)',
-        'Student Cohort Unit Economics & Retention Cohort Model (XLSX)'
+      publicPreviewThesis: 'A two-sided vertical marketplace connecting open-hardware engineers and CAD designers with specialized PCB fabricators and rapid prototyping labs. Includes demand-side acquisition playbook, 14% take-rate unit economics, and supplier SLA standards.',
+      gatedSummary: 'Contains cold-outreach templates for the top 500 electronics design creators, supplier quality scoring criteria, escrow deposit logic for hardware milestone verification, and 18-month financial roadmap to reach liquidity break-even.',
+      demandSignals: [
+        'Hardware prototype turnaround times currently average an inefficient 24 days',
+        'Specialty creators report 68% dissatisfaction with generic freelancer platforms',
+        'Take-rate model validated against 18 pilot fabrication contracts'
+      ],
+      tierPricing: {
+        tier0: 0,
+        tier1: 0,
+        tier2Deposit: 200,
+        tier3Partial: 1170,
+        tier4Full: 2730
+      }
+    }
+  ],
+
+  // The 5 Layers of Structured Trust
+  trustLayers: [
+    {
+      layer: 'Layer 01',
+      title: 'Identity & Reputation Verification',
+      headline: 'Real humans with public stakes. Zero anonymous accounts.',
+      description: 'Every architect and buyer undergoes strict identity verification before publishing or unlocking. No bots, no burner accounts. Verification status is visibly staked to reputation.',
+      checkpoints: [
+        'Government ID verification (Aadhaar / Passport / Driver License)',
+        'Bank account ownership verification via penny drop',
+        'Phone & business email confirmation',
+        'Buyer capital capacity verification (CA certificate / fund registration)',
+        'Strict one-person-one-account policy'
+      ]
+    },
+    {
+      layer: 'Layer 02',
+      title: 'Escrow Custody on Every Transaction',
+      headline: 'Money never moves directly from buyer to architect.',
+      description: 'Funds are held in neutral escrow before any proprietary documentation is unlocked. The architect knows the money is committed; the buyer knows their funds are safe until satisfied.',
+      checkpoints: [
+        'Buyer funds deposited into regulated vvEntra escrow',
+        'Architect alerted to confirmed buyer capital commitment',
+        'Documentation unlocks strictly against escrow collateral',
+        'Mandatory 7-day inspection window opens upon unlock',
+        'Payout releases only upon buyer signoff or inspection lapse'
+      ]
+    },
+    {
+      layer: 'Layer 03',
+      title: 'Staged Reveal · Four Progressive Tiers',
+      headline: 'Commitment scales with exposure. Mirroring real M&A.',
+      description: 'Buyers do not pay full price for blind access. They progress through four structured tiers, unlocking deeper layers of substance for proportionally greater commitment.',
+      checkpoints: [
+        'Tier 0 · Public Preview: Free sector, scale, depth metrics, and architect credentials',
+        'Tier 1 · Verified Access: Free full opportunity thesis & ability to ask structured questions',
+        'Tier 2 · Interest Deposit ($100–500): Refundable deposit; architect approves buyer access',
+        'Tier 3 · NDA + Partial Unlock (30%): Business model, research, and direct conversation enabled',
+        'Tier 4 · Full Unlock (Remaining 70%): Complete IP, financial models, and ongoing partnership'
+      ]
+    },
+    {
+      layer: 'Layer 04',
+      title: 'Dispute Resolution · Clear, Fast, Fair',
+      headline: 'Documented refund criteria with a 5-day resolution SLA.',
+      description: 'Refunds are granted for objective, verifiable failures—such as misrepresented depth, plagiarized text, or false credentials. Subjective buyer remorse is strictly rejected.',
+      checkpoints: [
+        'Documented refund criteria for material misrepresentation',
+        'Strict 5-business-day resolution SLA by senior vvEntra moderators',
+        'Frivolous claims penalized with reputation point deductions',
+        'Architect given 48 hours to provide counter-evidence',
+        'Bad actors permanently lose platform access'
+      ]
+    },
+    {
+      layer: 'Layer 05',
+      title: 'Platform Guarantee · The Premium Layer',
+      headline: 'vvEntra backs transactions above $10,000 directly.',
+      description: 'On high-value deals, vvEntra absorbs the settlement risk. Architects receive guaranteed payout within 48 hours regardless of dispute status, while buyers receive priority mediation.',
+      checkpoints: [
+        'Guaranteed settlement within 48 hours for premium architects',
+        'Platform absorbs dispute risk up to $50,000 coverage cap',
+        'Priority dispute review conducted by founding moderators',
+        'Premium verification badge displayed on buyer & architect profiles',
+        'Available on all verified institutional listings'
       ]
     }
   ],
 
-  // Frequently Asked Questions (Categorized by Buyer and Operator)
-  faqs: {
-    buyer: [
-      {
-        question: 'How is buyer capital protected during due diligence?',
-        answer: 'All buyer funds are deposited directly into neutral, regulated banking escrow accounts. The operator cannot access these funds during your 7-day inspection window. If deliverables materially deviate from verified specifications, funds are refunded in full under our documented SLA.'
-      },
-      {
-        question: 'What occurs during the technical diligence review session?',
-        answer: 'Upon 10% escrow deposit confirmation, you receive direct calendar booking access to the operating principal. Under a binding bilateral Non-Disclosure Agreement (NDA), you conduct a 45-minute technical audit examining architecture schematics, accounting records, live integrations, and supplier contracts.'
-      },
-      {
-        question: 'What are the specific criteria for receiving a 100% escrow refund?',
-        answer: 'Refunds are automatically approved if: (1) deliverable documentation is materially less than stated (e.g. fewer than 90 pages or missing frameworks), (2) advertised financial models or vendor rosters are omitted, or (3) the operator fails to respond to technical inquiries within the 48-hour SLA window.'
-      },
-      {
-        question: 'Can I purchase the intellectual property directly without ongoing operator involvement?',
-        answer: 'Yes. At closing, buyers select from three transaction structures: Asset Transfer Only (direct clean IP buyout), Strategic Advisory (retaining the operator for weekly oversight), or Full Operating Partnership (90/10 milestone-based execution partnership).'
-      }
-    ],
-    seller: [
-      {
-        question: 'How are proprietary operational blueprints protected prior to payment?',
-        answer: 'Core operational IP—including source code repositories, vendor agreements, and financial cash-flow models—is never publicly exposed. Buyers only see sanitized executive abstracts until they complete identity verification, execute a mutual NDA, and place 10% cash deposit into regulated escrow.'
-      },
-      {
-        question: 'What is the mandatory 90-page documentation threshold?',
-        answer: 'vvEntra exclusively lists institutional-grade operational assets. Submissions must include complete procedural workflows (SOPs), technical data schemas, three-statement financial models, and risk mitigation registers. Abstract pitch decks without operational depth are systematically rejected.'
-      },
-      {
-        question: 'What fees does vvEntra charge asset operators?',
-        answer: 'Intake and technical audits are 100% free upfront. vvEntra retains a flat 10% facility commission strictly upon successful escrow clearance and buyer approval. Operating principals retain 90% of all gross deal proceeds.'
-      },
-      {
-        question: 'How and when are seller transaction payouts settled?',
-        answer: 'Payouts are cleared within 7 business days of buyer milestone approval or conclusion of the 7-day inspection window. Settlements are transferred directly to verified commercial bank accounts via FedWire, SWIFT, or domestic ACH rails.'
-      }
-    ]
-  },
-
-  // Institutional Compliance & Trust Safeguards
-  complianceSafeguards: [
-    {
-      title: 'Identity Verification & Anti-Fraud',
-      description: 'Government identity credentials, commercial registry documentation, and beneficial ownership records are audited prior to platform participation.'
-    },
-    {
-      title: 'Regulated Escrow Custody',
-      description: 'All financial commitments remain in licensed banking escrow accounts. Capital is released strictly upon milestone verification and inspection sign-off.'
-    },
-    {
-      title: 'Multi-Tier Diligence Disclosure',
-      description: 'Proprietary intellectual property is disclosed through staged legal checkpoints: Public Executive Summary → NDA-Gated Review → Virtual Data Room Access.'
-    },
-    {
-      title: 'Five-Day Dispute Resolution SLA',
-      description: 'Documented arbitration protocols govern misrepresentation or missing specifications. Disputes receive formal review with predetermined settlement schedules.'
-    },
-    {
-      title: 'Statutory Guarantee Facility',
-      description: 'High-value transactions qualify for platform escrow guarantees, ensuring settlement security while formal inspection periods are fulfilled.'
-    },
-    {
-      title: 'Mandatory 90-Page Documentation Threshold',
-      description: 'Submissions must include complete operational workflows, financial projections, and risk matrices. Conceptual proposals without operational depth are rejected.'
-    }
-  ],
-
-  // The Atomic Handover Protocol Specifications
-  getHandoverProtocol: function(asset) {
-    if (!asset) return null;
-    const val = asset.valuation || 25000;
-    const sellerNet = Math.round(val * 0.90);
-    const repoSlug = (asset.id || 'vve-core').toLowerCase();
+  // Staged Reveal Flow for Single Opportunity Detail
+  getStagedRevealProtocol(opportunity) {
+    if (!opportunity) return null;
+    const price = opportunity.unlockPrice || 5000;
+    const dep = opportunity.tierPricing?.tier2Deposit || 250;
+    const partial = opportunity.tierPricing?.tier3Partial || Math.round(price * 0.30);
+    const fullRem = opportunity.tierPricing?.tier4Full || (price - partial);
+    const architectNet = Math.round(price * 0.90);
+    const platformFee = price - architectNet;
 
     return {
-      assetId: asset.id,
-      title: 'The Atomic Handover Protocol',
-      escrowGuarantee: '100% Protected by Regulated Neutral Custody',
-      phases: [
+      opportunityId: opportunity.id,
+      title: opportunity.title,
+      totalUnlockPrice: price,
+      architectNet: architectNet,
+      platformFee: platformFee,
+      stages: [
         {
-          id: 'phase-1',
-          number: '01',
-          title: 'Escrow Deposit',
-          category: 'Buyer Deposits 100% Full Amount',
-          status: `✓ 100% Full Amount Locked ($${val.toLocaleString()})`,
+          tier: 'Tier 0',
+          number: '00',
+          title: 'Public Preview',
+          cost: 'Free Access',
+          status: 'Unlocked by Default',
           statusCode: 'verified',
           badgeClass: 'c-badge--success',
-          icon: '🔒',
-          primaryMetric: `100% Full Purchase Amount: $${val.toLocaleString()}`,
-          headline: `Buyer deposits 100% of the purchase funds ($${val.toLocaleString()}) into vvEntra escrow before seller transfers any code or assets.`,
+          icon: '👁',
+          visibleSummary: 'Sector, TAM scale, geography, architect exit track record, and documentation depth metrics (pages, financial models, SOP count).',
+          lockedDetails: 'Specific company thesis, proprietary frameworks, and contact info remain hidden.',
           checkpoints: [
-            `Buyer wires the full 100% purchase amount ($${val.toLocaleString()}) into vvEntra's secure escrow account`,
-            `vvEntra verifies the full $${val.toLocaleString()} is locked; seller cannot withdraw it yet, buyer cannot cancel without agreement`,
-            'Seller receives verified proof that 100% of the money is locked in vvEntra; transfer is safely authorized'
-          ],
-          technicalArtifact: `Escrow Lock TXID: 0x8a92f...7e1 · Full 100% ($${val.toLocaleString()}) Confirmed in Vault`
+            'Verified documentation depth metrics confirmed by moderation audit',
+            'Architect identity and exit track record authenticated',
+            'Public demand signals and arbitrage spread verified'
+          ]
         },
         {
-          id: 'phase-2',
+          tier: 'Tier 1',
+          number: '01',
+          title: 'Verified Access',
+          cost: 'Free for KYC Members',
+          status: 'Available to Verified Buyers',
+          statusCode: 'ready',
+          badgeClass: 'c-badge--neutral',
+          icon: '📋',
+          visibleSummary: 'Full opportunity title, 1-paragraph operational thesis, sub-category scope, estimated execution capital, and ability to submit structured questions.',
+          lockedDetails: 'Full 90+ page operational blueprint, supplier names, and financial models remain vault-locked.',
+          checkpoints: [
+            'Buyer government KYC & investment capacity verified',
+            'Full operational thesis unlocked',
+            'Asynchronous Q&A messaging opened with the architect'
+          ]
+        },
+        {
+          tier: 'Tier 2',
           number: '02',
-          title: 'Code & Cloud Custody Lock',
-          category: 'Repository & Cloud Infrastructure',
-          status: 'Ready for Custody',
+          title: 'Interest Deposit',
+          cost: `$${dep} (Refundable Deposit)`,
+          status: 'Architect Approval Gate',
           statusCode: 'ready',
           badgeClass: 'c-badge--neutral',
-          icon: '📁',
-          primaryMetric: 'Private GitHub Org + AWS/Cloud Root IAM',
-          headline: 'Seller safely transfers source code, GitHub repository, and cloud servers into custody.',
+          icon: '💳',
+          visibleSummary: 'Buyer deposits refundable intent capital into vvEntra escrow. Architect reviews the buyer’s investment profile and decides whether to accept or decline.',
+          lockedDetails: 'If architect declines, deposit returns immediately. If approved, deposit applies toward Tier 3 partial unlock.',
           checkpoints: [
-            `Private GitHub organization transfer (${repoSlug}-production-repo) secured in escrow`,
-            'AWS / Google Cloud root organization credentials re-keyed and isolated',
-            'Automated code audit confirms 0 backdoors, clean licenses, and complete commit history'
-          ],
-          technicalArtifact: `Git SHA: ${repoSlug.replace('-', '')}8f9a · 1,420 Commits · 0 Vulnerabilities`
+            `$${dep} intent deposit held in neutral vvEntra escrow`,
+            'Architect reviews buyer reputation and thesis alignment',
+            'Mutual clearance opens bilateral diligence pathway'
+          ]
         },
         {
-          id: 'phase-3',
+          tier: 'Tier 3',
           number: '03',
-          title: 'Domain & DNS Migration',
-          category: 'Website Address & Live Traffic',
-          status: 'Queued for Routing',
-          statusCode: 'ready',
-          badgeClass: 'c-badge--neutral',
-          icon: '🌐',
-          primaryMetric: 'Apex Domain Registrar + SSL Certificates',
-          headline: 'Website domain name and server traffic are transferred directly to the buyer with zero downtime.',
-          checkpoints: [
-            'Domain registrar EPP authorization code transferred to buyer\'s registrar account',
-            'Cloudflare / DNS routing and SSL certificates pointed to buyer\'s cloud server',
-            'Live customer traffic and active web services verified active with zero downtime'
-          ],
-          technicalArtifact: 'EPP Domain Auth Verified · DNS Propagated · Zero Downtime SLA'
-        },
-        {
-          id: 'phase-4',
-          number: '04',
-          title: 'Testing & Payout Release',
-          category: 'Seller Receives 90% · vvEntra Fee 10%',
-          status: `Seller: $${sellerNet.toLocaleString()} · Fee: $${Math.round(val * 0.10).toLocaleString()}`,
+          title: 'NDA + Partial Unlock',
+          cost: `$${partial} (30% Unlock Escrow)`,
+          status: 'Confidential Diligence',
           statusCode: 'pending',
           badgeClass: 'c-badge--warning',
-          icon: '✓',
-          primaryMetric: `Seller Receives 90% ($${sellerNet.toLocaleString()}) + vvEntra 10% Fee ($${Math.round(val * 0.10).toLocaleString()})`,
-          headline: `Buyer tests and confirms the live software. Both parties sign off: seller gets 90% ($${sellerNet.toLocaleString()}) and vvEntra retains 10% ($${Math.round(val * 0.10).toLocaleString()}).`,
+          icon: '✍',
+          visibleSummary: 'Full business model document (35+ pages), market validation data, and 24-month roadmap unlocked. Direct live conversation enabled.',
+          lockedDetails: 'Proprietary financial models, raw vendor contracts, and sensitive IP remain locked until Tier 4.',
           checkpoints: [
-            'Buyer logs in, tests live software, and confirms full operational control',
-            'Both buyer and seller submit digital sign-offs confirming transaction completion',
-            `vvEntra escrow releases the 90% payout wire ($${sellerNet.toLocaleString()}) to seller, and retains the 10% platform fee ($${Math.round(val * 0.10).toLocaleString()})`
-          ],
-          technicalArtifact: `Settlement Complete: Seller Paid $${sellerNet.toLocaleString()} (90%) · Platform Fee $${Math.round(val * 0.10).toLocaleString()} (10%)`
+            'Bilateral Non-Disclosure Agreement digitally signed on-chain/escrow',
+            `30% capital ($${partial}) locked in escrow`,
+            'Direct scheduled voice/video consultation with architect unlocked'
+          ]
+        },
+        {
+          tier: 'Tier 4',
+          number: '04',
+          title: 'Full Unlock & Settlement',
+          cost: `$${fullRem} (Remaining 70%)`,
+          status: 'Full Asset Delivery',
+          statusCode: 'pending',
+          badgeClass: 'c-badge--warning',
+          icon: '🔓',
+          visibleSummary: `Complete 100% documentation package (${opportunity.documentationDepth.totalPages} pages), Excel financial models, SOPs, and ongoing execution engagement.`,
+          lockedDetails: `7-day statutory inspection window begins. Payout ($${architectNet}) released to architect upon satisfaction. vvEntra retains 10% ($${platformFee}).`,
+          checkpoints: [
+            'Full operational blueprint and all financial models downloaded',
+            '7-day inspection window activated for buyer due diligence',
+            `Escrow wire ($${architectNet}) released to architect upon buyer approval or 7-day lapse`
+          ]
         }
       ]
     };
+  },
+
+  // The 3 Engagement Paths after Unlock
+  engagementPaths: [
+    {
+      id: 'path-full',
+      title: 'Full Partnership',
+      category: 'Hands-On Execution Co-Building',
+      description: 'Architect joins as active execution partner. Weekly strategic check-ins, operational oversight, and milestone tracking during build-out.',
+      pricingModel: '90% of full deal value. Unlock earnings plus ongoing milestone execution retainers.',
+      idealFor: 'Investors and corporate operators who want the creator’s direct brains during the first 6–12 months of company launch.'
+    },
+    {
+      id: 'path-advisory',
+      title: 'Guidance + Advisory',
+      category: 'Strategic Input & Mentorship',
+      description: 'Architect advises but does not operate. Bi-weekly scheduled guidance calls, strategic roadmap reviews, and document clarifications.',
+      pricingModel: 'Unlock fee + structured advisory retainer.',
+      idealFor: 'Experienced operators with existing teams who only need strategic calibration from the architect.'
+    },
+    {
+      id: 'path-docs',
+      title: 'Documents Only',
+      category: 'Clean IP Transfer & Independent Execution',
+      description: 'Complete intellectual property and operational blueprint transfer. Exclusive execution rights. Architect involvement ends at delivery.',
+      pricingModel: 'Flat unlock fee only. Zero ongoing commitments.',
+      idealFor: 'Well-capitalized private equity funds and serial founders who execute entirely in-house.'
+    }
+  ],
+
+  // The Playbook Chapters
+  playbookChapters: [
+    {
+      id: 'ch-01',
+      title: '01 · Mindset',
+      summary: 'The mental models that separate the top 10% of buyers and architects from the rest.',
+      takeaways: [
+        'Conviction Over Curiosity: Do not unlock opportunities just to browse. Unlock because you have a defined thesis and capital capacity.',
+        'Trust the Staged Reveal: The staged reveal exists because open-idea marketplaces die from IP theft. Exposure must scale with commitment.',
+        'Architects are Operating Partners, Not Freelance Vendors: The highest-value transactions lead to long-term advisory or follow-on ventures.',
+        'Time is the Real Investment: The $5,000 unlock is not the primary cost—the 9 months you saved researching the market is the real dividend.'
+      ]
+    },
+    {
+      id: 'ch-02',
+      title: '02 · Preparation',
+      summary: 'What serious buyers and architects do before ever spending or listing a single dollar.',
+      takeaways: [
+        'Pre-Screen Verification: Complete government KYC and proof of funds capacity before submitting access requests.',
+        'Formulate Clear Sector Theses: Define your target geography, TAM threshold, and execution team capabilities upfront.',
+        'Architects: Depth is the Moat: Listings with under 90 pages get rejected. Invest deeply in your first 3 submissions to earn Senior Architect tier.'
+      ]
+    },
+    {
+      id: 'ch-03',
+      title: '03 · Execution',
+      summary: 'The 5 stages of an effective unlock and delivery cycle.',
+      takeaways: [
+        'Stage 1: Submit structured questions at Tier 1 before depositing intent funds.',
+        'Stage 2: Use Tier 2 deposit to audit the architect’s communication speed and clarity.',
+        'Stage 3: Review the core 35-page business model at Tier 3 with your lead operator.',
+        'Stage 4: Engage the 7-day inspection window at Tier 4 deliberately, testing assumptions.',
+        'Stage 5: Select the right ongoing engagement path (Full Partnership vs Advisory vs Docs Only).'
+      ]
+    },
+    {
+      id: 'ch-04',
+      title: '04 · Red Flags',
+      summary: 'When to walk away: how experienced buyers avoid getting burned.',
+      takeaways: [
+        'Architect won’t answer Tier 1 technical questions: If they give vague marketing answers, operational depth is missing.',
+        'Generic frameworks, zero proprietary insight: If it’s just SWOT and Porter’s Five Forces, you are paying for textbook fluff.',
+        'Pricing way below sector average: If a FinTech opportunity is listed at $1,200 when sector median is $7,200, depth is almost certainly shallow.',
+        'Pressure to skip inspection window: If an architect pushes to release funds early, stop the transaction immediately.'
+      ]
+    },
+    {
+      id: 'ch-05',
+      title: '05 · Success Patterns',
+      summary: 'What top architects do to build six-figure earnings on vvEntra.',
+      takeaways: [
+        'Publish Less, Charge More: Top architects publish only 3–5 opportunities per year, commanding 1.8x platform median pricing.',
+        'Earn Post-Unlock: 62% of top architect revenue comes from ongoing execution partnerships, not the initial unlock.',
+        'Selectivity Compounds Reputation: Senior architects decline 40–50% of Tier 2 buyer requests to protect their 5.0 rating.'
+      ]
+    },
+    {
+      id: 'ch-06',
+      title: '06 · Common Mistakes',
+      summary: 'The fatal traps that cause amateurs to fail on the exchange.',
+      takeaways: [
+        'Buying across 5 different sectors without a focus.',
+        'Architects getting defensive when an investor asks technical questions.',
+        'Negotiating outside the platform: Eliminates escrow, dispute SLAs, and legal protections.',
+        'Letting opportunities sit on a hard drive for 6 months without executing.'
+      ]
+    }
+  ],
+
+  // Frequently Asked Questions
+  faq: {
+    investors: [
+      {
+        q: 'How does vvEntra protect my money before I see the full IP?',
+        a: 'Through our 4-Tier Staged Reveal. You only commit a small refundable deposit ($100–$500) at Tier 2. At Tier 3, you pay 30% under a strict NDA to inspect the core 35-page business model. The remaining 70% is only committed at Tier 4, which opens a mandatory 7-day inspection window before escrow releases funds.'
+      },
+      {
+        q: 'What happens if the opportunity is misrepresented or plagiarized?',
+        a: 'You raise a dispute during the 7-day inspection window. Our moderation team reviews the documentation against our strict refund criteria (e.g. promised 110 pages but delivered 40, or plagiarized text). Legitimate claims receive a 100% refund within our 5-business-day resolution SLA.'
+      },
+      {
+        q: 'Can the architect help my team build the business after unlock?',
+        a: 'Yes. Upon Tier 4 unlock, you choose from three paths: Full Partnership (architect joins as hands-on co-builder), Guidance + Advisory (scheduled strategic calls), or Documents Only (independent execution).'
+      },
+      {
+        q: 'What verification is required for buyers?',
+        a: 'We verify government ID, confirm bank account ownership via penny-drop, and require proof of capital capacity (auditor certificate, recent statement, or company registration) to keep tire-kickers out of the exchange.'
+      }
+    ],
+    architects: [
+      {
+        q: 'What is the minimum documentation required to list an opportunity?',
+        a: 'Every listing requires a minimum of 90 pages of operational depth: Business Model Document (min 30 pages), Execution SOPs & Workflows (min 25 pages), Market Validation Signals (min 15 pages), at least 1 financial model, a risk mitigation map, and a 24-month roadmap.'
+      },
+      {
+        q: 'How do I know a buyer won’t steal my idea during Tier 0 or Tier 1?',
+        a: 'Tiers 0 and 1 only display public preview metrics (sector, scale, depth metrics, and high-level thesis). Your proprietary frameworks, vendor contracts, and actionable systems remain vault-encrypted until the buyer signs an NDA and deposits funds in escrow at Tier 3 and 4.'
+      },
+      {
+        q: 'What is vvEntra’s fee and when do I get paid?',
+        a: 'Listing is 100% free with zero monthly fees. vvEntra takes a flat 10% facility fee only upon successful deal clearance. You retain 90% of all gross transaction proceeds, paid out via bank wire or Stripe within 7 days of inspection completion.'
+      },
+      {
+        q: 'Can I decline a buyer who requests access?',
+        a: 'Yes. At Tier 2, you have the unilateral right to review the buyer’s profile and decline access without penalty. Senior architects regularly decline 40% of requests to ensure they only transact with aligned operators.'
+      }
+    ]
   }
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = VVENTRA_DATA;
-}

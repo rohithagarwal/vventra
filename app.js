@@ -76,58 +76,223 @@
   }
 
   // ===================================================================
-  // 4. TRANSACTION & SETTLEMENT CALCULATOR
+  // 4. TRANSACTION & SETTLEMENT CONTROLLER (Verbatim from original platform)
   // ===================================================================
-  const SettlementCalculator = {
-    calculate(valuation) {
-      const numericVal = Math.max(3000, Math.min(100000, Number(valuation) || 10000));
-      const escrowDeposit = Math.round(numericVal * 0.10);
-      const sellerNetProceeds = Math.round(numericVal * 0.90);
-      const facilityCommission = Math.round(numericVal * 0.10);
+  const PricingController = {
+    initialized: false,
 
-      return {
-        valuation: numericVal,
-        escrowDeposit,
-        sellerNetProceeds,
-        facilityCommission,
-        disputeArbitration: {
-          standardRelease: sellerNetProceeds,
-          buyerRefund: sellerNetProceeds,
-          apportionedSplit: {
-            majorityParty: Math.round(sellerNetProceeds * 0.60),
-            minorityParty: Math.round(sellerNetProceeds * 0.40)
-          }
+    init() {
+      const input = document.getElementById('calc-input');
+      const slider = document.getElementById('calc-slider');
+      const presets = document.querySelectorAll('.calc-preset');
+      if (!input || !slider) return;
+
+      function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+
+      function setText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      }
+
+      function update(val) {
+        const v = parseInt(val) || 10000;
+        const safe = Math.max(500, Math.min(1000000, v));
+        const capped = safe > 50000;
+        document.body.classList.toggle('is-capped', capped);
+
+        const unlock = safe * 0.10;
+        const remaining = safe - unlock;
+        const opt1 = remaining;
+        const opt2 = remaining * 0.70;
+        const opt3 = remaining * 0.50;
+        const arch_unlock = unlock * 0.90;
+        const arch_opt1 = opt1 * 0.90;
+        const arch_opt2 = opt2 * 0.90;
+        const arch_opt3 = opt3 * 0.90;
+        const arch_best = arch_unlock + arch_opt1;
+        const buyer_opt1 = unlock + opt1;
+        const buyer_opt2 = unlock + opt2;
+        const buyer_opt3 = unlock + opt3;
+        const arch_opt1_total = arch_unlock + arch_opt1;
+        const arch_opt2_total = arch_unlock + arch_opt2;
+        const arch_opt3_total = arch_unlock + arch_opt3;
+
+        function disp(amount, pctOfListed) {
+          if (capped) return pctOfListed + '%';
+          return '$' + fmt(amount);
         }
-      };
+        function dispListed() {
+          if (capped) return '50K+';
+          return '$' + fmt(safe);
+        }
+
+        // Calculator results
+        setText('r-unlock', disp(unlock, '10'));
+        setText('r-best', disp(arch_best, '90'));
+        setText('r-opt1-b', disp(buyer_opt1, '100'));
+        setText('r-opt2-b', disp(buyer_opt2, '70'));
+        setText('r-opt3-b', disp(buyer_opt3, '50'));
+        setText('r-opt1-a', disp(arch_opt1_total, '90'));
+        setText('r-opt2-a', disp(arch_opt2_total, '63'));
+        setText('r-opt3-a', disp(arch_opt3_total, '45'));
+
+        // Option card footers
+        setText('card1-buyer', disp(buyer_opt1, '100'));
+        setText('card2-buyer', disp(buyer_opt2, '70'));
+        setText('card3-buyer', disp(buyer_opt3, '50'));
+        setText('card1-arch', disp(arch_opt1_total, '90'));
+        setText('card2-arch', disp(arch_opt2_total, '63'));
+        setText('card3-arch', disp(arch_opt3_total, '45'));
+
+        // Based on price
+        setText('based-on-price', dispListed());
+
+        // Flow diagram buyer view
+        setText('flow-buyer-unlock', disp(unlock, '10'));
+        setText('flow-buyer-listed', dispListed());
+        setText('flow-buyer-escrow', disp(unlock, '10'));
+        setText('flow-buyer-min', disp(opt3, '50'));
+        setText('flow-buyer-max', disp(opt1, '100'));
+
+        // Flow diagram architect view
+        setText('flow-arch-buyer', dispListed());
+        setText('flow-arch-escrow', dispListed());
+        setText('flow-arch-receive', disp(safe * 0.90, '90'));
+
+        // Flow section header
+        setText('flow-head-buyer', dispListed());
+        setText('flow-head-arch', dispListed());
+
+        // Calculator architect primary description
+        setText('calc-arch-unlock-earn', disp(arch_unlock, '9'));
+        setText('calc-arch-exec-earn', disp(arch_opt1, '81'));
+
+        // Dispute scenarios
+        const disputeCommission = remaining * 0.10;
+        const disputeArchEarn = remaining * 0.90;
+        const disputeWin60 = disputeArchEarn * 0.60;
+        const disputeLose40 = disputeArchEarn * 0.40;
+
+        setText('dispute-deal-amount', disp(remaining, '90'));
+        setText('d1-comm', disp(disputeCommission, '9'));
+        setText('d1-arch', disp(disputeArchEarn, '81'));
+        setText('d1-total', dispListed());
+
+        setText('d2-comm', disp(disputeCommission, '9'));
+        setText('d2-refund', disp(disputeArchEarn, '81'));
+
+        setText('d3-comm', disp(disputeCommission, '9'));
+        setText('d3-buyer60', disp(disputeWin60, '49'));
+        setText('d3-arch40', disp(disputeLose40, '32'));
+
+        setText('d4-comm', disp(disputeCommission, '9'));
+        setText('d4-arch60', disp(disputeWin60, '49'));
+        setText('d4-buyer40', disp(disputeLose40, '32'));
+
+        // Benefit cards
+        setText('ben-buyer-unlock', disp(unlock, '10'));
+        setText('ben-buyer-listed', dispListed());
+        setText('ben-arch-listed', dispListed());
+        setText('ben-arch-takehome', disp(safe * 0.90, '90'));
+        setText('ben-arch-unlock-earn', disp(arch_unlock, '9'));
+
+        // Slider sync
+        if (safe <= 50000) {
+          slider.value = safe;
+        } else {
+          slider.value = 50000;
+        }
+        presets.forEach(p => p.classList.toggle('active', parseInt(p.dataset.val) === safe));
+      }
+
+      this.update = update;
+
+      if (!this.initialized) {
+        input.addEventListener('input', e => update(e.target.value));
+        slider.addEventListener('input', e => { input.value = e.target.value; update(e.target.value); });
+        presets.forEach(p => {
+          p.addEventListener('click', () => {
+            input.value = p.dataset.val;
+            update(p.dataset.val);
+          });
+        });
+
+        // Rules accordion
+        document.querySelectorAll('#page-pricing .rule-q').forEach(q => {
+          q.addEventListener('click', () => {
+            const item = q.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('#page-pricing .rule-item.open').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+          });
+        });
+
+        // Role toggle inside pricing hero
+        const pricingRoleToggle = document.querySelector('#page-pricing #role-toggle');
+        if (pricingRoleToggle) {
+          pricingRoleToggle.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              setPerspective(btn.dataset.role);
+            });
+          });
+        }
+
+        // Anchor smooth scrolls & CTAs
+        document.querySelectorAll('#page-pricing a[href^="#"]').forEach(a => {
+          const href = a.getAttribute('href');
+          if (href === '#calculator' || href === '#flow') {
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              const el = document.querySelector(href);
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+          } else if (href === '#home/cta') {
+            a.addEventListener('click', (e) => {
+              e.preventDefault();
+              window.location.hash = State.role === 'architect' ? '#list' : '#browse';
+            });
+          }
+        });
+
+        // Reveal animations observer
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              revealObserver.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12 });
+
+        this.observeReveals = () => {
+          document.querySelectorAll('#page-pricing .reveal:not(.in)').forEach(el => revealObserver.observe(el));
+          setTimeout(() => {
+            document.querySelectorAll('#page-pricing .reveal:not(.in)').forEach(el => {
+              const r = el.getBoundingClientRect();
+              if (r.top < window.innerHeight + 200) el.classList.add('in');
+            });
+          }, 200);
+        };
+
+        this.initialized = true;
+      }
+
+      update(input.value || 10000);
+      if (this.observeReveals) this.observeReveals();
     },
 
     updateUI() {
-      const slider = DOM.get('#calc-deal-slider');
-      const inputDisplay = DOM.get('#calc-input-val');
-      if (!slider) return;
-
-      const calc = this.calculate(slider.value || State.calculatorValuation);
-      State.calculatorValuation = calc.valuation;
-
-      if (inputDisplay) inputDisplay.textContent = formatCurrency(calc.valuation);
-
-      const depositEl = DOM.get('#calc-unlock-fee');
-      const sellerNetEl = DOM.get('#calc-arch-net');
-      const facilityEl = DOM.get('#calc-platform-cut');
-
-      if (depositEl) depositEl.textContent = formatCurrency(calc.escrowDeposit);
-      if (sellerNetEl) sellerNetEl.textContent = formatCurrency(calc.sellerNetProceeds);
-      if (facilityEl) facilityEl.textContent = formatCurrency(calc.facilityCommission);
-
-      const dClean = DOM.get('#disp-scenario-clean');
-      const dGhost = DOM.get('#disp-scenario-ghost');
-      const dSplit = DOM.get('#disp-scenario-6040');
-
-      if (dClean) dClean.textContent = `Seller receives ${formatCurrency(calc.sellerNetProceeds)} (90%) · vvEntra fee ${formatCurrency(calc.facilityCommission)}`;
-      if (dGhost) dGhost.textContent = `Buyer receives ${formatCurrency(calc.sellerNetProceeds)} full refund · Escrow released`;
-      if (dSplit) dSplit.textContent = `Primary: ${formatCurrency(calc.disputeArbitration.apportionedSplit.majorityParty)} · Counterparty: ${formatCurrency(calc.disputeArbitration.apportionedSplit.minorityParty)}`;
+      if (this.update) {
+        const input = document.getElementById('calc-input');
+        this.update(input ? input.value : 10000);
+      } else {
+        this.init();
+      }
+      if (this.observeReveals) this.observeReveals();
     }
   };
+
+  const SettlementCalculator = PricingController;
 
   // ===================================================================
   // 5. ASSET REPOSITORY SERVICE
@@ -202,18 +367,18 @@
 
     if (heroTitle) {
       heroTitle.innerHTML = isOperator
-        ? `Monetize verified operational assets.<br><em>Without ongoing management overhead.</em>`
-        : `Acquire audited commercial assets.<br><em>Deploy execution capital with escrow security.</em>`;
+        ? `I have intelligence. I monetise the thinking.<br><em>Sell the thinking. Keep your operating life clean.</em>`
+        : `Where execution-ready opportunities meet operators, investors, and founders who can build them.<br><em>Acquire opportunity. Deploy execution.</em>`;
     }
 
     if (heroSub) {
       heroSub.textContent = isOperator
-        ? `A confidential exchange where enterprise operators package verified operational assets and systems specifications, accessing institutional capital with 90% direct payout settlement.`
-        : `A private transaction network connecting qualified capital with verified commercial assets. Minimum 90-page documentation threshold. Staged legal disclosures. Neutral banking escrow.`;
+        ? `A confidential network giving your strategic systems and operational intelligence a direct market. Real-time buyer demand signals. Staged disclosure. 90% direct payout upon escrow clearance.`
+        : `Curated. Verified. Confidential by design. Minimum 90 pages of operational depth. Staged legal disclosures. Neutral banking escrow custody.`;
     }
 
     if (heroCta) {
-      heroCta.textContent = isOperator ? 'Submit Operational Asset Listing →' : 'Review Institutional Assets →';
+      heroCta.textContent = isOperator ? 'List Opportunity Blueprint →' : 'Explore Opportunities (184) →';
       heroCta.href = isOperator ? '#list' : '#browse';
     }
 
@@ -224,15 +389,15 @@
 
     if (signalBadge && signalTitle && signalText && signalBtn) {
       if (isOperator) {
-        signalBadge.textContent = 'Intake Priority · RegTech Sector';
-        signalTitle.textContent = 'Compliance Automation Gap';
-        signalText.textContent = 'High institutional buyer demand (88) vs. 22 active audited listings. Average deal clearing time is under 14 days with $7,200 diligence deposit thresholds.';
-        signalBtn.textContent = 'Submit Assets in this Category →';
+        signalBadge.textContent = 'Your build signal this week';
+        signalTitle.textContent = 'RegTech Compliance for Mid-Market';
+        signalText.textContent = 'Highest-value gap detected: buyer demand index 88, only 18 active listings, average unlock $6,200. If you can structure a 90+ page opportunity here, expected clear time is under 12 days.';
+        signalBtn.textContent = 'List an Opportunity in this Category →';
         signalBtn.href = '#list';
       } else {
-        signalBadge.textContent = 'Mandate Match · Priority';
-        signalTitle.textContent = 'Enterprise Software & E-Com';
-        signalText.textContent = 'Asset VVE-2440 matches standard private equity search criteria. Operations package includes verified Shopify Plus & ERP integration specifications with audited financial returns.';
+        signalBadge.textContent = 'Your thesis match this week';
+        signalTitle.textContent = 'AI Vertical Workflow & B2B SaaS Mid-Market';
+        signalText.textContent = 'Based on your interest: 14 new opportunities matched your filters. 3 are unlocked by peer PE buyers. 2 are in the surge zone with rising demand, clearing within 5 days.';
         signalBtn.textContent = 'Inspect Asset Specifications →';
         signalBtn.href = '#listing?id=VVE-2440';
       }
@@ -253,28 +418,41 @@
         if (kpi2.previousElementSibling) kpi2.previousElementSibling.textContent = '● Active Searches';
         kpi3.textContent = '42';
         if (kpi3.previousElementSibling) kpi3.previousElementSibling.textContent = 'New Mandates';
-        kpi4.textContent = '$7,200';
+        kpi4.textContent = '$7,500';
         if (kpi4.previousElementSibling) kpi4.previousElementSibling.textContent = 'Top Sector Pay (Fintech)';
         kpi5.textContent = '+34%';
-        if (kpi5.previousElementSibling) kpi5.previousElementSibling.textContent = 'Top 5 Demand Gap';
+        if (kpi5.previousElementSibling) kpi5.previousElementSibling.textContent = 'Top Demand Gap';
         kpi6.textContent = '37';
-        if (kpi6.previousElementSibling) kpi6.previousElementSibling.textContent = 'Listings Cleared';
+        if (kpi6.previousElementSibling) kpi6.previousElementSibling.textContent = 'Deals Cleared';
       } else {
         kpi1.textContent = '184';
-        if (kpi1.previousElementSibling) kpi1.previousElementSibling.textContent = '● Live Listings';
+        if (kpi1.previousElementSibling) kpi1.previousElementSibling.textContent = '● Live Opportunities';
         kpi2.textContent = '87';
         if (kpi2.previousElementSibling) kpi2.previousElementSibling.textContent = '● Active Now';
         kpi3.textContent = '42';
         if (kpi3.previousElementSibling) kpi3.previousElementSibling.textContent = 'New This Week';
-        kpi4.textContent = '247';
-        if (kpi4.previousElementSibling) kpi4.previousElementSibling.textContent = 'Architects Online';
-        kpi5.textContent = '$4,300';
-        if (kpi5.previousElementSibling) kpi5.previousElementSibling.textContent = 'Avg Unlock Valuation';
+        kpi4.textContent = '72';
+        if (kpi4.previousElementSibling) kpi4.previousElementSibling.textContent = 'Verified Architects';
+        kpi5.textContent = '$5,800';
+        if (kpi5.previousElementSibling) kpi5.previousElementSibling.textContent = 'Median Unlock Rate';
         kpi6.textContent = '37';
-        if (kpi6.previousElementSibling) kpi6.previousElementSibling.textContent = 'Deals Closed';
+        if (kpi6.previousElementSibling) kpi6.previousElementSibling.textContent = 'Deals Closed (100% Escrow)';
       }
     }
+
+    // Update Playbook role button state if rendered
+    const pbInvBtn = DOM.get('#pb-role-investor');
+    const pbArchBtn = DOM.get('#pb-role-architect');
+    if (pbInvBtn && pbArchBtn) {
+      pbInvBtn.classList.toggle('is-active', !isOperator);
+      pbArchBtn.classList.toggle('is-active', isOperator);
+    }
   }
+
+  window.vveSetPerspective = function(role) {
+    setPerspective(role);
+  };
+
 
   // ===================================================================
   // 7. VIEW RENDERERS
@@ -465,7 +643,8 @@
     }
 
     renderDeliverablesList(asset.deliverablesPackage, false);
-    renderHandoverProtocol(asset);
+    renderStagedRevealProtocol(asset);
+    renderEngagementPaths();
   }
 
   function renderDeliverablesList(docs, isRevealed) {
@@ -505,52 +684,53 @@
   }
 
   // ===================================================================
-  // 7B. THE ATOMIC HANDOVER PROTOCOL CONTROLLER
+  // 7B. THE STAGED REVEAL PROTOCOL CONTROLLER (Tiers 0 to 4)
   // ===================================================================
-  let currentHandoverData = null;
-  let activeHandoverStepIndex = 0;
-  let isHandoverSimulating = false;
+  let currentStagedData = null;
+  let activeStagedStepIndex = 0;
+  let isStagedSimulating = false;
+  let selectedEngagementPathId = 'path-full';
 
-  function renderHandoverProtocol(asset) {
+  function renderStagedRevealProtocol(opportunity) {
     const grid = DOM.get('#handover-steps-grid');
     if (!grid) return;
 
-    currentHandoverData = VVENTRA_DATA.getHandoverProtocol(asset);
-    if (!currentHandoverData) return;
+    currentStagedData = VVENTRA_DATA.getStagedRevealProtocol(opportunity);
+    if (!currentStagedData) return;
 
-    activeHandoverStepIndex = 0;
-    renderHandoverSteps();
-    renderHandoverInspector(currentHandoverData.phases[activeHandoverStepIndex], asset);
+    activeStagedStepIndex = 0;
+    renderStagedRevealSteps();
+    renderStagedRevealInspector(currentStagedData.stages[activeStagedStepIndex], opportunity);
   }
 
-  function renderHandoverSteps() {
+  function renderStagedRevealSteps() {
     const grid = DOM.get('#handover-steps-grid');
-    if (!grid || !currentHandoverData) return;
+    if (!grid || !currentStagedData) return;
 
-    grid.innerHTML = currentHandoverData.phases.map((phase, idx) => `
-      <div class="c-handover-step ${idx === activeHandoverStepIndex ? 'is-active' : ''} ${phase.statusCode === 'verified' ? 'is-verified' : ''}" 
+    grid.innerHTML = currentStagedData.stages.map((stage, idx) => `
+      <div class="c-handover-step ${idx === activeStagedStepIndex ? 'is-active' : ''} ${stage.statusCode === 'verified' ? 'is-verified' : ''}" 
            data-step-idx="${idx}" 
-           onclick="window.vveSelectHandoverStep(${idx})">
+           onclick="window.vveSelectStagedStep(${idx})">
         <div class="c-handover-step__top">
-          <span class="c-handover-step__num">PHASE ${phase.number}</span>
-          <span class="c-handover-step__icon">${phase.icon}</span>
+          <span class="c-handover-step__num">${stage.tier}</span>
+          <span class="c-handover-step__icon">${stage.icon}</span>
         </div>
         <div>
-          <div class="c-handover-step__title">${phase.title}</div>
-          <div class="c-handover-step__cat">${phase.category}</div>
+          <div class="c-handover-step__title">${stage.title}</div>
+          <div class="c-handover-step__cat">${stage.cost}</div>
         </div>
-        <div class="c-handover-step__badge ${phase.badgeClass}">
-          ${phase.status}
+        <div class="c-handover-step__badge ${stage.badgeClass}">
+          ${stage.status}
         </div>
       </div>
     `).join('');
   }
 
-  function renderHandoverInspector(phase, asset) {
+  function renderStagedRevealInspector(stage, opportunity) {
     const inspector = DOM.get('#handover-inspector');
-    if (!inspector || !phase) return;
+    if (!inspector || !stage) return;
 
-    const checkpointsHtml = phase.checkpoints ? phase.checkpoints.map(cp => `
+    const checkpointsHtml = stage.checkpoints ? stage.checkpoints.map(cp => `
       <li class="c-handover-insp__check-item">
         <span class="c-handover-insp__check-icon">✓</span>
         <span>${cp}</span>
@@ -559,101 +739,207 @@
 
     inspector.innerHTML = `
       <div class="c-handover-insp__header">
-        <div class="c-handover-insp__title">Phase ${phase.number} Custody Verification: ${phase.title}</div>
-        <div class="c-handover-insp__metric">${phase.primaryMetric}</div>
+        <div class="c-handover-insp__title">${stage.tier} Protocol: ${stage.title} (${stage.cost})</div>
+        <div class="c-handover-insp__metric">${stage.status}</div>
       </div>
-      <div class="c-handover-insp__headline">${phase.headline}</div>
+      <div class="c-handover-insp__headline" style="margin-bottom: 0.75rem;">
+        <strong>Visible Substance:</strong> ${stage.visibleSummary}
+      </div>
+      <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem; padding: 0.6rem 0.8rem; background: var(--color-bg-alt); border-radius: var(--radius-xs);">
+        <strong>Protected / Locked at this tier:</strong> ${stage.lockedDetails}
+      </div>
       <ul class="c-handover-insp__checklist">
         ${checkpointsHtml}
       </ul>
       <div class="c-handover-insp__artifact">
-        <span>🔒 Technical Verification Artifact:</span>
-        <strong>${phase.technicalArtifact}</strong>
+        <span>🔒 Structured Trust Gate:</span>
+        <strong>Neutral Escrow Custody · Statutory 7-Day Inspection SLA</strong>
       </div>
     `;
   }
 
-  window.vveSelectHandoverStep = function(idx) {
-    if (isHandoverSimulating || !currentHandoverData) return;
-    activeHandoverStepIndex = idx;
-    const asset = AssetRepository.getById(State.activeAssetId);
-    renderHandoverSteps();
-    renderHandoverInspector(currentHandoverData.phases[idx], asset);
+  window.vveSelectStagedStep = function(idx) {
+    if (isStagedSimulating || !currentStagedData) return;
+    activeStagedStepIndex = idx;
+    const opp = AssetRepository.getById(State.activeAssetId);
+    renderStagedRevealSteps();
+    renderStagedRevealInspector(currentStagedData.stages[idx], opp);
   };
 
-  function simulateHandoverSequence() {
-    if (!currentHandoverData) return;
-    if (isHandoverSimulating) return;
+  function simulateStagedRevealSequence() {
+    if (!currentStagedData) return;
+    if (isStagedSimulating) return;
 
     const simBtn = DOM.get('#handover-sim-btn');
     if (simBtn && simBtn.textContent.includes('Reset')) {
-      renderHandoverProtocol(AssetRepository.getById(State.activeAssetId));
-      simBtn.textContent = '▶ Run Live Simulation Now';
+      renderStagedRevealProtocol(AssetRepository.getById(State.activeAssetId));
+      simBtn.textContent = '▶ Run Staged Reveal Simulation';
       return;
     }
 
-    isHandoverSimulating = true;
+    isStagedSimulating = true;
     if (simBtn) {
       simBtn.disabled = true;
-      simBtn.textContent = '⏳ Simulating Handover in Progress...';
+      simBtn.textContent = '⏳ Simulating Progressive Unlock…';
     }
 
-    const phases = currentHandoverData.phases;
+    const stages = currentStagedData.stages;
     let currentIdx = 0;
-    const asset = AssetRepository.getById(State.activeAssetId);
-    const val = asset.valuation || 380000;
-    const fee = Math.round(val * 0.10);
-    const sellerNet = val - fee;
+    const opp = AssetRepository.getById(State.activeAssetId);
 
-    phases[0].status = 'Verifying Buyer Escrow Wire...';
-    phases[0].badgeClass = 'c-badge--warning';
-    phases[1].status = 'Queued for Code Transfer';
-    phases[2].status = 'Queued for DNS Migration';
-    phases[3].status = 'Awaiting Testing & Signoff';
-    renderHandoverSteps();
+    // Initial state before simulation
+    stages[1].status = 'Verifying KYC Standing…';
+    stages[1].badgeClass = 'c-badge--warning';
+    stages[2].status = 'Awaiting Intent Deposit';
+    stages[3].status = 'Bilateral NDA Locked';
+    stages[4].status = 'Escrow Settlement Pending';
+    renderStagedRevealSteps();
 
     const interval = setInterval(() => {
-      if (currentIdx < phases.length) {
-        activeHandoverStepIndex = currentIdx;
-        const currentPhase = phases[currentIdx];
-        currentPhase.statusCode = 'verified';
-        currentPhase.badgeClass = 'c-badge--success';
+      if (currentIdx < stages.length) {
+        activeStagedStepIndex = currentIdx;
+        const currentStage = stages[currentIdx];
+        currentStage.statusCode = 'verified';
+        currentStage.badgeClass = 'c-badge--success';
 
         if (currentIdx === 0) {
-          currentPhase.status = `✓ 100% Full Amount Deposited & Locked ($${val.toLocaleString()})`;
-          if (phases[1]) {
-            phases[1].status = 'Locking Code & Cloud IAM into Escrow...';
-            phases[1].badgeClass = 'c-badge--warning';
+          currentStage.status = '✓ Public Preview Active (Free)';
+          if (stages[1]) {
+            stages[1].status = 'Verifying KYC Credentials…';
+            stages[1].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 1) {
-          currentPhase.status = '✓ Code & Cloud Secured in Escrow';
-          if (phases[2]) {
-            phases[2].status = 'Migrating Domain & DNS to Buyer...';
-            phases[2].badgeClass = 'c-badge--warning';
+          currentStage.status = '✓ KYC Verified · Thesis Unlocked';
+          if (stages[2]) {
+            stages[2].status = 'Depositing Intent Capital into Escrow…';
+            stages[2].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 2) {
-          currentPhase.status = '✓ Domain & DNS Migrated to Buyer';
-          if (phases[3]) {
-            phases[3].status = 'Buyer Testing & Mutual Signoff...';
-            phases[3].badgeClass = 'c-badge--warning';
+          currentStage.status = '✓ Intent Deposit in Escrow · Accepted';
+          if (stages[3]) {
+            stages[3].status = 'Signing Bilateral NDA…';
+            stages[3].badgeClass = 'c-badge--warning';
           }
         } else if (currentIdx === 3) {
-          currentPhase.status = `✓ Seller Paid $${sellerNet.toLocaleString()} (90%) · vvEntra Fee $${fee.toLocaleString()} (10%)`;
+          currentStage.status = '✓ Mutual NDA Signed · 30% Unlocked';
+          if (stages[4]) {
+            stages[4].status = 'Transferring Full 90+ Page Package…';
+            stages[4].badgeClass = 'c-badge--warning';
+          }
+        } else if (currentIdx === 4) {
+          currentStage.status = `✓ Full 90+ Page Unlock · 90% Architect ($${currentStagedData.architectNet.toLocaleString()}) / 10% vvEntra ($${currentStagedData.platformFee.toLocaleString()})`;
         }
 
-        renderHandoverSteps();
-        renderHandoverInspector(currentPhase, asset);
+        renderStagedRevealSteps();
+        renderStagedRevealInspector(currentStage, opp);
         currentIdx++;
       } else {
         clearInterval(interval);
-        isHandoverSimulating = false;
+        isStagedSimulating = false;
         if (simBtn) {
           simBtn.disabled = false;
-          simBtn.textContent = '↺ Reset / Run Simulation Again';
+          simBtn.textContent = '↺ Reset / Re-run Staged Simulation';
         }
-        showNotification('Atomic Handover Complete: Escrow deposit verified, code secured, domain transferred, and payout settled.');
+        showNotification('Staged Reveal Complete: Escrow verified, NDA executed, 90+ page playbook unlocked, and 90/10 split ready for settlement.');
       }
-    }, 1100);
+    }, 1200);
+  }
+
+  // ===================================================================
+  // 7C. THE 3 ENGAGEMENT PATHS CONTROLLER
+  // ===================================================================
+  function renderEngagementPaths(selectedId = selectedEngagementPathId) {
+    const container = DOM.get('#listing-engagement-paths');
+    if (!container) return;
+
+    selectedEngagementPathId = selectedId;
+    container.innerHTML = VVENTRA_DATA.engagementPaths.map(path => {
+      const isSelected = path.id === selectedEngagementPathId;
+      return `
+        <div class="c-engagement-card ${isSelected ? 'is-selected' : ''}" 
+             onclick="window.vveSelectEngagementPath('${path.id}')">
+          <div>
+            <div class="c-engagement-card__top">
+              <span class="c-engagement-card__title">${path.title}</span>
+              <span class="c-engagement-card__badge">${isSelected ? '● Selected' : 'Available'}</span>
+            </div>
+            <div style="font-size: 0.76rem; font-family: var(--font-family-mono); color: var(--color-brand-primary); margin-bottom: 0.4rem;">
+              ${path.category}
+            </div>
+            <p class="c-engagement-card__desc">${path.description}</p>
+          </div>
+          <div class="c-engagement-card__pricing">
+            <strong>Model:</strong> ${path.pricingModel}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.vveSelectEngagementPath = function(pathId) {
+    renderEngagementPaths(pathId);
+    const chosen = VVENTRA_DATA.engagementPaths.find(p => p.id === pathId);
+    if (chosen) {
+      showNotification(`Engagement model selected: ${chosen.title}`);
+    }
+  };
+
+  // ===================================================================
+  // 7D. THE PLAYBOOK CONTROLLER (#playbook)
+  // ===================================================================
+  let activePlaybookChapterId = 'ch-01';
+
+  function renderPlaybook(chapterId = activePlaybookChapterId) {
+    const container = DOM.get('#playbook-content-container');
+    if (!container) return;
+
+    activePlaybookChapterId = chapterId;
+
+    DOM.getAll('#playbook-chapter-tabs .c-playbook-tab').forEach(tab => {
+      tab.classList.toggle('is-active', tab.dataset.chapter === chapterId);
+    });
+
+    const chapter = VVENTRA_DATA.playbookChapters.find(ch => ch.id === chapterId) || VVENTRA_DATA.playbookChapters[0];
+    const isInvestor = State.role === 'investor';
+
+    container.innerHTML = `
+      <div class="c-playbook-card">
+        <div class="c-badge c-badge--brand" style="margin-bottom: 0.75rem;">Chapter ${chapter.id.replace('ch-', '')} · ${isInvestor ? 'Investor Lens' : 'Architect Lens'}</div>
+        <h2 class="c-playbook-card__title">${chapter.title}</h2>
+        <p class="c-playbook-card__summary">${chapter.summary}</p>
+        
+        <h4 style="font-size: 0.82rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 1rem;">
+          Mandatory Operating Takeaways (${isInvestor ? 'For Investors & Buyers' : 'For Architects & Creators'}):
+        </h4>
+        <ul class="c-playbook-takeaways">
+          ${chapter.takeaways.map(t => `<li>${t}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  function setupPlaybookControls() {
+    DOM.getAll('#playbook-chapter-tabs .c-playbook-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        renderPlaybook(tab.dataset.chapter);
+      });
+    });
+
+    const pbInvBtn = DOM.get('#pb-role-investor');
+    const pbArchBtn = DOM.get('#pb-role-architect');
+
+    if (pbInvBtn) {
+      pbInvBtn.addEventListener('click', () => {
+        setPerspective('investor');
+        renderPlaybook();
+      });
+    }
+    if (pbArchBtn) {
+      pbArchBtn.addEventListener('click', () => {
+        setPerspective('architect');
+        renderPlaybook();
+      });
+    }
   }
 
   // ===================================================================
@@ -858,6 +1144,8 @@
       renderDashboard();
     } else if (viewName === 'browse') {
       renderMarketplace();
+    } else if (viewName === 'playbook') {
+      renderPlaybook();
     } else if (viewName === 'listing') {
       renderAssetDetail(State.activeAssetId);
     } else if (viewName === 'pricing') {
@@ -1015,18 +1303,7 @@
       });
     });
 
-    const calcSlider = DOM.get('#calc-deal-slider');
-    if (calcSlider) {
-      calcSlider.addEventListener('input', () => SettlementCalculator.updateUI());
-    }
-    DOM.getAll('.calc-preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (calcSlider) {
-          calcSlider.value = btn.dataset.val;
-          SettlementCalculator.updateUI();
-        }
-      });
-    });
+    PricingController.init();
 
     DOM.getAll('.c-filter-chip').forEach(chip => {
       chip.addEventListener('click', () => {
@@ -1052,7 +1329,7 @@
 
     const handoverSimBtn = DOM.get('#handover-sim-btn');
     if (handoverSimBtn) {
-      handoverSimBtn.addEventListener('click', simulateHandoverSequence);
+      handoverSimBtn.addEventListener('click', simulateStagedRevealSequence);
     }
 
     window.vveToggleBookmark = (id, event) => AssetRepository.toggleBookmark(id, event);
@@ -1064,6 +1341,7 @@
     setupDemandChartControls();
     setupWhatToListRecommender();
     setupVideoControls();
+    setupPlaybookControls();
 
     window.addEventListener('hashchange', handleNavigation);
     handleNavigation();
