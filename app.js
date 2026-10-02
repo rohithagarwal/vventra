@@ -519,6 +519,443 @@
     grid.innerHTML = assets.map(createAssetCardMarkup).join('');
   }
 
+  // ===================================================================
+  // 4B. 4-QUADRANT ARBITRAGE MATRIX CONTROLLER
+  // ===================================================================
+  const QuadrantMatrixController = {
+    selectedSectorId: 'sec-09', // CYBER-AUDIT (Highest gap by default)
+    activeFilter: 'all',
+    searchQuery: '',
+    initialized: false,
+
+    init() {
+      if (this.initialized) return;
+      const filterGroup = DOM.get('#matrix-filter-group');
+      if (filterGroup) {
+        filterGroup.querySelectorAll('.c-filter-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            filterGroup.querySelectorAll('.c-filter-chip').forEach(c => c.classList.remove('is-active'));
+            chip.classList.add('is-active');
+            this.activeFilter = chip.dataset.quadFilter || 'all';
+            this.renderNodes();
+          });
+        });
+      }
+
+      const searchInput = DOM.get('#matrix-sector-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          this.searchQuery = e.target.value.trim().toLowerCase();
+          this.renderNodes();
+        });
+      }
+
+      this.initialized = true;
+      this.render();
+    },
+
+    render() {
+      const svg = DOM.get('#quadrant-matrix-svg');
+      if (!svg || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
+
+      this.renderCanvas(svg);
+      this.renderNodes();
+      this.renderSidebar();
+    },
+
+    renderCanvas(svg) {
+      svg.innerHTML = `
+        <defs>
+          <radialGradient id="surgeGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#D04A15" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#D04A15" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#059669" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+          </filter>
+        </defs>
+
+        <!-- Quadrant 1: Top-Left (Arbitrage Surge) -->
+        <rect x="80" y="40" width="440" height="210" fill="var(--color-bg-alt)" opacity="0.6"/>
+        <rect x="80" y="40" width="440" height="210" fill="url(#surgeGlow)"/>
+        
+        <!-- Quadrant 2: Top-Right (Institutional Stars) -->
+        <rect x="520" y="40" width="440" height="210" fill="var(--color-bg-surface)" opacity="0.7"/>
+        <rect x="520" y="40" width="440" height="210" fill="url(#starGlow)"/>
+
+        <!-- Quadrant 3: Bottom-Left (Emerging Niches) -->
+        <rect x="80" y="250" width="440" height="210" fill="var(--color-bg-surface)" opacity="0.4"/>
+        
+        <!-- Quadrant 4: Bottom-Right (Saturated Liquidity) -->
+        <rect x="520" y="250" width="440" height="210" fill="var(--color-bg-alt)" opacity="0.4"/>
+
+        <!-- Subtle Background Gridlines -->
+        <line x1="80" y1="145" x2="960" y2="145" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="80" y1="355" x2="960" y2="355" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="300" y1="40" x2="300" y2="460" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+        <line x1="740" y1="40" x2="740" y2="460" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="2 4"/>
+
+        <!-- Crosshair Dividing Lines -->
+        <line x1="520" y1="40" x2="520" y2="460" stroke="var(--color-border-default)" stroke-width="1.75" stroke-dasharray="5 4"/>
+        <line x1="80" y1="250" x2="960" y2="250" stroke="var(--color-border-default)" stroke-width="1.75" stroke-dasharray="5 4"/>
+
+        <!-- Quadrant Headers & Strategic Descriptions -->
+        <g id="quad-labels">
+          <!-- Top-Left -->
+          <text x="96" y="65" font-size="13" font-weight="700" fill="var(--color-brand-primary)" letter-spacing="0.04em">⚡ ARBITRAGE SURGE</text>
+          <text x="96" y="82" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Scarce Supply (&lt;20) · Max Seller Premium</text>
+
+          <!-- Top-Right -->
+          <text x="536" y="65" font-size="13" font-weight="700" fill="var(--color-success)" letter-spacing="0.04em">★ INSTITUTIONAL STARS</text>
+          <text x="536" y="82" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">High Demand (&gt;75) · Active Supply (≥20) · Liquid Scale</text>
+
+          <!-- Bottom-Left -->
+          <text x="96" y="275" font-size="13" font-weight="700" fill="#2563EB" letter-spacing="0.04em">🌱 EMERGING NICHES</text>
+          <text x="96" y="292" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Incubating Demand (≤75) · Low Competition · Asymmetric Upside</text>
+
+          <!-- Bottom-Right -->
+          <text x="536" y="275" font-size="13" font-weight="700" fill="var(--color-text-muted)" letter-spacing="0.04em">⏳ SATURATED LIQUIDITY</text>
+          <text x="536" y="292" font-size="10.5" fill="var(--color-text-faint)" font-family="var(--font-family-mono)">Moderate Demand · High Competition · Buyer Pricing Leverage</text>
+        </g>
+
+        <!-- Main Outer Axes -->
+        <line x1="80" y1="460" x2="960" y2="460" stroke="var(--color-border-strong)" stroke-width="1.5"/>
+        <line x1="80" y1="40" x2="80" y2="460" stroke="var(--color-border-strong)" stroke-width="1.5"/>
+
+        <!-- Axis Ticks & Scale Markers -->
+        <text x="70" y="45" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">100</text>
+        <text x="70" y="254" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">75</text>
+        <text x="70" y="464" font-size="10" fill="var(--color-text-faint)" text-anchor="end" font-family="var(--font-family-mono)">50</text>
+
+        <text x="80" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">10</text>
+        <text x="520" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">25 (Median)</text>
+        <text x="960" y="478" font-size="10" fill="var(--color-text-faint)" text-anchor="middle" font-family="var(--font-family-mono)">40+</text>
+
+        <!-- Axis Titles -->
+        <text x="520" y="504" font-size="11" font-weight="600" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)">
+          OPERATOR SUPPLY DEPTH (Active Listings & Competition) →
+        </text>
+        <text x="24" y="250" font-size="11" font-weight="600" fill="var(--color-text-muted)" text-anchor="middle" font-family="var(--font-family-mono)" transform="rotate(-90 24 250)">
+          INSTITUTIONAL BUYER DEMAND INDEX (0 - 100) ↑
+        </text>
+
+        <!-- Node Layer Container -->
+        <g id="quadrant-nodes-layer"></g>
+      `;
+    },
+
+    renderNodes() {
+      const layer = DOM.get('#quadrant-nodes-layer');
+      if (!layer || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
+
+      const sectors = VVENTRA_DATA.sectors;
+      const minSupply = 10, maxSupply = 40;
+      const minDemand = 50, maxDemand = 100;
+      const plotWidth = 880, plotHeight = 420;
+      const originX = 80, originY = 460;
+
+      layer.innerHTML = sectors.map(s => {
+        const supply = s.architectSupplyCount || 20;
+        const demand = s.buyerDemandIndex || 70;
+
+        const xNorm = Math.max(0, Math.min(1, (supply - minSupply) / (maxSupply - minSupply)));
+        const x = originX + xNorm * plotWidth;
+
+        const yNorm = Math.max(0, Math.min(1, (demand - minDemand) / (maxDemand - minDemand)));
+        const y = originY - yNorm * plotHeight;
+
+        const isSelected = s.id === this.selectedSectorId;
+        const matchesFilter = this.activeFilter === 'all' || 
+          s.quadrant === this.activeFilter || 
+          (this.activeFilter === 'niche' && (s.quadrant === 'niche' || s.quadrant === 'out_of_favor'));
+        const isDimmed = !matchesSearch || !matchesFilter;
+
+        let color = '#D04A15';
+        if (s.quadrant === 'star') color = '#059669';
+        else if (s.quadrant === 'niche' || s.quadrant === 'out_of_favor') color = '#2563EB';
+        else if (s.quadrant === 'cash_cow' || s.quadrant === 'saturated') color = '#6B7280';
+
+        const radius = Math.min(12, Math.max(7, Math.round((s.arbitrageGap || 50) / 7)));
+
+        return `
+          <g class="c-quad-node ${isDimmed ? 'is-dimmed' : ''} ${isSelected ? 'is-focused' : ''}" 
+             data-sector-id="${s.id}">
+            <circle class="node-pulse" cx="${x}" cy="${y}" r="${radius + 6}" fill="${color}" opacity="${isSelected ? '0.28' : '0'}"/>
+            <circle class="node-core" cx="${x}" cy="${y}" r="${radius}" fill="${color}" stroke="var(--color-bg-surface)" stroke-width="2" filter="url(#nodeShadow)"/>
+            <text x="${x + radius + 6}" y="${y + 4}" font-size="11" font-weight="${isSelected ? '700' : '600'}" fill="${isDimmed ? 'var(--color-text-faint)' : 'var(--color-text-main)'}">
+              ${s.name.split(' ')[0]} <tspan fill="${color}" font-weight="600">(${s.growth7d})</tspan>
+            </text>
+          </g>
+        `;
+      }).join('');
+
+      this.bindNodeEvents();
+    },
+
+    bindNodeEvents() {
+      const tooltip = DOM.get('#quadrant-tooltip');
+      const wrapper = DOM.get('#quadrant-chart-wrapper');
+
+      document.querySelectorAll('.c-quad-node').forEach(node => {
+        const id = node.dataset.sectorId;
+        const sector = VVENTRA_DATA.sectors.find(s => s.id === id);
+        if (!sector) return;
+
+        node.addEventListener('mouseenter', () => {
+          if (!tooltip || !wrapper) return;
+          const rect = wrapper.getBoundingClientRect();
+          const nodeRect = node.getBoundingClientRect();
+
+          let left = nodeRect.left - rect.left + 20;
+          let top = nodeRect.top - rect.top - 20;
+          if (left + 290 > rect.width) left = left - 310;
+          if (top + 180 > rect.height) top = rect.height - 190;
+
+          const isSurge = sector.quadrant === 'surge';
+          const badgeClass = isSurge ? 'c-badge--primary' : (sector.quadrant === 'star' ? 'c-badge--success' : 'c-badge--neutral');
+
+          tooltip.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+              <div>
+                <span class="c-badge ${badgeClass}" style="font-size: 0.68rem; margin-bottom: 2px;">${sector.code} · ${sector.category || 'Asset Class'}</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--color-text-main);">${sector.name}</h4>
+              </div>
+              <strong style="color: var(--color-brand-primary); font-family: var(--font-family-mono); font-size: 0.88rem;">+${sector.arbitrageGap} Gap</strong>
+            </div>
+
+            <div style="margin: 8px 0; padding: 6px 0; border-top: 1px solid var(--color-border-subtle); border-bottom: 1px solid var(--color-border-subtle); font-size: 0.76rem; font-family: var(--font-family-mono); display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+              <div>Demand: <strong>${sector.buyerDemandIndex} / 100</strong></div>
+              <div>Supply: <strong>${sector.architectSupplyCount} Active</strong></div>
+              <div>7d Growth: <strong style="color: var(--color-success);">${sector.growth7d}</strong></div>
+              <div>Avg Value: <strong>${sector.avgUnlockPrice}</strong></div>
+            </div>
+
+            <div style="font-size: 0.72rem; color: var(--color-text-muted); line-height: 1.4;">
+              ${isSurge ? '⚡ <strong>High Arbitrage:</strong> Instant clearing probability; creators command maximum pricing leverage.' : '★ <strong>High Liquidity:</strong> Active transaction throughput with deep private equity buy mandates.'}
+            </div>
+            <div style="margin-top: 8px; font-size: 0.72rem; color: var(--color-brand-primary); font-weight: 600;">
+              Click node to inspect opportunities →
+            </div>
+          `;
+
+          tooltip.style.left = `${left}px`;
+          tooltip.style.top = `${top}px`;
+          tooltip.style.display = 'block';
+        });
+
+        node.addEventListener('mouseleave', () => {
+          if (tooltip) tooltip.style.display = 'none';
+        });
+
+        node.addEventListener('click', () => {
+          this.selectSector(id);
+        });
+      });
+    },
+
+    renderSidebar() {
+      const panel = DOM.get('#quadrant-sidebar-panel');
+      if (!panel || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
+
+      const sector = VVENTRA_DATA.sectors.find(s => s.id === this.selectedSectorId) || VVENTRA_DATA.sectors[0];
+      const isSurge = sector.quadrant === 'surge';
+
+      const topGaps = [...VVENTRA_DATA.sectors].sort((a, b) => (b.arbitrageGap || 0) - (a.arbitrageGap || 0)).slice(0, 4);
+
+      panel.innerHTML = `
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <span class="c-badge ${isSurge ? 'c-badge--primary' : 'c-badge--success'}">${sector.code} · ${sector.category}</span>
+            <span style="font-size: 0.75rem; font-family: var(--font-family-mono); color: var(--color-text-faint);">Audit Confirmed</span>
+          </div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--color-text-main);">${sector.name}</h3>
+          <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">
+            ${isSurge 
+              ? 'Severe supply shortage relative to private equity search fund mandates. Listings in this category clear within 12 days.' 
+              : 'Institutional scale category with sustained monthly capital deployment and standardized handover benchmarks.'}
+          </p>
+
+          <!-- 4 Telemetry Metrics -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+            <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
+              <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Demand Score</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-brand-primary);">${sector.buyerDemandIndex} <span style="font-size: 0.75rem; color: var(--color-text-faint);">/ 100</span></div>
+            </div>
+            <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
+              <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Active Supply</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-text-main);">${sector.architectSupplyCount} <span style="font-size: 0.75rem; color: var(--color-text-faint);">listings</span></div>
+            </div>
+            <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
+              <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Arbitrage Spread</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-success);">+${sector.arbitrageGap} <span style="font-size: 0.75rem; color: var(--color-text-faint);">pts</span></div>
+            </div>
+            <div style="background: var(--color-bg-alt); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid var(--color-border-subtle);">
+              <div style="font-size: 0.68rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Avg Clear Time</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: var(--color-text-main);">${sector.avgClearDays || 12} <span style="font-size: 0.75rem; color: var(--color-text-faint);">days</span></div>
+            </div>
+          </div>
+
+          <a href="#browse" class="c-btn c-btn--primary c-btn--full" style="margin-bottom: 1.5rem;" onclick="State.activeFilter='all';">
+            Inspect ${sector.name} Dossiers →
+          </a>
+        </div>
+
+        <!-- Top Arbitrage Gaps Table List -->
+        <div style="border-top: 1px solid var(--color-border-subtle); padding-top: 1rem;">
+          <div style="font-size: 0.72rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin-bottom: 0.6rem;">
+            Ranked Arbitrage Opportunities
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            ${topGaps.map((g, idx) => `
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); background: ${g.id === this.selectedSectorId ? 'var(--color-brand-subtle)' : 'var(--color-bg-alt)'}; cursor: pointer;" onclick="QuadrantMatrixController.selectSector('${g.id}')">
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600;">
+                  <span style="font-family: var(--font-family-mono); color: var(--color-text-faint); font-size: 0.7rem;">0${idx+1}</span>
+                  ${g.name}
+                </div>
+                <strong style="color: var(--color-brand-primary); font-family: var(--font-family-mono); font-size: 0.78rem;">+${g.arbitrageGap}</strong>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    },
+
+    selectSector(id) {
+      this.selectedSectorId = id;
+      this.renderNodes();
+      this.renderSidebar();
+
+      const row = document.querySelector(`#dashboard-matrix-body tr[data-sector-id="${id}"]`);
+      if (row) {
+        document.querySelectorAll('#dashboard-matrix-body tr').forEach(r => r.classList.remove('is-active-row'));
+        row.classList.add('is-active-row');
+        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  };
+  window.QuadrantMatrixController = QuadrantMatrixController;
+
+  // ===================================================================
+  // 4C. SECTOR INTELLIGENCE API (Live External Data Manager)
+  // ===================================================================
+  const SectorIntelligenceAPI = {
+    source: 'benchmark',
+    timer: null,
+    initialized: false,
+
+    init() {
+      if (this.initialized) return;
+      const btnOpen = DOM.get('#btn-open-api-modal');
+      const backdrop = DOM.get('#api-modal-backdrop');
+      const btnClose = DOM.get('#api-modal-close');
+      const btnCancel = DOM.get('#api-modal-cancel');
+      const btnSave = DOM.get('#api-modal-save');
+      const btnSim = DOM.get('#btn-sim-ticks');
+
+      const openModal = () => backdrop && backdrop.classList.add('is-open');
+      const closeModal = () => backdrop && backdrop.classList.remove('is-open');
+
+      if (btnOpen) btnOpen.addEventListener('click', openModal);
+      if (btnClose) btnClose.addEventListener('click', closeModal);
+      if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+      if (btnSim) {
+        btnSim.addEventListener('click', () => {
+          this.toggleSimulation();
+        });
+      }
+
+      if (btnSave) {
+        btnSave.addEventListener('click', () => {
+          const selected = document.querySelector('input[name="api-source-radio"]:checked');
+          const customUrl = DOM.get('#api-custom-url-input');
+          const val = selected ? selected.value : 'benchmark';
+          this.applySource(val, customUrl ? customUrl.value.trim() : '');
+          closeModal();
+        });
+      }
+
+      this.initialized = true;
+    },
+
+    toggleSimulation() {
+      if (this.source === 'simulation') {
+        this.applySource('benchmark');
+      } else {
+        this.applySource('simulation');
+      }
+    },
+
+    applySource(mode, customUrl = '') {
+      this.source = mode;
+      const badge = DOM.get('#matrix-api-badge');
+      const btnSim = DOM.get('#btn-sim-ticks');
+
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+
+      if (mode === 'simulation') {
+        if (badge) {
+          badge.textContent = '● Live Tick Stream (Simulated)';
+          badge.className = 'c-badge c-badge--primary';
+        }
+        if (btnSim) btnSim.textContent = '⏹ Stop Stream';
+
+        showNotification('Live Simulation Active: Streaming volatility and liquidity ticks.');
+
+        this.timer = setInterval(() => {
+          VVENTRA_DATA.sectors.forEach(s => {
+            const delta = (Math.random() - 0.48) * 1.5;
+            s.buyerDemandIndex = Math.min(99, Math.max(50, Math.round(s.buyerDemandIndex + delta)));
+            s.arbitrageGap = Math.max(20, Math.round(s.buyerDemandIndex - (s.architectSupplyCount || 20) * 0.9));
+          });
+          QuadrantMatrixController.renderNodes();
+          QuadrantMatrixController.renderSidebar();
+          renderDashboard();
+        }, 3200);
+
+      } else if (mode === 'custom' && customUrl) {
+        if (badge) {
+          badge.textContent = 'Connecting...';
+          badge.className = 'c-badge c-badge--neutral';
+        }
+        fetch(customUrl)
+          .then(res => res.json())
+          .then(() => {
+            if (badge) {
+              badge.textContent = '● External API Live (200 OK)';
+              badge.className = 'c-badge c-badge--success';
+            }
+            showNotification(`Connected to external API: ${customUrl}`);
+          })
+          .catch(err => {
+            if (badge) {
+              badge.textContent = '● API Fallback (Calibrated Benchmark)';
+              badge.className = 'c-badge c-badge--warning';
+            }
+            showNotification(`External API failed to load (${err.message}). Using calibrated benchmark.`);
+          });
+        if (btnSim) btnSim.textContent = '▶ Stream Live Ticks';
+      } else {
+        if (badge) {
+          badge.textContent = '● Live Benchmark (14 Sectors)';
+          badge.className = 'c-badge c-badge--success';
+        }
+        if (btnSim) btnSim.textContent = '▶ Stream Live Ticks';
+        showNotification('Switched to vvEntra Calibrated Index.');
+        QuadrantMatrixController.render();
+        renderDashboard();
+      }
+    }
+  };
+  window.SectorIntelligenceAPI = SectorIntelligenceAPI;
+
   function renderDashboard() {
     const tbody = DOM.get('#dashboard-matrix-body');
     if (!tbody || !VVENTRA_DATA || !VVENTRA_DATA.sectors) return;
@@ -530,8 +967,9 @@
       const change = String(s.trailing7dChange || s.growth7d || '+0%');
       const isPositive = change.startsWith('+');
       const val = s.medianUnlockValuation || s.avgUnlockPrice || '$5,000';
+      const isSelected = s.id === QuadrantMatrixController.selectedSectorId;
       return `
-        <tr>
+        <tr data-sector-id="${s.id}" class="${isSelected ? 'is-active-row' : ''}" style="cursor: pointer;" onclick="QuadrantMatrixController.selectSector('${s.id}')">
           <td>
             <div style="font-weight: 600;">${s.name}</div>
             <div style="font-size: 0.75rem; color: var(--color-text-faint);">${industry}</div>
@@ -541,15 +979,17 @@
             <strong>${demand}</strong>
           </td>
           <td>
-            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${listings}%; background: var(--color-text-faint);"></div></div>
+            <div class="c-bar-meter"><div class="c-bar-meter__fill" style="width: ${listings * 2.5}%; background: var(--color-text-faint);"></div></div>
             <span>${listings}</span>
           </td>
-          <td><span class="c-badge c-badge--success">${gap}</span></td>
+          <td><span class="c-badge ${s.quadrant === 'surge' ? 'c-badge--primary' : 'c-badge--success'}">${gap}</span></td>
           <td><span style="font-family: var(--font-family-mono); font-weight: 600; color: ${isPositive ? 'var(--color-success)' : 'var(--color-danger)'};">${change}</span></td>
           <td><strong>${val}</strong></td>
         </tr>
       `;
     }).join('');
+
+    QuadrantMatrixController.render();
   }
 
   function createAssetCardMarkup(asset) {
@@ -1098,6 +1538,14 @@
         searchInput.addEventListener('input', e => runFaqSearch(e.target.value));
       }
 
+      const liveChatLink = page.querySelector('#faq-livechat-link');
+      if (liveChatLink) {
+        liveChatLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          showNotification('Live Concierge Desk: Active Mon-Sat 9am-9pm IST. Direct desk email: concierge@vventra.com');
+        });
+      }
+
       faqInitialized = true;
     }
 
@@ -1304,7 +1752,9 @@
   function handleNavigation() {
     const hash = window.location.hash || '#overview';
     const [route, queryStr] = hash.split('?');
-    const viewName = route.replace('#', '') || 'overview';
+    let viewName = route.replace('#', '') || 'overview';
+    if (viewName === 'home' || viewName === 'cta') viewName = 'overview';
+    if (viewName === 'apply') viewName = 'list';
 
     const params = new URLSearchParams(queryStr);
     if (params.has('id')) {
@@ -1529,6 +1979,8 @@
     AssetRepository.updateBookmarkCount();
 
     renderTickerTape();
+    QuadrantMatrixController.init();
+    SectorIntelligenceAPI.init();
     setupAssetComposer();
     setupDiligenceWorkflow();
     setupDemandChartControls();

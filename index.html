@@ -265,6 +265,7 @@
             <h2 class="c-section-header__title">Strategic Positioning Quadrant</h2>
             <p class="c-section-header__sub">Real-time mapping of commercial sectors across Demand Growth (X-axis) and Market Activity (Y-axis)</p>
           </div>
+          <a href="#dashboard" class="c-btn c-btn--secondary c-btn--sm">Launch Full Intelligence Terminal →</a>
         </div>
 
         <div class="l-dashboard-split">
@@ -388,6 +389,97 @@
           <div class="c-stat-card__label">Deals Closed</div>
           <div class="c-stat-card__val" id="dash-kpi-6">37</div>
           <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600; margin-top: 4px;">100% Escrow Cleared</div>
+        </div>
+      </div>
+
+      <!-- 4-QUADRANT MARKET OPPORTUNITY MATRIX (Arbitrage Gap Positioning) -->
+      <div class="c-quadrant-container" id="dashboard-quadrant-section" style="margin-bottom: 3.5rem;">
+        <div class="c-section-header" style="margin-bottom: 1.25rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem;">
+              <span class="c-badge c-badge--neutral">Market Positioning Intelligence</span>
+              <span class="c-badge c-badge--success" id="matrix-api-badge">● Live Benchmark (14 Sectors)</span>
+            </div>
+            <h2 class="c-section-header__title">Strategic Opportunity Quadrant (Arbitrage Gap Analysis)</h2>
+            <p class="c-section-header__sub">
+              Dynamic scatter mapping of commercial sectors across <strong>Operator Supply Scarcity (X-Axis)</strong> vs. <strong>Institutional Buyer Demand (Y-Axis)</strong>.
+              Top-Left Quadrant represents maximum clearing velocity, highest unlock valuations, and seller pricing power.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+            <button type="button" class="c-btn c-btn--secondary c-btn--sm" id="btn-open-api-modal">
+              ⚡ Connect Free Live API
+            </button>
+            <button type="button" class="c-btn c-btn--outline c-btn--sm" id="btn-sim-ticks">
+              ▶ Stream Live Ticks
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="c-matrix-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.2rem; flex-wrap: wrap;">
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;" id="matrix-filter-group">
+            <button type="button" class="c-filter-chip is-active" data-quad-filter="all">All 14 Sectors</button>
+            <button type="button" class="c-filter-chip" data-quad-filter="surge">⚡ Arbitrage Surge (Max Gap)</button>
+            <button type="button" class="c-filter-chip" data-quad-filter="star">★ Institutional Stars</button>
+            <button type="button" class="c-filter-chip" data-quad-filter="cash_cow">💰 High Liquidity Yield</button>
+            <button type="button" class="c-filter-chip" data-quad-filter="niche">🌱 Emerging Niches</button>
+          </div>
+          <div style="position: relative; min-width: 240px;">
+            <input type="text" id="matrix-sector-search" placeholder="Search sector node..." class="c-matrix-search-input" />
+          </div>
+        </div>
+
+        <!-- Matrix Split View: Interactive Graph + Detail Sidebar -->
+        <div class="l-dashboard-split">
+          <div class="c-card" style="padding: 1.25rem; position: relative; overflow: visible;">
+            <!-- Interactive SVG Plot -->
+            <div id="quadrant-chart-wrapper" style="position: relative; width: 100%; min-height: 480px;">
+              <svg id="quadrant-matrix-svg" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; display: block;">
+                <!-- Populated via JavaScript dynamically -->
+              </svg>
+
+              <!-- Floating Node Tooltip Card -->
+              <div id="quadrant-tooltip" class="c-quad-tooltip" style="display: none;"></div>
+            </div>
+
+            <!-- Quadrant Summary Legend Strip -->
+            <div class="c-quad-legend" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-border-subtle); font-size: 0.78rem;">
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #D04A15; margin-top: 3px; flex-shrink: 0;"></span>
+                <div>
+                  <strong>Arbitrage Surge (Top-Left)</strong>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 80-100 · Supply &lt;20 · Max Seller Pricing Leverage</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #059669; margin-top: 3px; flex-shrink: 0;"></span>
+                <div>
+                  <strong>Institutional Stars (Top-Right)</strong>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand 80-100 · Supply 20+ · Scaled Transaction Velocity</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #2563EB; margin-top: 3px; flex-shrink: 0;"></span>
+                <div>
+                  <strong>Emerging Niches (Bottom-Left)</strong>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;80 · Supply &lt;20 · Uncontested Territory</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #6B7280; margin-top: 3px; flex-shrink: 0;"></span>
+                <div>
+                  <strong>High Competition (Bottom-Right)</strong>
+                  <div style="color: var(--color-text-muted); font-size: 0.72rem;">Demand &lt;80 · Supply 25+ · Buyer Price Leverage</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Sidebar: Selected Sector Deep-Dive & Arbitrage Ranking -->
+          <div class="c-card" id="quadrant-sidebar-panel" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+            <!-- Populated via JavaScript on load and node click -->
+          </div>
         </div>
       </div>
 
@@ -3172,8 +3264,8 @@
     <h2 class="display xl reveal delay-2">Now you know <em>exactly</em> how it works.</h2>
     <p class="lead reveal delay-3">Every dollar protected. Every IP gated. Every dispute resolved within five days. Trust is not a tagline at vvEntra. It is the architecture.</p>
     <div class="final-ctas reveal delay-3">
-      <a class='btn btn-orange' href='/#cta'>Apply for access <span class="arrow">→</span></a>
-      <a href="#home" data-route="home" class="btn btn-outline">Back to homepage <span class="arrow">→</span></a>
+      <a class='btn btn-orange' href='#list' data-route="list">Apply for access <span class="arrow">→</span></a>
+      <a href="#overview" data-route="overview" class="btn btn-outline">Back to marketplace <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -3557,30 +3649,30 @@
       <h2 class="display lg">Didn't find your <em>answer?</em></h2>
       <p class="lead" style="text-align:center;">We're a small team and we answer founder-style: directly, quickly, no support-bot routing. Pick the channel that works for you.</p>
       <div class="channels">
-        <div class="channel">
+        <a href="mailto:hello@vventra.com?subject=vvEntra%20Inquiry%20-%20Asset%20Diligence&body=Hello%20vvEntra%20Team%2C%0A%0AI%20am%20inquiring%20about%20the%20platform%20architecture%20and%20opportunity%20registry..." class="channel" id="faq-email-link" title="Click to email hello@vventra.com">
           <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
           </div>
           <span class="ttl">Email us</span>
           <span class="desc">hello@vventra.com</span>
-        </div>
-        <div class="channel">
+        </a>
+        <a href="#live-chat" class="channel" id="faq-livechat-link" title="Launch instant concierge live chat">
           <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           </div>
           <span class="ttl">Live chat</span>
           <span class="desc">Mon-Sat · 9am-9pm IST</span>
-        </div>
-        <div class="channel">
+        </a>
+        <a href="mailto:concierge@vventra.com?subject=Schedule%20a%2015-Minute%20vvEntra%20Diligence%20Call&body=Hello%20vvEntra%20Concierge%2C%0A%0AI%20would%20like%20to%20schedule%20a%20private%2015-minute%20walkthrough..." class="channel" id="faq-call-link" title="Click to schedule a 15-min call">
           <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           </div>
           <span class="ttl">Schedule a call</span>
           <span class="desc">Premium tier · 15 min</span>
-        </div>
+        </a>
       </div>
       <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem;">
-        <a class='btn btn-orange' href='/#cta'><span class="cta-text"></span> <span class="arrow">→</span></a>
+        <a class='btn btn-orange' href='#browse' data-route="browse">Explore Active Dossiers <span class="arrow">→</span></a>
         <a href="#trust" data-route="trust" class="btn btn-outline">Read trust policy <span class="arrow">→</span></a>
       </div>
     </div>
@@ -3716,7 +3808,58 @@
 
   
 
-  </main>
+  <!-- ===================================================================
+       API CONNECTION MODAL (Extensible External Data Feed)
+       =================================================================== -->
+  <div class="c-api-modal-backdrop" id="api-modal-backdrop">
+    <div class="c-api-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+        <div>
+          <div class="c-badge c-badge--neutral" style="margin-bottom: 0.35rem;">Telemetry Configuration</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700;">Market Intelligence Data Feeds</h3>
+        </div>
+        <button type="button" class="c-btn-close" id="api-modal-close" style="font-size: 1.25rem; color: var(--color-text-faint); cursor: pointer; background:none; border:none;">✕</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.55; margin-bottom: 1.5rem;">
+        vvEntra tracks 14 commercial categories calibrated against private equity diligence pipelines. You can seamlessly connect any free public or private REST API endpoint to stream live market indices.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+        <label style="font-size: 0.78rem; font-family: var(--font-family-mono); color: var(--color-text-faint); text-transform: uppercase;">Active Data Source</label>
+        
+        <label style="display: flex; align-items: flex-start; gap: 10px; padding: 0.8rem; background: var(--color-bg-alt); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-xs); cursor: pointer;">
+          <input type="radio" name="api-source-radio" value="benchmark" checked style="margin-top: 3px;" />
+          <div>
+            <strong style="font-size: 0.88rem; display: block;">vvEntra Calibrated Index (Default Canonical)</strong>
+            <span style="font-size: 0.76rem; color: var(--color-text-muted);">14 institutional sectors with audited demand scores, listing counts, and clearing SLAs.</span>
+          </div>
+        </label>
+
+        <label style="display: flex; align-items: flex-start; gap: 10px; padding: 0.8rem; background: var(--color-bg-alt); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-xs); cursor: pointer;">
+          <input type="radio" name="api-source-radio" value="simulation" style="margin-top: 3px;" />
+          <div>
+            <strong style="font-size: 0.88rem; display: block;">Live Streaming Simulation (Dynamic Ticks)</strong>
+            <span style="font-size: 0.76rem; color: var(--color-text-muted);">Simulates live market orders, volatility shifts, and liquidity ticks every 3 seconds.</span>
+          </div>
+        </label>
+
+        <label style="display: flex; align-items: flex-start; gap: 10px; padding: 0.8rem; background: var(--color-bg-alt); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-xs); cursor: pointer;">
+          <input type="radio" name="api-source-radio" value="custom" style="margin-top: 3px;" />
+          <div style="flex: 1;">
+            <strong style="font-size: 0.88rem; display: block;">External REST API Endpoint (Free / Public)</strong>
+            <span style="font-size: 0.76rem; color: var(--color-text-muted); display: block; margin-bottom: 0.5rem;">Enter any free public JSON endpoint (e.g., AlphaVantage, CoinGecko, WorldBank, or custom webhook).</span>
+            <input type="url" id="api-custom-url-input" placeholder="https://api.example.com/v1/sectors" style="width: 100%; padding: 6px 10px; font-size: 0.8rem; background: var(--color-bg-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-xs); color: var(--color-text-main); font-family: var(--font-family-mono);" />
+          </div>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.6rem;">
+        <button type="button" class="c-btn c-btn--outline c-btn--sm" id="api-modal-cancel">Cancel</button>
+        <button type="button" class="c-btn c-btn--primary c-btn--sm" id="api-modal-save">Apply Telemetry Source</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification Shelf -->
   <div class="c-toast-shelf" id="toast-shelf"></div>
