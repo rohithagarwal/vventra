@@ -65,6 +65,14 @@
           <span>●</span> KYC Verified
         </div>
 
+        <!-- Institutional Authentication Portal -->
+        <div class="c-nav__auth-portal" id="nav-auth-portal">
+          <a href="#auth" class="c-nav__auth-btn" id="nav-auth-btn">
+            <span class="auth-icon">🔒</span>
+            <span>Sign In</span>
+          </a>
+        </div>
+
         <!-- Theme Mode Toggle -->
         <button type="button" class="c-nav__icon-btn" id="theme-toggle-btn" title="Toggle Dark/Light Mode">🌙</button>
       </div>
@@ -4034,6 +4042,240 @@
     </div>
 
   </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 12: INSTITUTIONAL AUTHENTICATION & LOGIN (#auth, #login, #signup)
+         =================================================================== -->
+    <section id="page-auth" class="c-view auth-page">
+      <div class="c-auth-container">
+        <!-- Interactive Neural Constellation & Quantum Liquidity Background -->
+        <div class="c-auth-bg">
+          <canvas id="auth-canvas" class="c-auth-canvas"></canvas>
+          <div class="c-auth-ambient-orb c-auth-ambient-orb--1"></div>
+          <div class="c-auth-ambient-orb c-auth-ambient-orb--2"></div>
+          <div class="c-auth-ambient-orb c-auth-ambient-orb--3"></div>
+          <div class="c-auth-grid-overlay"></div>
+          
+          <!-- Cyber Institutional Ticker Ribbon -->
+          <div class="c-auth-ticker">
+            <div class="c-auth-ticker__item"><span>● SECURE GATEWAY</span> 256-BIT TLS 1.3</div>
+            <div class="c-auth-ticker__item"><span>● BANKING ESCROW</span> $14.2M COMMITTED</div>
+            <div class="c-auth-ticker__item"><span>● VERIFIED NODES</span> 72 ARCHITECTS ONLINE</div>
+            <div class="c-auth-ticker__item"><span>● CLEARING LATENCY</span> 0.18s SLA</div>
+            <div class="c-auth-ticker__item"><span>● REGULATORY STANDING</span> SEC / FINRA TELEMETRY ACTIVE</div>
+          </div>
+        </div>
+
+        <!-- Floating Return Link -->
+        <div class="c-auth-top-bar">
+          <a href="#overview" class="c-auth-back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <span>Return to vvEntra Exchange</span>
+          </a>
+          <div class="c-auth-enclave-badge">
+            <span class="c-auth-enclave-dot"></span>
+            <span>SECURE ENCLAVE NODE #08</span>
+          </div>
+        </div>
+
+        <!-- Glassmorphism Auth Terminal Window -->
+        <div class="c-auth-card-wrap">
+          <div class="c-auth-card" id="auth-card">
+            <!-- Terminal Header -->
+            <div class="c-auth-card__header">
+              <div class="c-auth-brand">
+                <div class="c-auth-brand__mark">v</div>
+                <div class="c-auth-brand__info">
+                  <div class="c-auth-brand__name">vv<span>Entra</span></div>
+                  <span class="c-auth-brand__tag">INSTITUTIONAL GATEWAY</span>
+                </div>
+              </div>
+              <div class="c-auth-security-chip">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>Encrypted</span>
+              </div>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <div class="c-auth-heading">
+              <h2 class="c-auth-title" id="auth-title">Access Venture Intelligence</h2>
+              <p class="c-auth-desc" id="auth-desc">Confidential cryptographic access for accredited capital allocators and systems architects.</p>
+            </div>
+
+            <!-- 1-Click Instant Institutional Demo Accounts -->
+            <div class="c-auth-demo-box">
+              <div class="c-auth-demo-box__title">
+                <span class="demo-lightning">⚡</span>
+                <span>INSTANT 1-CLICK DEMO AUTHENTICATION</span>
+              </div>
+              <div class="c-auth-demo-box__actions">
+                <button type="button" class="c-auth-demo-btn" id="demo-btn-investor" title="Sign in as Accredited PE Buyer">
+                  <span class="demo-role-badge">💼 BUYER</span>
+                  <div class="demo-text">
+                    <strong>Marcus Sterling</strong>
+                    <span>Managing Partner · Apex Horizon Capital</span>
+                  </div>
+                  <span class="demo-click-cue">Login ➔</span>
+                </button>
+                <button type="button" class="c-auth-demo-btn" id="demo-btn-architect" title="Sign in as Lead Systems Architect">
+                  <span class="demo-role-badge" style="background: rgba(5, 150, 105, 0.2); color: #10B981; border-color: rgba(5, 150, 105, 0.4);">📐 ARCHITECT</span>
+                  <div class="demo-text">
+                    <strong>Dr. Aris Vance</strong>
+                    <span>Principal Architect · Sovereign Systems</span>
+                  </div>
+                  <span class="demo-click-cue">Login ➔</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mode Tabs (Sign In vs Sign Up) -->
+            <div class="c-auth-tabs">
+              <button type="button" class="c-auth-tab is-active" id="tab-auth-signin" data-tab="signin">Sign In</button>
+              <button type="button" class="c-auth-tab" id="tab-auth-signup" data-tab="signup">Institutional Register</button>
+            </div>
+
+            <!-- Role Selector -->
+            <div class="c-auth-role-select">
+              <label class="c-auth-field-label">Access Credential Class:</label>
+              <div class="c-auth-role-grid">
+                <button type="button" class="c-auth-role-option is-active" data-role="investor" id="auth-role-select-investor">
+                  <span class="c-auth-role-option__icon">💼</span>
+                  <div class="c-auth-role-option__info">
+                    <strong>Institutional Buyer</strong>
+                    <span>Deploy capital & inspect blueprints</span>
+                  </div>
+                </button>
+                <button type="button" class="c-auth-role-option" data-role="architect" id="auth-role-select-architect">
+                  <span class="c-auth-role-option__icon">📐</span>
+                  <div class="c-auth-role-option__info">
+                    <strong>Systems Architect</strong>
+                    <span>Monetize intelligence & IP</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- ===================== FORM 1: SIGN IN ===================== -->
+            <form id="form-auth-signin" class="c-auth-form">
+              <div class="c-auth-field">
+                <label class="c-auth-field-label" for="signin-email">Institutional Work Email</label>
+                <div class="c-auth-input-wrap">
+                  <span class="c-auth-input-icon">✉</span>
+                  <input type="email" id="signin-email" class="c-auth-input" placeholder="partner@apexhorizon.com" required autocomplete="email" />
+                </div>
+              </div>
+
+              <div class="c-auth-field">
+                <div class="c-auth-field-row">
+                  <label class="c-auth-field-label" for="signin-password">Security Password</label>
+                  <a href="#faq" class="c-auth-forgot-link" id="link-forgot-pass">Forgot credentials?</a>
+                </div>
+                <div class="c-auth-input-wrap">
+                  <span class="c-auth-input-icon">🔒</span>
+                  <input type="password" id="signin-password" class="c-auth-input" placeholder="••••••••••••" required autocomplete="current-password" />
+                  <button type="button" class="c-auth-toggle-pwd" id="toggle-signin-password" title="Show/Hide Password">👁</button>
+                </div>
+              </div>
+
+              <div class="c-auth-form-meta">
+                <label class="c-auth-remember">
+                  <input type="checkbox" id="signin-remember" checked />
+                  <span>Remember this terminal session (30 days)</span>
+                </label>
+              </div>
+
+              <button type="submit" class="c-auth-btn-primary" id="btn-signin-submit">
+                <span class="btn-spinner" id="signin-spinner" style="display:none;"></span>
+                <span class="btn-label" id="signin-label">Authenticate & Enter Terminal →</span>
+              </button>
+            </form>
+
+            <!-- ===================== FORM 2: SIGN UP ===================== -->
+            <form id="form-auth-signup" class="c-auth-form" style="display: none;">
+              <div class="c-auth-field-row-split">
+                <div class="c-auth-field">
+                  <label class="c-auth-field-label" for="signup-name">Full Legal Name</label>
+                  <div class="c-auth-input-wrap">
+                    <span class="c-auth-input-icon">👤</span>
+                    <input type="text" id="signup-name" class="c-auth-input" placeholder="e.g. Marcus Sterling" required />
+                  </div>
+                </div>
+
+                <div class="c-auth-field">
+                  <label class="c-auth-field-label" for="signup-firm">Firm / Syndicate / Studio</label>
+                  <div class="c-auth-input-wrap">
+                    <span class="c-auth-input-icon">🏛️</span>
+                    <input type="text" id="signup-firm" class="c-auth-input" placeholder="e.g. Apex Horizon Capital" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="c-auth-field">
+                <label class="c-auth-field-label" for="signup-email">Corporate Work Email</label>
+                <div class="c-auth-input-wrap">
+                  <span class="c-auth-input-icon">✉</span>
+                  <input type="email" id="signup-email" class="c-auth-input" placeholder="partner@apexhorizon.com" required autocomplete="email" />
+                </div>
+              </div>
+
+              <div class="c-auth-field">
+                <label class="c-auth-field-label" for="signup-password">Create Security Password</label>
+                <div class="c-auth-input-wrap">
+                  <span class="c-auth-input-icon">🔒</span>
+                  <input type="password" id="signup-password" class="c-auth-input" placeholder="Min. 8 characters with symbol" required autocomplete="new-password" />
+                  <button type="button" class="c-auth-toggle-pwd" id="toggle-signup-password" title="Show/Hide Password">👁</button>
+                </div>
+                <!-- Password Strength Meter -->
+                <div class="c-auth-pwd-meter">
+                  <div class="c-auth-pwd-meter-bar" id="signup-pwd-meter-bar"></div>
+                </div>
+                <div class="c-auth-pwd-hint" id="signup-pwd-hint">Password strength: Enter minimum 8 characters</div>
+              </div>
+
+              <div class="c-auth-form-meta">
+                <label class="c-auth-remember">
+                  <input type="checkbox" id="signup-accreditation" required />
+                  <span>I declare accredited institutional investor or verified systems architect standing under vvEntra bylaws.</span>
+                </label>
+              </div>
+
+              <button type="submit" class="c-auth-btn-primary" id="btn-signup-submit">
+                <span class="btn-spinner" id="signup-spinner" style="display:none;"></span>
+                <span class="btn-label" id="signup-label">Establish Institutional Account →</span>
+              </button>
+            </form>
+
+            <!-- Institutional SSO Options -->
+            <div class="c-auth-divider">
+              <span>OR ENTERPRISE FEDERATION</span>
+            </div>
+
+            <div class="c-auth-sso-grid">
+              <button type="button" class="c-auth-sso-btn" id="sso-google-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.5L1.9 16.2C3.7 20 7.5 23.5 12 23.5z"/></svg>
+                <span>Google Workspace SSO</span>
+              </button>
+              <button type="button" class="c-auth-sso-btn" id="sso-fido-btn">
+                <span style="font-size: 1rem;">🔑</span>
+                <span>Hardware Passkey (FIDO2)</span>
+              </button>
+            </div>
+
+            <!-- Terminal Security Footer -->
+            <div class="c-auth-footer">
+              <div class="c-auth-footer-item">
+                <span class="c-auth-footer-icon">🛡️</span>
+                <span>End-to-End Encrypted via Hardware Security Module (HSM)</span>
+              </div>
+              <div class="c-auth-footer-item">
+                <span class="c-auth-footer-icon">⚖️</span>
+                <span>Confidential Mutual Non-Disclosure Agreement Bound</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
   

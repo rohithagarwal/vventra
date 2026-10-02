@@ -53,7 +53,8 @@
     ]),
     activeFilter: 'all',
     searchQuery: '',
-    dataRoomRevealed: false
+    dataRoomRevealed: false,
+    currentUser: StorageService.get('auth_user', null)
   };
 
   // ===================================================================
@@ -2469,6 +2470,9 @@
     let viewName = route.replace('#', '') || 'overview';
     if (viewName === 'home' || viewName === 'cta') viewName = 'overview';
     if (viewName === 'apply') viewName = 'list';
+    if (viewName === 'login' || viewName === 'signin' || viewName === 'signup' || viewName === 'auth') {
+      viewName = 'auth';
+    }
 
     const params = new URLSearchParams(queryStr);
     if (params.has('id')) {
@@ -2507,6 +2511,12 @@
       SettlementCalculator.updateUI();
     } else if (viewName === 'purchase') {
       renderDiligencePanel(State.activeAssetId);
+    } else if (viewName === 'auth') {
+      AuthController.initPage(route);
+    }
+
+    if (viewName !== 'auth') {
+      AuthController.stopCanvas();
     }
 
     observePageReveals('#page-' + viewName);
@@ -2642,9 +2652,609 @@
   }
 
   // ===================================================================
+  // 10C. INSTITUTIONAL AUTHENTICATION & LOGIN CONTROLLER
+  // ===================================================================
+  const AuthController = {
+    animId: null,
+    particles: [],
+    pulses: [],
+    mouse: { x: -1000, y: -1000, isHovering: false },
+    eventsInitialized: false,
+
+    startCanvas() {
+      const canvas = DOM.get('#auth-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      if (this.animId) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+
+      const resize = () => {
+        const parent = canvas.parentElement || document.body;
+        const rect = parent.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = (rect.width || window.innerWidth) * dpr;
+        canvas.height = (rect.height || window.innerHeight) * dpr;
+        ctx.scale(dpr, dpr);
+      };
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      const getWidth = () => (canvas.parentElement ? canvas.parentElement.offsetWidth : window.innerWidth) || window.innerWidth;
+      const getHeight = () => (canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight) || window.innerHeight;
+
+      // Initialize 55 financial / intelligence nodes
+      const colors = ['#EC5B20', '#D5AF24', '#38BDF8', '#FFFFFF', '#F97316'];
+      this.particles = [];
+      const particleCount = 55;
+      for (let i = 0; i < particleCount; i++) {
+        this.particles.push({
+          x: Math.random() * getWidth(),
+          y: Math.random() * getHeight(),
+          vx: (Math.random() - 0.5) * 0.75,
+          vy: (Math.random() - 0.5) * 0.75,
+          radius: Math.random() * 2.2 + 1.2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          baseAlpha: Math.random() * 0.45 + 0.35,
+          pulseSpeed: Math.random() * 0.03 + 0.015,
+          pulsePhase: Math.random() * Math.PI * 2
+        });
+      }
+
+      this.pulses = [];
+
+      // Mouse tracking
+      const onMouseMove = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        this.mouse.x = e.clientX - rect.left;
+        this.mouse.y = e.clientY - rect.top;
+        this.mouse.isHovering = true;
+      };
+      const onMouseLeave = () => {
+        this.mouse.isHovering = false;
+        this.mouse.x = -1000;
+        this.mouse.y = -1000;
+      };
+
+      canvas.removeEventListener('mousemove', canvas._onMM);
+      canvas.removeEventListener('mouseleave', canvas._onML);
+      canvas._onMM = onMouseMove;
+      canvas._onML = onMouseLeave;
+      canvas.addEventListener('mousemove', onMouseMove);
+      canvas.addEventListener('mouseleave', onMouseLeave);
+
+      const maxDist = 130;
+      let frame = 0;
+
+      const loop = () => {
+        const w = getWidth();
+        const h = getHeight();
+        ctx.clearRect(0, 0, w, h);
+        frame++;
+
+        // Randomly spawn data packet pulses along connected edges
+        if (frame % 30 === 0 && this.pulses.length < 16) {
+          const idxA = Math.floor(Math.random() * this.particles.length);
+          const pA = this.particles[idxA];
+          for (let j = 0; j < this.particles.length; j++) {
+            if (idxA === j) continue;
+            const pB = this.particles[j];
+            const dx = pA.x - pB.x;
+            const dy = pA.y - pB.y;
+            const d = Math.sqrt(dx * dx + dy * dy);
+            if (d < maxDist) {
+              this.pulses.push({
+                x1: pA.x, y1: pA.y,
+                x2: pB.x, y2: pB.y,
+                progress: 0,
+                speed: 0.018 + Math.random() * 0.015,
+                color: Math.random() > 0.5 ? '#EC5B20' : '#D5AF24'
+              });
+              break;
+            }
+          }
+        }
+
+        // Update and draw particles
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) { p.x = 0; p.vx *= -1; }
+          if (p.x > w) { p.x = w; p.vx *= -1; }
+          if (p.y < 0) { p.y = 0; p.vy *= -1; }
+          if (p.y > h) { p.y = h; p.vy *= -1; }
+
+          // Mouse gravity interaction
+          if (this.mouse.isHovering) {
+            const mdx = this.mouse.x - p.x;
+            const mdy = this.mouse.y - p.y;
+            const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+            if (mDist < 160 && mDist > 5) {
+              const force = (160 - mDist) / 160;
+              p.x -= (mdx / mDist) * force * 0.45;
+              p.y -= (mdy / mDist) * force * 0.45;
+
+              // Draw interactive line to cursor
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(this.mouse.x, this.mouse.y);
+              ctx.strokeStyle = `rgba(236, 91, 32, ${(1 - mDist / 160) * 0.55})`;
+              ctx.lineWidth = 1.2;
+              ctx.stroke();
+            }
+          }
+
+          // Draw node
+          p.pulsePhase += p.pulseSpeed;
+          const currentAlpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.2;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0.15, Math.min(1, currentAlpha));
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Connect with nearby nodes
+          for (let j = i + 1; j < this.particles.length; j++) {
+            const p2 = this.particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * 0.28;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw and update active liquidity pulses
+        for (let k = this.pulses.length - 1; k >= 0; k--) {
+          const pulse = this.pulses[k];
+          pulse.progress += pulse.speed;
+          if (pulse.progress >= 1) {
+            this.pulses.splice(k, 1);
+            continue;
+          }
+
+          const curX = pulse.x1 + (pulse.x2 - pulse.x1) * pulse.progress;
+          const curY = pulse.y1 + (pulse.y2 - pulse.y1) * pulse.progress;
+
+          ctx.beginPath();
+          ctx.arc(curX, curY, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = pulse.color;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = pulse.color;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        this.animId = requestAnimationFrame(loop);
+      };
+
+      this.animId = requestAnimationFrame(loop);
+    },
+
+    stopCanvas() {
+      if (this.animId) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+    },
+
+    initPage(route) {
+      this.startCanvas();
+
+      const tabSignIn = DOM.get('#tab-auth-signin');
+      const tabSignUp = DOM.get('#tab-auth-signup');
+
+      if (route === '#signup') {
+        if (tabSignUp) tabSignUp.click();
+      } else {
+        if (tabSignIn && !tabSignIn.classList.contains('is-active')) {
+          tabSignIn.click();
+        }
+      }
+
+      this.setupEvents();
+    },
+
+    setupEvents() {
+      if (this.eventsInitialized) return;
+      this.eventsInitialized = true;
+
+      const tabSignIn = DOM.get('#tab-auth-signin');
+      const tabSignUp = DOM.get('#tab-auth-signup');
+      const formSignIn = DOM.get('#form-auth-signin');
+      const formSignUp = DOM.get('#form-auth-signup');
+      const title = DOM.get('#auth-title');
+      const desc = DOM.get('#auth-desc');
+
+      let currentRole = 'investor';
+
+      // Tab Switching
+      if (tabSignIn && tabSignUp && formSignIn && formSignUp) {
+        tabSignIn.addEventListener('click', () => {
+          tabSignIn.classList.add('is-active');
+          tabSignUp.classList.remove('is-active');
+          formSignIn.style.display = 'flex';
+          formSignUp.style.display = 'none';
+          if (title) title.textContent = 'Access Venture Intelligence';
+          if (desc) desc.textContent = 'Confidential cryptographic access for accredited capital allocators and systems architects.';
+        });
+
+        tabSignUp.addEventListener('click', () => {
+          tabSignUp.classList.add('is-active');
+          tabSignIn.classList.remove('is-active');
+          formSignIn.style.display = 'none';
+          formSignUp.style.display = 'flex';
+          if (title) title.textContent = 'Institutional Onboarding';
+          if (desc) desc.textContent = 'Establish an accredited firm account or verified systems architect standing.';
+        });
+      }
+
+      // Role Selection
+      const roleInvBtn = DOM.get('#auth-role-select-investor');
+      const roleArchBtn = DOM.get('#auth-role-select-architect');
+      if (roleInvBtn && roleArchBtn) {
+        roleInvBtn.addEventListener('click', () => {
+          roleInvBtn.classList.add('is-active');
+          roleArchBtn.classList.remove('is-active');
+          currentRole = 'investor';
+        });
+        roleArchBtn.addEventListener('click', () => {
+          roleArchBtn.classList.add('is-active');
+          roleInvBtn.classList.remove('is-active');
+          currentRole = 'architect';
+        });
+      }
+
+      // Password Toggles
+      const toggleSignInPwd = DOM.get('#toggle-signin-password');
+      const inputSignInPwd = DOM.get('#signin-password');
+      if (toggleSignInPwd && inputSignInPwd) {
+        toggleSignInPwd.addEventListener('click', () => {
+          const isPwd = inputSignInPwd.type === 'password';
+          inputSignInPwd.type = isPwd ? 'text' : 'password';
+          toggleSignInPwd.textContent = isPwd ? '🔒' : '👁';
+        });
+      }
+
+      const toggleSignUpPwd = DOM.get('#toggle-signup-password');
+      const inputSignUpPwd = DOM.get('#signup-password');
+      if (toggleSignUpPwd && inputSignUpPwd) {
+        toggleSignUpPwd.addEventListener('click', () => {
+          const isPwd = inputSignUpPwd.type === 'password';
+          inputSignUpPwd.type = isPwd ? 'text' : 'password';
+          toggleSignUpPwd.textContent = isPwd ? '🔒' : '👁';
+        });
+      }
+
+      // Password Strength Meter
+      const pwdMeterBar = DOM.get('#signup-pwd-meter-bar');
+      const pwdHint = DOM.get('#signup-pwd-hint');
+      if (inputSignUpPwd && pwdMeterBar && pwdHint) {
+        inputSignUpPwd.addEventListener('input', () => {
+          const val = inputSignUpPwd.value;
+          let score = 0;
+          if (val.length >= 8) score++;
+          if (/[A-Z]/.test(val)) score++;
+          if (/[0-9]/.test(val)) score++;
+          if (/[^A-Za-z0-9]/.test(val)) score++;
+
+          if (val.length === 0) {
+            pwdMeterBar.style.width = '0%';
+            pwdHint.textContent = 'Password strength: Enter minimum 8 characters';
+            pwdHint.style.color = 'rgba(255, 255, 255, 0.45)';
+          } else if (score <= 1) {
+            pwdMeterBar.style.width = '25%';
+            pwdMeterBar.style.backgroundColor = '#DC2626';
+            pwdHint.textContent = 'Strength: Weak · Add numbers and uppercase letters';
+            pwdHint.style.color = '#F87171';
+          } else if (score === 2) {
+            pwdMeterBar.style.width = '50%';
+            pwdMeterBar.style.backgroundColor = '#D97706';
+            pwdHint.textContent = 'Strength: Moderate · Add special symbol (@, $, %, !)';
+            pwdHint.style.color = '#FBBF24';
+          } else if (score === 3) {
+            pwdMeterBar.style.width = '75%';
+            pwdMeterBar.style.backgroundColor = '#2563EB';
+            pwdHint.textContent = 'Strength: Strong · Institutional security standard';
+            pwdHint.style.color = '#60A5FA';
+          } else {
+            pwdMeterBar.style.width = '100%';
+            pwdMeterBar.style.backgroundColor = '#059669';
+            pwdHint.textContent = 'Strength: Institutional Grade · Cryptographically robust';
+            pwdHint.style.color = '#34D399';
+          }
+        });
+      }
+
+      // Quick 1-Click Demo Accounts
+      const demoInvestorBtn = DOM.get('#demo-btn-investor');
+      if (demoInvestorBtn) {
+        demoInvestorBtn.addEventListener('click', () => {
+          const emailInput = DOM.get('#signin-email');
+          const passInput = DOM.get('#signin-password');
+          if (emailInput) emailInput.value = 'm.sterling@apexhorizon.com';
+          if (passInput) passInput.value = 'ApexCapital#2026';
+          if (roleInvBtn) roleInvBtn.click();
+
+          const spinner = DOM.get('#signin-spinner');
+          const label = DOM.get('#signin-label');
+          if (spinner) spinner.style.display = 'inline-block';
+          if (label) label.textContent = 'Authenticating Enclave...';
+
+          setTimeout(() => {
+            if (spinner) spinner.style.display = 'none';
+            if (label) label.textContent = 'Authenticate & Enter Terminal →';
+
+            AuthController.login({
+              name: 'Marcus Sterling',
+              firm: 'Apex Horizon Capital',
+              email: 'm.sterling@apexhorizon.com',
+              role: 'investor',
+              tier: 'Tier-1 Accredited Allocator',
+              escrowPool: '$150,000 Committed'
+            });
+          }, 650);
+        });
+      }
+
+      const demoArchitectBtn = DOM.get('#demo-btn-architect');
+      if (demoArchitectBtn) {
+        demoArchitectBtn.addEventListener('click', () => {
+          const emailInput = DOM.get('#signin-email');
+          const passInput = DOM.get('#signin-password');
+          if (emailInput) emailInput.value = 'a.vance@sovereignsystems.io';
+          if (passInput) passInput.value = 'SystemsArchitect#94p';
+          if (roleArchBtn) roleArchBtn.click();
+
+          const spinner = DOM.get('#signin-spinner');
+          const label = DOM.get('#signin-label');
+          if (spinner) spinner.style.display = 'inline-block';
+          if (label) label.textContent = 'Validating 94p Blueprint standing...';
+
+          setTimeout(() => {
+            if (spinner) spinner.style.display = 'none';
+            if (label) label.textContent = 'Authenticate & Enter Terminal →';
+
+            AuthController.login({
+              name: 'Dr. Aris Vance',
+              firm: 'Sovereign Systems Lab',
+              email: 'a.vance@sovereignsystems.io',
+              role: 'architect',
+              tier: 'Verified Systems Architect',
+              escrowPool: '90% Net Payout Standing'
+            });
+          }, 650);
+        });
+      }
+
+      // Manual Sign In Submit
+      if (formSignIn) {
+        formSignIn.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = DOM.get('#signin-email')?.value.trim();
+          const spinner = DOM.get('#signin-spinner');
+          const label = DOM.get('#signin-label');
+
+          if (spinner) spinner.style.display = 'inline-block';
+          if (label) label.textContent = 'Verifying credentials...';
+
+          setTimeout(() => {
+            if (spinner) spinner.style.display = 'none';
+            if (label) label.textContent = 'Authenticate & Enter Terminal →';
+
+            const rawPart = email ? email.split('@')[0].replace('.', ' ') : 'Verified Client';
+            const formattedName = rawPart.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+
+            AuthController.login({
+              name: formattedName || 'Verified Client',
+              firm: currentRole === 'investor' ? 'Institutional Syndicate' : 'Independent Systems Studio',
+              email: email || 'partner@vventra-client.com',
+              role: currentRole,
+              tier: currentRole === 'investor' ? 'Tier-1 Accredited' : 'Verified Architect',
+              escrowPool: 'Active Custody'
+            });
+          }, 700);
+        });
+      }
+
+      // Manual Sign Up Submit
+      if (formSignUp) {
+        formSignUp.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = DOM.get('#signup-name')?.value.trim() || 'Institutional Partner';
+          const firm = DOM.get('#signup-firm')?.value.trim() || 'Private Venture Studio';
+          const email = DOM.get('#signup-email')?.value.trim() || 'partner@enterprise.io';
+          const spinner = DOM.get('#signup-spinner');
+          const label = DOM.get('#signup-label');
+
+          if (spinner) spinner.style.display = 'inline-block';
+          if (label) label.textContent = 'Generating 256-bit cryptographic keys...';
+
+          setTimeout(() => {
+            if (spinner) spinner.style.display = 'none';
+            if (label) label.textContent = 'Establish Institutional Account →';
+
+            AuthController.login({
+              name: name,
+              firm: firm,
+              email: email,
+              role: currentRole,
+              tier: currentRole === 'investor' ? 'Tier-1 Accredited Allocator' : 'Certified Systems Architect',
+              escrowPool: 'Active Custody'
+            });
+          }, 800);
+        });
+      }
+
+      // SSO Buttons
+      const ssoGoogle = DOM.get('#sso-google-btn');
+      if (ssoGoogle) {
+        ssoGoogle.addEventListener('click', () => {
+          showNotification('Federating with Google Workspace SSO enclave...');
+          setTimeout(() => {
+            AuthController.login({
+              name: 'Elena Rostova',
+              firm: 'Nordic Growth Capital',
+              email: 'e.rostova@nordicgrowth.com',
+              role: currentRole,
+              tier: 'Google Workspace Verified',
+              escrowPool: '$200,000 Allocation'
+            });
+          }, 600);
+        });
+      }
+
+      const ssoFido = DOM.get('#sso-fido-btn');
+      if (ssoFido) {
+        ssoFido.addEventListener('click', () => {
+          showNotification('Awaiting FIDO2 Hardware Passkey biometric touch...');
+          setTimeout(() => {
+            AuthController.login({
+              name: 'Julian Sterling',
+              firm: 'Apex Syndicate Partners',
+              email: 'j.sterling@apexsyndicate.com',
+              role: currentRole,
+              tier: 'Hardware Security Key Verified',
+              escrowPool: '$350,000 Allocation'
+            });
+          }, 800);
+        });
+      }
+
+      // Forgot password modal / prompt
+      const linkForgot = DOM.get('#link-forgot-pass');
+      if (linkForgot) {
+        linkForgot.addEventListener('click', (e) => {
+          e.preventDefault();
+          showNotification('Institutional Recovery: An encrypted hardware reset link has been dispatched to your corporate security administrator.');
+        });
+      }
+    },
+
+    login(userData) {
+      State.currentUser = userData;
+      StorageService.set('auth_user', userData);
+
+      // Auto-switch perspective to match user role
+      if (userData.role && userData.role !== State.role) {
+        setPerspective(userData.role);
+      }
+
+      this.updateNavbar();
+      showNotification(`Welcome back, ${userData.name}. Enclave authorized.`);
+      window.location.hash = '#dashboard';
+    },
+
+    logout() {
+      const name = State.currentUser ? State.currentUser.name : 'Operator';
+      State.currentUser = null;
+      try {
+        localStorage.removeItem('vve_auth_user');
+      } catch (e) {}
+
+      this.updateNavbar();
+      showNotification(`Session terminated for ${name}. Hardware keys flushed.`);
+      window.location.hash = '#overview';
+    },
+
+    updateNavbar() {
+      const portal = DOM.get('#nav-auth-portal');
+      if (!portal) return;
+
+      if (!State.currentUser) {
+        portal.innerHTML = `
+          <a href="#auth" class="c-nav__auth-btn" id="nav-auth-btn" title="Sign In to Institutional Terminal">
+            <span class="auth-icon">🔒</span>
+            <span>Sign In</span>
+          </a>
+        `;
+        return;
+      }
+
+      const user = State.currentUser;
+      const initials = user.name
+        ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+        : 'KY';
+      const isArch = user.role === 'architect';
+
+      portal.innerHTML = `
+        <div class="c-nav__user-menu" id="nav-user-menu">
+          <button type="button" class="c-nav__user-pill" id="nav-user-pill" title="Institutional Profile: ${user.name}">
+            <span class="c-nav__user-avatar ${isArch ? 'is-architect' : ''}">${initials}</span>
+            <span class="c-nav__user-name">${user.name.split(' ')[0]}</span>
+            <span class="c-nav__user-role-badge">${isArch ? 'Architect' : 'Buyer'}</span>
+            <span class="c-nav__user-chevron">▾</span>
+          </button>
+          <div class="c-nav__user-dropdown" id="nav-user-dropdown" style="display: none;">
+            <div class="c-nav__dropdown-header">
+              <strong>${user.name}</strong>
+              <span>${user.firm || 'Institutional Syndicate'}</span>
+              <span class="c-badge c-badge--success" style="font-size: 0.65rem; margin-top: 5px;">● ${user.tier || 'Verified Tier-1'}</span>
+            </div>
+            <div class="c-nav__dropdown-divider"></div>
+            <a href="#dashboard" class="c-nav__dropdown-item">📊 Institutional Dashboard</a>
+            <a href="#list" class="c-nav__dropdown-item">${isArch ? '📐 My Blueprint Composer' : '💼 My Buy-Box Mandates'}</a>
+            <a href="#browse" class="c-nav__dropdown-item">🔍 Explore Opportunities (184)</a>
+            <div class="c-nav__dropdown-divider"></div>
+            <button type="button" class="c-nav__dropdown-item c-nav__dropdown-item--danger" id="nav-logout-btn">
+              🚪 Secure Sign Out
+            </button>
+          </div>
+        </div>
+      `;
+
+      const pill = DOM.get('#nav-user-pill');
+      const dropdown = DOM.get('#nav-user-dropdown');
+      const logoutBtn = DOM.get('#nav-logout-btn');
+
+      if (pill && dropdown) {
+        pill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isShown = dropdown.style.display === 'block';
+          dropdown.style.display = isShown ? 'none' : 'block';
+        });
+
+        // Close on outside click
+        const closeDropdown = (e) => {
+          if (!dropdown.contains(e.target) && e.target !== pill) {
+            dropdown.style.display = 'none';
+          }
+        };
+        document.removeEventListener('click', dropdown._closeHandler);
+        dropdown._closeHandler = closeDropdown;
+        document.addEventListener('click', closeDropdown);
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          AuthController.logout();
+        });
+      }
+    }
+  };
+
+  // ===================================================================
   // 11. INITIALIZATION ON DOM READY
   // ===================================================================
   function initApp() {
+    AuthController.updateNavbar();
+    AuthController.setupEvents();
     setTheme(State.theme);
     const themeToggle = DOM.get('#theme-toggle-btn');
     if (themeToggle) {
