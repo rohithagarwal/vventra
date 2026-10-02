@@ -472,9 +472,14 @@
     }
 
     // Update navigation link text for #list
-    const navLinkList = DOM.get('#nav-link-list');
-    if (navLinkList) {
-      navLinkList.textContent = isOperator ? 'List Opportunity' : 'Post Buy Mandate';
+    const navCtaText = DOM.get('#nav-cta-text');
+    if (navCtaText) {
+      navCtaText.textContent = isOperator ? '+ List Blueprint' : '+ Post Buy Mandate';
+    } else {
+      const navLinkList = DOM.get('#nav-link-list');
+      if (navLinkList) {
+        navLinkList.textContent = isOperator ? '+ List Blueprint' : '+ Post Buy Mandate';
+      }
     }
   }
 
@@ -1950,298 +1955,792 @@
     updateMandateMatches();
   }
 
-  // --- Track 2: Architect Opportunity Intake & AI Co-Pilot Controller ---
+  // --- Track 2: Architect Opportunity Intake & Live Buyer Preview Controller ---
   function setupAssetComposer() {
-    const form = DOM.get('#composer-form');
-    const priceInput = DOM.get('#comp-price');
-    const escrowDisp = DOM.get('#comp-calc-escrow');
-    const payoutDisp = DOM.get('#comp-calc-payout');
-    const feeDisp = DOM.get('#comp-calc-fee');
-    const prevTitle = DOM.get('#comp-prev-title');
-    const prevLead = DOM.get('#comp-prev-lead');
-    const prevUnlock = DOM.get('#comp-prev-unlock');
-
+    const composer = DOM.get('#listComposer');
+    const preview = DOM.get('#listPreview');
+    const submitCard = DOM.get('#listSubmitCard');
+    const successCard = DOM.get('#listSubmitSuccess');
+    const readiness = DOM.get('#lsubReadiness');
+    const submitBtn = DOM.get('#lsubSubmitBtn');
+    const previewBtn = DOM.get('#lsubPreviewBtn');
+    const editBtn = DOM.get('#lsubEditBtn');
     const sampleBtn = DOM.get('#btn-load-sample-architect');
-    const applyAiBtn = DOM.get('#btn-apply-ai-to-form');
-    const aiOutputLabel = DOM.get('#ai-output-label');
-    const aiOutputBody = DOM.get('#ai-output-body');
-    const aiReadinessScore = DOM.get('#ai-readiness-score');
-    const aiReadinessBar = DOM.get('#ai-readiness-bar');
-    const aiPillarClarity = DOM.get('#ai-pillar-clarity');
-    const aiPillarRedaction = DOM.get('#ai-pillar-redaction');
-    const aiStatusBadge = DOM.get('#ai-status-badge');
 
-    const btnPolishThesis = DOM.get('#btn-ai-polish-thesis');
-    const btnFormatFinancials = DOM.get('#btn-ai-format-financials');
-    const btnPreAudit = DOM.get('#btn-ai-preaudit');
-    const btnRedactIp = DOM.get('#btn-ai-redact-ip');
-    const toolBtns = [btnPolishThesis, btnFormatFinancials, btnPreAudit, btnRedactIp].filter(Boolean);
+    if (!composer || !preview) return;
 
-    function updateEscrowMath() {
-      const price = Number(priceInput?.value) || 25000;
-      const escrow = Math.round(price * 0.10);
-      const payout = Math.round(price * 0.90);
-      const fee = escrow;
+    const TEASER_PREVIEW_CHARS = 90;
 
-      if (escrowDisp) escrowDisp.textContent = formatCurrency(escrow);
-      if (payoutDisp) payoutDisp.textContent = formatCurrency(payout);
-      if (feeDisp) feeDisp.textContent = formatCurrency(fee);
-      if (prevUnlock) prevUnlock.textContent = `Diligence Escrow: ${formatCurrency(escrow)} (10%)`;
-    }
-
-    if (priceInput) {
-      priceInput.addEventListener('input', updateEscrowMath);
-    }
-    updateEscrowMath();
-
-    // Cache of AI polished texts
-    const activeAiPolishData = {
-      title: 'Institutional RegTech Pipeline: Automated Environmental & Safety Compliance Matrix',
-      problem: 'US mid-market industrial manufacturing facilities face severe statutory penalty exposure under updated EPA/OSHA multi-jurisdiction mandates. Current compliance relies on fragmented spreadsheets and manual audit logs that fail 62% of surprise inspections, generating an estimated $340k in annual avoidable regulatory fines per plant cluster.',
-      solution: 'End-to-end operational ingestion matrix: automated sensor telemetry log validation, immutably timestamped compliance audit trails, 14 complete Standard Operating Procedures (SOPs), and pre-built API connectors for Tier-1 ERP systems. Documented architecture enables turnkey operator handover in under 14 days without core team dependency.',
-      economics: 'Addressable market of $2.4B across 14,000 mid-sized industrial facilities. Unit economics yield 84% gross margins with an average contract value (ACV) of $18,400. Buyer capital payback horizon calculated at 6.4 months post-handover.',
-      persona: 'Mid-Market Private Equity Industrial Roll-up looking to add compliance SaaS gross margins to portfolio holding companies, or enterprise software operators seeking adjacent vertical expansion.'
+    const state = {
+      title: '',
+      tags: '',
+      hook: '',
+      stage: 'Execution-Ready',
+      geography: '',
+      capital: '',
+      timeline: '',
+      monet: '',
+      price: 28000,
+      docs: '',
+      thesis: '',
+      problem: '',
+      gap: '',
+      model: '',
+      competitive: '',
+      risks: '',
+      gtm: '',
+      financials: ''
     };
 
-    // Load authentic sample draft
-    if (sampleBtn) {
-      sampleBtn.addEventListener('click', () => {
-        const titleInput = DOM.get('#comp-title');
-        const probInput = DOM.get('#comp-thesis-problem');
-        const solInput = DOM.get('#comp-thesis-solution');
-        const econInput = DOM.get('#comp-thesis-economics');
-        const persInput = DOM.get('#comp-thesis-persona');
-        const metricInput = DOM.get('#comp-proof-metric');
+    const aiSummary = {};
+    const aiEdited = {};
+    let lastSubmittedAssetId = null;
 
-        if (titleInput) titleInput.value = 'Automated Regulatory Compliance Pipeline for Plant Operators';
-        if (probInput) probInput.value = 'Plant managers are drowning in paper audits for EPA and OSHA. Inspections happen without warning and paper logs get lost, causing thousands in fines.';
-        if (solInput) solInput.value = 'We built a 90 page step-by-step pipeline with sensors and checklist software. Everything is mapped out so any tech team can run it right away.';
-        if (econInput) econInput.value = 'Market is about 14,000 factories. We charge around $18k a year and margins are over 80%. An owner gets their money back in about 6 months.';
-        if (persInput) persInput.value = 'PE firms buying factories or software companies looking for a new product.';
-        if (metricInput) metricInput.value = 'Tested across 4 industrial pilot sites; 0 audit citations across 180 consecutive operating days.';
-
-        if (priceInput) priceInput.value = 35000;
-        updateEscrowMath();
-
-        if (prevTitle) prevTitle.textContent = 'Automated Regulatory Compliance Pipeline for Plant Operators';
-        if (prevLead) prevLead.textContent = 'Sanitized Executive Abstract: "Plant managers are drowning in paper audits for EPA and OSHA. Step-by-step pipeline with 14 SOPs ready for handover."';
-
-        if (aiReadinessScore) aiReadinessScore.textContent = '74 / 100';
-        if (aiReadinessBar) aiReadinessBar.style.width = '74%';
-        if (aiPillarClarity) {
-          aiPillarClarity.textContent = '○ Clarity: Needs Polish';
-          aiPillarClarity.classList.remove('is-pass');
-        }
-
-        showNotification('Sample raw draft loaded. Click "Polish Executive Thesis" to transform it into institutional PE grade.');
-        triggerAiTool('thesis');
-      });
+    function fmtMoney(n) {
+      n = Math.round(Number(n) || 0);
+      return '$' + n.toLocaleString('en-US');
     }
 
-    function triggerAiTool(mode) {
-      toolBtns.forEach(b => b.classList.remove('is-active'));
-      if (aiStatusBadge) {
-        aiStatusBadge.textContent = '● Neural Polishing...';
-        aiStatusBadge.className = 'c-badge c-badge--warning';
+    const FREE = [
+      { id: 'title', label: 'Opportunity title', type: 'text', ph: 'Autonomous Backend Operations System for Mid-Market E-Commerce Brands', aiBtn: '✨ AI Polish Title', aiHint: 'Upgrade to institutional PE-grade system name' },
+      { id: 'tags', label: 'Industry tags (comma separated)', type: 'text', ph: 'E-Commerce, AI Automation, Supply Chain', aiBtn: '✨ AI Suggest Tags', aiHint: 'Analyze and suggest high-yield sector tags' },
+      { id: 'hook', label: 'One-line hook', type: 'textarea', ph: 'A documented operational intelligence system that removes the founder from backend e-commerce operations in under 90 days.', aiBtn: '✨ AI Polish Hook', aiHint: 'Synthesize quantified executive hook' },
+      { id: 'stage', label: 'Stage', type: 'select', options: ['Execution-Ready', 'Validated Thesis', 'Early Concept'], aiBtn: '✨ AI Stage Audit', aiHint: 'Evaluate architecture readiness' },
+      { id: 'geography', label: 'Geography', type: 'text', ph: 'AU, US, UK, EU', aiBtn: '✨ AI Target Jurisdictions', aiHint: 'Target primary buyer capital regions' },
+      { id: 'capital', label: 'Capital required', type: 'text', ph: '$28,000 – $56,000', aiBtn: '✨ AI Sizing Pro-Forma', aiHint: 'Calibrate deployment capital' },
+      { id: 'timeline', label: 'Time to launch', type: 'text', ph: '60–90 days', aiBtn: '✨ AI Timeline Sizing', aiHint: 'Determine phased rollout horizon' },
+      { id: 'monet', label: 'Monetisation', type: 'text', ph: 'Retainer + project', aiBtn: '✨ AI Monetisation Model', aiHint: 'Structure high-margin recurring contract' },
+      { id: 'price', label: 'Listed price (USD)', type: 'number', ph: '28000', aiBtn: '✨ AI Pricing Band', aiHint: 'Optimize for rapid escrow closing' }
+    ];
+
+    const DEEP = [
+      { id: 'thesis', label: 'Investment thesis', ph: 'Write the full thesis. Why this opportunity exists, the structural reason serious capital should pay attention, and what makes it defensible. No length limit.' },
+      { id: 'problem', label: 'The problem', ph: 'Describe the full problem. What is broken, who feels the pain, what it costs them today.' },
+      { id: 'gap', label: 'Market gap', ph: 'The complete whitespace analysis. What existing solutions miss and why this is structurally underserved.' },
+      { id: 'model', label: 'Business model & revenue logic', ph: 'Full revenue model. Unit economics, pricing logic, margins, retention assumptions.' },
+      { id: 'competitive', label: 'Competitive landscape', ph: 'Every relevant competitor and adjacent player, and why none of them is a direct head-to-head.' },
+      { id: 'risks', label: 'Risks & execution challenges', ph: 'The honest risk register. What could go wrong and what it takes to execute well.' },
+      { id: 'gtm', label: 'Go-to-market strategy', ph: 'The complete GTM. Channels, sequencing, anchor accounts, content engine, first-customer motion.' },
+      { id: 'financials', label: 'Financial projections', ph: 'Full projections. Revenue trajectory, cost to first customers, key assumptions, sensitivity.' }
+    ];
+
+    // Institutional Knowledge Base for inline AI polishing
+    const aiEnhancementLibrary = {
+      title: 'Autonomous Sensor Telemetry & Regulatory Compliance Pipeline for Mid-Market Manufacturing',
+      tags: 'RegTech, Industrial IoT, Compliance Automation, Enterprise SaaS',
+      hook: 'A documented, sensor-integrated operational intelligence system eliminating 62% audit citation exposure across mid-market manufacturing plants within 14 days.',
+      stage: 'Execution-Ready',
+      geography: 'North America (US Mid-Market), UK & EU Tier-1 Industrial Hubs',
+      capital: '$35,000 – $75,000 (Working Capital + Initial Telemetry Ingestion)',
+      timeline: '14-Day Rapid Handover · 60-Day Phased Factory Integration',
+      monet: 'Annual Recurring Contract ($18,400 ACV) + 84% Gross Margin SLA',
+      price: 35000,
+      docs: `Institutional Systems Architecture 90+ Page Specification (PDF)\nThree-Statement Financial Pro-Forma & Cashflow Model (.xlsx)\n14 Documented Standard Operating Procedures (SOPs) & Integration Maps\nSCADA & Tier-1 ERP Telemetry Connector Protocols\nVendor & Supplier Transition Warranty Agreements`,
+      thesis: `Mid-market industrial manufacturing facilities (14,000 plants across North America and Europe) face severe statutory penalty exposure under updated EPA/OSHA multi-jurisdiction mandates. Current compliance relies on fragmented spreadsheets and manual audit logs that fail 62% of surprise inspections, generating an estimated $340k in annual avoidable regulatory fines per plant cluster. This autonomous compliance pipeline establishes an unassailable data moat with 84% gross margins, verified 14-day turnkey operator handover, and a 6.4-month capital payback horizon. Serious capital can deploy this architecture as an immediate high-margin roll-up into existing manufacturing holdings.`,
+      problem: `Plant managers spend 22+ hours per week manually compiling physical paper inspection logs and reconciling disjointed SCADA sensor data. When surprise regulatory audits occur, paper records are missing or unvalidated, resulting in immediate stop-work citations averaging $48,000 per violation. Operators lack centralized compliance visibility, resulting in acute statutory liability, insurance premium surcharges, and operator burnout.`,
+      gap: `Tier-1 enterprise software suites (SAP EHS, Oracle Risk) demand $350k+ deployment overhead and 12-month implementation cycles, rendering them unfeasible for mid-market plants with 50-500 staff. Conversely, generic SMB checklist tools lack automated sensor ingestion and cryptographic audit trails required by statutory enforcement officers. Our architecture bridges this exact structural whitespace by providing turnkey compliance automation deployable in 14 days without IT infrastructure reconfiguration.`,
+      model: `Direct enterprise recurring licensing at $18,400 Average Contract Value (ACV) per manufacturing facility. Operating costs are limited to cloud ingestion and telemetry verification, yielding steady-state gross margins of 84%. Customer lifetime value is modeled at $73,600 over a 4-year retention lifecycle with negative net revenue churn due to statutory compliance stickiness. Breakeven occurs within 6.4 months post-handover.`,
+      competitive: `Point-solution checklist tools lack sensor telemetry integration and immutable timestamping. Specialized environmental engineering consultancies charge $220/hour for manual audit preparation, creating recurring operational friction. Our turnkey documented architecture enables non-technical plant operators to achieve 100% audit compliance autonomously, defended by 14 proprietary integration maps and SOP protocols.`,
+      risks: `Execution risks include legacy factory PLC/SCADA protocol variability and frontline operator change-management inertia. Both are mitigated through our included 14 vendor-agnostic webhook bridges, standardized visual SOPs, and 15 hours of post-closing architect implementation warranty.`,
+      gtm: `Direct outbound account-based marketing targeted at VP of Operations and EHS Directors across 3 core industrial corridors (Midwest US, Rust Belt, Rhine-Ruhr Germany). Secondary channel distribution through commercial property and casualty risk insurers offering policy discounts for verified compliance installations.`,
+      financials: `Year 1 pro-forma targets 24 plant installations generating $441,600 ARR with $370,000 contribution margin. Year 2 expands to 82 installations reaching $1,508,800 ARR at 84% gross margin. Full 3-statement financial model demonstrates initial capital recovery within 6.4 months post-closing.`
+    };
+
+    // AI Summary Engine (Verbatim institutional heuristic from original vvEntra platform)
+    function simulateSummary(fieldLabel, text) {
+      if (!text || !text.trim()) return '';
+      const clean = text.replace(/\s+/g, ' ').trim();
+      const sentences = clean.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(s => s.length > 0);
+      const wordCount = clean.split(/\s+/).length;
+
+      const dataRe = /(\$[\d,.]+\s?[KMB]?|\b\d+[\d,.]*\s?%|\b\d+[\d,.]*\s?(x|months?|days?|weeks?|years?|hours?)\b|\b\d{2,}[\d,.]*\b)/i;
+      const dataSentences = sentences.filter(s => dataRe.test(s));
+
+      const signalRe = /\b(market|customers?|segment|target|revenue|margin|pricing|charge|cost|save|reduce|grow|demand|competitor|incumbent|because|driver|trend|why now|moat|defensible|retention|churn|acquisition)\b/i;
+      const signalSentences = sentences.filter(s => signalRe.test(s) && !dataRe.test(s));
+
+      function trimSentence(s, max = 160) {
+        if (s.length <= max) return s;
+        return s.slice(0, max).replace(/\s+\S*$/, '') + '…';
       }
 
-      setTimeout(() => {
-        if (aiStatusBadge) {
-          aiStatusBadge.textContent = '● Institutional Grade';
-          aiStatusBadge.className = 'c-badge c-badge--success';
-        }
-      }, 500);
+      const firstSentence = sentences[0] || '';
+      const firstIsSubstantive = firstSentence.length > 40 && (dataRe.test(firstSentence) || signalRe.test(firstSentence));
 
-      if (mode === 'thesis') {
-        if (btnPolishThesis) btnPolishThesis.classList.add('is-active');
-        if (aiOutputLabel) aiOutputLabel.textContent = '✨ Institutional Executive Memorandum';
-        if (aiOutputBody) {
-          aiOutputBody.innerHTML = `
-            <div class="c-ai-stream-text">
-              <strong>EXECUTIVE MEMORANDUM · INVESTMENT COMMITTEE SUMMARY</strong><br><br>
-              <strong>1. Structural Asymmetry:</strong><br>
-              ${activeAiPolishData.problem}<br><br>
-              <strong>2. Architectural Deliverables:</strong><br>
-              ${activeAiPolishData.solution}<br><br>
-              <strong>3. Strategic Buyer Fit:</strong><br>
-              ${activeAiPolishData.persona}
-            </div>
-          `;
-        }
-        if (aiReadinessScore) aiReadinessScore.textContent = '96 / 100';
-        if (aiReadinessBar) aiReadinessBar.style.width = '96%';
-        if (aiPillarClarity) {
-          aiPillarClarity.textContent = '✓ Clarity: PE-Grade';
-          aiPillarClarity.classList.add('is-pass');
-        }
-      } else if (mode === 'financials') {
-        if (btnFormatFinancials) btnFormatFinancials.classList.add('is-active');
-        if (aiOutputLabel) aiOutputLabel.textContent = '📊 Formatted Financial Pro-Forma & Margins';
-        const price = Number(priceInput?.value) || 35000;
-        if (aiOutputBody) {
-          aiOutputBody.innerHTML = `
-            <div class="c-ai-stream-text">
-              <strong>STRUCTURED FINANCIAL RETURN PROFILE</strong><br><br>
-              ● <strong>Total Addressable Market (TAM):</strong> $2.4B (14,000 verified industrial facilities)<br>
-              ● <strong>Average Contract Value (ACV):</strong> $18,400 / annual recurring enterprise contract<br>
-              ● <strong>Gross Margin Profile:</strong> 84% (software delivery & data ingestion)<br>
-              ● <strong>Capital Payback Timeline:</strong> 6.4 Months post-closing<br>
-              ● <strong>Asset Acquisition Valuation:</strong> ${formatCurrency(price)}<br>
-              ● <strong>Statutory Escrow Unlock:</strong> ${formatCurrency(Math.round(price * 0.1))} (10% neutral custody)<br>
-              ● <strong>Net Architect Settlement:</strong> ${formatCurrency(Math.round(price * 0.9))} (90% wire on day 7)
-            </div>
-          `;
-        }
-      } else if (mode === 'preaudit') {
-        if (btnPreAudit) btnPreAudit.classList.add('is-active');
-        if (aiOutputLabel) aiOutputLabel.textContent = '🛡️ Red-Flag Pre-Audit Diligence Result';
-        if (aiOutputBody) {
-          aiOutputBody.innerHTML = `
-            <div class="c-ai-stream-text">
-              <strong>INVESTMENT COMMITTEE RED-FLAG AUDIT: PASSED (0 Critical)</strong><br><br>
-              ✓ <strong>Documentation Threshold:</strong> 90+ Pages verified (Includes 14 SOPs and 3-statement model)<br>
-              ✓ <strong>Handover Independence:</strong> System contains explicit vendor transition protocols<br>
-              ✓ <strong>Legal Governance:</strong> Structured for bilateral NDA and 7-day statutory escrow custody<br>
-              ✓ <strong>Advisory Warranty:</strong> 15 hours dedicated architect transition included<br>
-              ⚠️ <em>Minor Advisory:</em> Ensure customer pilot NDA does not disclose factory names before bilateral escrow execution.
-            </div>
-          `;
-        }
-      } else if (mode === 'redact') {
-        if (btnRedactIp) btnRedactIp.classList.add('is-active');
-        if (aiOutputLabel) aiOutputLabel.textContent = '🔒 Sanitized Public Teaser & NDA Shield';
-        if (aiOutputBody) {
-          aiOutputBody.innerHTML = `
-            <div class="c-ai-stream-text">
-              <strong>PUBLIC MARKETPLACE TEASER (NDA-PROTECTED PREVIEW)</strong><br><br>
-              <strong>Asset:</strong> Automated Regulatory Compliance Pipeline for Plant Operators<br>
-              <strong>Scope:</strong> Turnkey compliance automation for industrial manufacturers facing updated EPA/OSHA audit mandates. Includes complete customer ICP, operational data schema, and land-and-expand commercial model.<br><br>
-              <div style="background: var(--color-bg-alt); padding: 0.6rem; border-radius: 4px; font-size: 0.78rem;">
-                <strong>Proprietary Identifiers Masked:</strong><br>
-                [REDACTED: Factory Cohort Client List], [REDACTED: Direct GitHub Repository URL], and [REDACTED: Pricing API Keys] remain gated in secure Data Room until 10% escrow deposit.
+      const points = [];
+      const usedLead = firstIsSubstantive ? firstSentence : null;
+      dataSentences.filter(s => s !== usedLead).slice(0, 3).forEach(s => points.push(trimSentence(s)));
+      if (points.length < 3) {
+        signalSentences.filter(s => s !== usedLead).slice(0, 3 - points.length).forEach(s => points.push(trimSentence(s)));
+      }
+
+      const depthNote =
+        wordCount > 220 ? 'The full write-up runs deep' :
+        wordCount > 110 ? 'The full write-up is detailed' :
+        'The full detail continues';
+
+      const sectionLead = {
+        'Investment thesis': 'The core thesis, in the architect’s own words:',
+        'The problem': 'The problem being solved:',
+        'Market gap': 'The market gap identified:',
+        'Business model & revenue logic': 'How the opportunity makes money:',
+        'Competitive landscape': 'The competitive position:',
+        'Risks & execution challenges': 'The key risks named:',
+        'Go-to-market strategy': 'The go-to-market approach:',
+        'Financial projections': 'The financial picture:'
+      };
+
+      return {
+        lead: firstIsSubstantive ? trimSentence(firstSentence, 220) : (sectionLead[fieldLabel] || 'Summary:'),
+        leadIsQuote: firstIsSubstantive,
+        intro: sectionLead[fieldLabel] || 'Key points:',
+        points: points,
+        closing: depthNote + ', including the specifics and supporting evidence, in the locked section.'
+      };
+    }
+
+    function summaryToText(s) {
+      if (!s) return '';
+      if (typeof s === 'string') return s;
+      let out = '';
+      if (s.leadIsQuote) out += s.lead + '\n\n';
+      if (s.points && s.points.length) {
+        out += (s.intro || 'Key points:') + '\n';
+        out += s.points.map(p => '• ' + p).join('\n');
+        out += '\n\n';
+      }
+      if (s.closing) out += s.closing;
+      return out.trim();
+    }
+
+    function summaryToHTML(s) {
+      if (!s) return '';
+      if (typeof s === 'string') return '<p class="pv-summary-text">' + s + '</p>';
+      let html = '';
+      if (s.leadIsQuote) html += '<p class="pv-summary-lead">' + s.lead + '</p>';
+      if (s.points && s.points.length) {
+        html += '<p class="pv-summary-intro">' + (s.intro || 'Key points:') + '</p>';
+        html += '<ul class="pv-summary-points">' + s.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
+      }
+      if (s.closing) html += '<p class="pv-summary-closing">' + s.closing + '</p>';
+      return html;
+    }
+
+    function regenerateSummary(fid, label) {
+      if (aiEdited[fid]) return;
+      aiSummary[fid] = simulateSummary(label, state[fid] || '');
+      const box = composer.querySelector(`[data-ai="${fid}"]`);
+      if (box) box.value = summaryToText(aiSummary[fid]);
+      renderPreviewSection(fid, label);
+    }
+
+    // Field Builder Helpers
+    function freeFieldHTML(f) {
+      let input;
+      if (f.type === 'textarea') {
+        input = `<textarea class="cfield-textarea" data-fid="${f.id}" placeholder="${f.ph || ''}"></textarea>`;
+      } else if (f.type === 'select') {
+        input = `<select class="cfield-select" data-fid="${f.id}">` + f.options.map(o => `<option value="${o}">${o}</option>`).join('') + `</select>`;
+      } else {
+        input = `<input class="cfield-input" type="${f.type}" data-fid="${f.id}" placeholder="${f.ph || ''}">`;
+      }
+
+      let extra = '';
+      if (f.id === 'price') {
+        extra = `<div class="unlock-calc"><span class="unlock-calc-label">Buyer pays to unlock (10%)</span><span class="unlock-calc-val" id="unlockCalcVal">$2,800</span></div>`;
+      }
+
+      return `
+        <div class="cfield">
+          <div class="cfield-label-row">
+            <label class="cfield-label">${f.label}</label>
+            <button type="button" class="cfield-ai-btn" data-ai-field="${f.id}" title="${f.aiHint || 'AI Enhance'}">${f.aiBtn}</button>
+          </div>
+          ${input}
+          ${extra}
+        </div>`;
+    }
+
+    function deepFieldHTML(f) {
+      return `
+        <div class="deep-field">
+          <div class="deep-field-label">
+            <span>${f.label}</span>
+          </div>
+          <div class="deep-cols">
+            <div class="deep-col">
+              <div class="deep-col-head">
+                <span class="deep-col-tag full">Your full text</span>
+                <button type="button" class="deep-polish-btn" data-deep-ai="${f.id}" title="AI Polish rough draft into institutional PE-grade analysis">✨ AI Polish Draft</button>
+              </div>
+              <textarea class="cfield-textarea deep-textarea" data-fid="${f.id}" placeholder="${f.ph || ''}"></textarea>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem;">
+                <span class="deep-col-sub">Confidential · unlocks after payment · no limit</span>
+                <span class="cfield-charcount" data-cc="${f.id}">0 words</span>
               </div>
             </div>
-          `;
-        }
-        if (aiPillarRedaction) {
-          aiPillarRedaction.textContent = '✓ NDA Redacted (Shielded)';
-          aiPillarRedaction.classList.add('is-pass');
-        }
-        if (prevLead) {
-          prevLead.textContent = 'Sanitized Executive Abstract: "Turnkey compliance automation for industrial manufacturers facing updated EPA/OSHA audit mandates. Proprietary schemas NDA-gated."';
-        }
-      }
+            <div class="deep-col">
+              <div class="deep-col-head">
+                <span class="deep-col-tag ai">Buyer sees (free)</span>
+                <button type="button" class="deep-regen" data-regen="${f.id}" title="Regenerate from your text">↻ Auto AI Teaser</button>
+              </div>
+              <textarea class="cfield-textarea deep-textarea deep-ai" data-ai="${f.id}" placeholder="An AI summary of your text appears here automatically. You can edit it."></textarea>
+              <span class="deep-ai-note">Auto-written from your text · editable</span>
+            </div>
+          </div>
+        </div>`;
     }
 
-    if (btnPolishThesis) btnPolishThesis.addEventListener('click', () => triggerAiTool('thesis'));
-    if (btnFormatFinancials) btnFormatFinancials.addEventListener('click', () => triggerAiTool('financials'));
-    if (btnPreAudit) btnPreAudit.addEventListener('click', () => triggerAiTool('preaudit'));
-    if (btnRedactIp) btnRedactIp.addEventListener('click', () => triggerAiTool('redact'));
+    // Render Composer Form Shell
+    composer.innerHTML = `
+      <div class="composer-tier">
+        <div class="composer-tier-head">
+          <span class="cth-badge free">Free</span>
+          <span class="cth-title">Always visible to the buyer</span>
+          <span class="cth-hint">Builds trust & discovery</span>
+        </div>
+        ${FREE.map(freeFieldHTML).join('')}
+      </div>
 
-    // Apply AI to form
-    if (applyAiBtn) {
-      applyAiBtn.addEventListener('click', () => {
-        const titleInput = DOM.get('#comp-title');
-        const probInput = DOM.get('#comp-thesis-problem');
-        const solInput = DOM.get('#comp-thesis-solution');
-        const econInput = DOM.get('#comp-thesis-economics');
-        const persInput = DOM.get('#comp-thesis-persona');
+      <div class="composer-tier">
+        <div class="composer-tier-head">
+          <span class="cth-badge teaser">Teaser</span>
+          <span class="cth-title">Buyer sees an AI summary free · your full text unlocks after payment</span>
+          <span class="cth-hint">Creates curiosity & defensibility</span>
+        </div>
+        <p class="deep-explainer">Write the real, complete content on the left. vvEntra automatically writes a public summary on the right that conveys your quality without revealing specifics. The buyer reads the summary free, plus a short blurred glimpse of your real words, then pays to unlock everything. You can edit the summary anytime or use AI Polish on any section.</p>
+        ${DEEP.map(deepFieldHTML).join('')}
+      </div>
 
-        if (titleInput) titleInput.value = activeAiPolishData.title;
-        if (probInput) probInput.value = activeAiPolishData.problem;
-        if (solInput) solInput.value = activeAiPolishData.solution;
-        if (econInput) econInput.value = activeAiPolishData.economics;
-        if (persInput) persInput.value = activeAiPolishData.persona;
+      <div class="composer-tier">
+        <div class="composer-tier-head">
+          <span class="cth-badge doc">Document</span>
+          <span class="cth-title">Shared as files after unlock + NDA</span>
+          <span class="cth-hint">Your prepared package</span>
+        </div>
+        <div class="cfield">
+          <div class="cfield-label-row">
+            <label class="cfield-label">Document package (one file name per line)</label>
+            <button type="button" class="cfield-ai-btn" data-ai-field="docs" title="AI Suggest complete diligence deliverables">✨ AI Suggest Diligence Package</button>
+          </div>
+          <textarea class="cfield-textarea" data-fid="docs" placeholder="Market sizing model (verified)&#10;Reference architecture (90+ pages)&#10;Supplier contract templates&#10;14 Standard Operating Procedures (SOPs)&#10;Three-Statement Financial Model (XLSX)"></textarea>
+        </div>
+      </div>
+    `;
 
-        if (prevTitle) prevTitle.textContent = activeAiPolishData.title;
-        if (prevLead) prevLead.textContent = `Sanitized Executive Abstract: "${activeAiPolishData.problem.slice(0, 120)}…"`;
+    // Render Live Buyer Preview Shell
+    preview.innerHTML = `
+      <div class="pv-tags" id="pvTags"></div>
+      <div class="pv-title" id="pvTitle">Opportunity Blueprint Title</div>
+      <div class="pv-hook" id="pvHook">Executive summary hook will appear here as you type…</div>
+      <div class="pv-snapshot">
+        <div class="pv-snap-cell"><span class="pv-snap-k">Stage</span><span class="pv-snap-v" id="pvStage">Execution-Ready</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Geography</span><span class="pv-snap-v" id="pvGeography">—</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Capital</span><span class="pv-snap-v" id="pvCapital">—</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Time to launch</span><span class="pv-snap-v" id="pvTimeline">—</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Monetisation</span><span class="pv-snap-v" id="pvMonet">—</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Unlock fee</span><span class="pv-snap-v" id="pvUnlock">$2,800</span></div>
+      </div>
+      <div id="pvSections"></div>
+      <div class="pv-section"><div class="pv-sec-title">Document package</div><div id="pvDocs"></div></div>
+    `;
 
-        showNotification('Applied institutional AI refinement to listing fields.');
+    const pvSectionsContainer = DOM.get('#pvSections');
+    if (pvSectionsContainer) {
+      pvSectionsContainer.innerHTML = DEEP.map(f => `
+        <div class="pv-section">
+          <div class="pv-sec-title">${f.label}</div>
+          <div class="pv-sec-summary" data-pvsum="${f.id}"><span class="pv-empty-hint">Nothing written yet.</span></div>
+          <div class="pv-sec-teaser" data-pvtease="${f.id}"></div>
+        </div>
+      `).join('');
+    }
+
+    // Live Buyer Preview Render Helpers
+    function setText(id, val) {
+      const el = DOM.get('#' + id);
+      if (el) el.textContent = val || '—';
+    }
+
+    function renderTags(val) {
+      const box = DOM.get('#pvTags');
+      if (!box) return;
+      box.innerHTML = '';
+      (val || '').split(',').map(t => t.trim()).filter(Boolean).forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'pv-tag';
+        s.textContent = t;
+        box.appendChild(s);
       });
     }
 
-    // Submission handler
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const title = DOM.get('#comp-title')?.value.trim();
-        const problem = DOM.get('#comp-thesis-problem')?.value.trim();
-        const solution = DOM.get('#comp-thesis-solution')?.value.trim();
-        const economics = DOM.get('#comp-thesis-economics')?.value.trim();
-        const persona = DOM.get('#comp-thesis-persona')?.value.trim();
-        const price = Number(priceInput?.value) || 25000;
-        const industry = DOM.get('#comp-industry')?.value || 'RegTech & Compliance';
+    function renderDocs(val) {
+      const box = DOM.get('#pvDocs');
+      if (!box) return;
+      box.innerHTML = '';
+      const lines = (val || '').split('\n').map(l => l.trim()).filter(Boolean);
+      if (!lines.length) {
+        box.innerHTML = '<span class="pv-empty-hint">No documents listed yet.</span>';
+        return;
+      }
+      lines.forEach(name => {
+        const row = document.createElement('div');
+        row.className = 'pv-doc-row';
+        row.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+          </svg>
+          <span class="pv-doc-name">${name}</span>
+          <span class="pv-doc-lock">NDA</span>
+        `;
+        box.appendChild(row);
+      });
+    }
 
-        if (!title || !problem || !solution) {
-          showNotification('Complete all mandatory asset documentation fields.');
-          return;
+    function updateUnlock() {
+      const priceVal = Number(state.price) || 0;
+      const v = priceVal ? fmtMoney(priceVal * 0.10) : '$0';
+      const calc = DOM.get('#unlockCalcVal');
+      if (calc) calc.textContent = v;
+      const pv = DOM.get('#pvUnlock');
+      if (pv) pv.textContent = priceVal ? v : '—';
+      DEEP.forEach(f => {
+        if (state[f.id]) renderPreviewSection(f.id, f.label);
+      });
+    }
+
+    function renderPreviewSection(fid, label) {
+      const sumBox = preview.querySelector(`[data-pvsum="${fid}"]`);
+      const teaseBox = preview.querySelector(`[data-pvtease="${fid}"]`);
+      if (!sumBox || !teaseBox) return;
+
+      const full = state[fid] || '';
+      const summary = aiSummary[fid] || '';
+
+      if (!full) {
+        sumBox.innerHTML = '<span class="pv-empty-hint">Nothing written yet.</span>';
+        teaseBox.innerHTML = '';
+        return;
+      }
+
+      sumBox.innerHTML = '';
+      if (typeof summary === 'string') {
+        const p = document.createElement('div');
+        p.className = 'pv-summary-text';
+        p.innerHTML = summary.split('\n').filter(Boolean).map(line =>
+          line.trim().startsWith('•')
+            ? '<div class="pv-sum-bullet">' + line.replace(/^•\s*/, '') + '</div>'
+            : '<p>' + line + '</p>'
+        ).join('');
+        sumBox.appendChild(p);
+      } else {
+        sumBox.innerHTML = summaryToHTML(summary);
+      }
+
+      teaseBox.innerHTML = '';
+      const glimpse = full.replace(/\s+/g, ' ').trim().slice(0, TEASER_PREVIEW_CHARS);
+      const wrap = document.createElement('div');
+      wrap.className = 'pv-glimpse-wrap';
+
+      const lbl = document.createElement('span');
+      lbl.className = 'pv-glimpse-label';
+      lbl.textContent = 'From the architect’s full write-up';
+
+      const g = document.createElement('div');
+      g.className = 'pv-glimpse';
+      g.innerHTML = `
+        <span class="pv-glimpse-vis">${glimpse}</span>
+        <span class="pv-glimpse-blur"> ${(full.replace(/\s+/g, ' ').trim().slice(TEASER_PREVIEW_CHARS, TEASER_PREVIEW_CHARS + 220) || 'and continues in full detail behind the unlock')}</span>
+      `;
+
+      const priceVal = Number(state.price) || 0;
+      const fee = priceVal ? fmtMoney(priceVal * 0.10) : 'the unlock fee';
+      const prompt = document.createElement('div');
+      prompt.className = 'pv-teaser-prompt';
+      prompt.textContent = `🔒 Pay ${fee} to read the full section`;
+
+      wrap.appendChild(lbl);
+      wrap.appendChild(g);
+      wrap.appendChild(prompt);
+      teaseBox.appendChild(wrap);
+    }
+
+    // Inline Field-Level AI Enhancement Action Handler
+    function handleAiEnhance(fieldId, btnEl) {
+      if (btnEl) {
+        const origText = btnEl.textContent;
+        btnEl.textContent = '✨ Polishing...';
+        btnEl.style.opacity = '0.7';
+        setTimeout(() => {
+          btnEl.textContent = origText;
+          btnEl.style.opacity = '1';
+        }, 500);
+      }
+
+      if (fieldId === 'title') {
+        const input = composer.querySelector('[data-fid="title"]');
+        const val = input?.value.trim();
+        const enhanced = (val && val.length > 5)
+          ? (val.includes('Pipeline') || val.includes('System') || val.includes('Matrix') ? val : `Autonomous ${val} Operations Matrix`)
+          : aiEnhancementLibrary.title;
+        if (input) {
+          input.value = enhanced;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI polished opportunity title to institutional PE grade.');
+      } else if (fieldId === 'tags') {
+        const input = composer.querySelector('[data-fid="tags"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.tags;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI suggested high-conviction sector tags.');
+      } else if (fieldId === 'hook') {
+        const input = composer.querySelector('[data-fid="hook"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.hook;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI refined executive hook with quantifiable outcomes.');
+      } else if (fieldId === 'stage') {
+        const sel = composer.querySelector('[data-fid="stage"]');
+        if (sel) {
+          sel.value = 'Execution-Ready';
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        showNotification('✨ AI stage audit completed: Certified as Execution-Ready.');
+      } else if (fieldId === 'geography') {
+        const input = composer.querySelector('[data-fid="geography"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.geography;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI suggested cross-border capital jurisdictions.');
+      } else if (fieldId === 'capital') {
+        const input = composer.querySelector('[data-fid="capital"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.capital;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI calibrated capital deployment pro-forma.');
+      } else if (fieldId === 'timeline') {
+        const input = composer.querySelector('[data-fid="timeline"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.timeline;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI structured 14-day handover timeline.');
+      } else if (fieldId === 'monet') {
+        const input = composer.querySelector('[data-fid="monet"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.monet;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI structured high-margin recurring contract model.');
+      } else if (fieldId === 'price') {
+        const input = composer.querySelector('[data-fid="price"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.price;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI calibrated market-clearing valuation ($35,000 / $3,500 unlock).');
+      } else if (fieldId === 'docs') {
+        const input = composer.querySelector('[data-fid="docs"]');
+        if (input) {
+          input.value = aiEnhancementLibrary.docs;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification('✨ AI generated institutional 5-document diligence package.');
+      } else if (DEEP.some(d => d.id === fieldId)) {
+        const deepObj = DEEP.find(d => d.id === fieldId);
+        const input = composer.querySelector(`[data-fid="${fieldId}"]`);
+        const userVal = input?.value.trim();
+        const polished = (userVal && userVal.length > 30)
+          ? `${userVal}\n\nQuantified Operating Framework: Documented across verified telemetry schemas with zero reliance on original founder hours. Structural payback horizon benchmarked at under 7 months with 80%+ gross margin defensibility.`
+          : aiEnhancementLibrary[fieldId];
+        
+        if (input) {
+          input.value = polished;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        showNotification(`✨ AI polished ${deepObj.label} draft into institutional analysis.`);
+      }
+    }
+
+    // Wire Free & Document Fields Input Listeners
+    composer.querySelectorAll('[data-fid]').forEach(el => {
+      const fid = el.dataset.fid;
+      const handler = () => {
+        state[fid] = el.value;
+        if (fid === 'title') setText('pvTitle', el.value || 'Opportunity Blueprint Title');
+        else if (fid === 'hook') setText('pvHook', el.value || 'Executive summary hook will appear here as you type…');
+        else if (fid === 'tags') renderTags(el.value);
+        else if (fid === 'stage') setText('pvStage', el.value);
+        else if (fid === 'geography') setText('pvGeography', el.value);
+        else if (fid === 'capital') setText('pvCapital', el.value);
+        else if (fid === 'timeline') setText('pvTimeline', el.value);
+        else if (fid === 'monet') setText('pvMonet', el.value);
+        else if (fid === 'price') {
+          state.price = parseFloat(el.value) || 0;
+          updateUnlock();
+        } else if (fid === 'docs') renderDocs(el.value);
+        else if (DEEP.find(d => d.id === fid)) {
+          const label = DEEP.find(d => d.id === fid).label;
+          const wc = el.value.trim() ? el.value.trim().split(/\s+/).length : 0;
+          const cc = composer.querySelector(`[data-cc="${fid}"]`);
+          if (cc) cc.textContent = `${wc} words`;
+          regenerateSummary(fid, label);
+        }
+      };
+
+      el.addEventListener('input', handler);
+      el.addEventListener('change', handler);
+    });
+
+    // Wire Inline AI Action Buttons on Free & Document Fields
+    composer.querySelectorAll('.cfield-ai-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fid = btn.dataset.aiField;
+        handleAiEnhance(fid, btn);
+      });
+    });
+
+    // Wire Inline AI Action Buttons on Deep Fields
+    composer.querySelectorAll('.deep-polish-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fid = btn.dataset.deepAi;
+        handleAiEnhance(fid, btn);
+      });
+    });
+
+    // Wire AI Summary Textarea Architect Edits
+    composer.querySelectorAll('[data-ai]').forEach(el => {
+      const fid = el.dataset.ai;
+      const label = DEEP.find(d => d.id === fid).label;
+      el.addEventListener('input', () => {
+        aiEdited[fid] = true;
+        aiSummary[fid] = el.value;
+        renderPreviewSection(fid, label);
+      });
+    });
+
+    // Wire Regenerate Buttons on Deep Fields
+    composer.querySelectorAll('[data-regen]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fid = btn.dataset.regen;
+        const label = DEEP.find(d => d.id === fid).label;
+        aiEdited[fid] = false;
+        regenerateSummary(fid, label);
+      });
+    });
+
+    // Load Institutional Sample Draft Pre-fill Button
+    if (sampleBtn) {
+      sampleBtn.addEventListener('click', () => {
+        // Populate Free fields
+        FREE.forEach(f => {
+          const el = composer.querySelector(`[data-fid="${f.id}"]`);
+          if (el && aiEnhancementLibrary[f.id] !== undefined) {
+            el.value = aiEnhancementLibrary[f.id];
+            state[f.id] = aiEnhancementLibrary[f.id];
+          }
+        });
+        state.price = aiEnhancementLibrary.price;
+
+        // Populate Deep fields
+        DEEP.forEach(f => {
+          const el = composer.querySelector(`[data-fid="${f.id}"]`);
+          if (el && aiEnhancementLibrary[f.id]) {
+            el.value = aiEnhancementLibrary[f.id];
+            state[f.id] = aiEnhancementLibrary[f.id];
+            const wc = el.value.trim().split(/\s+/).length;
+            const cc = composer.querySelector(`[data-cc="${f.id}"]`);
+            if (cc) cc.textContent = `${wc} words`;
+
+            aiEdited[f.id] = false;
+            aiSummary[f.id] = simulateSummary(f.label, el.value);
+            const aiBox = composer.querySelector(`[data-ai="${f.id}"]`);
+            if (aiBox) aiBox.value = summaryToText(aiSummary[f.id]);
+          }
+        });
+
+        // Populate Docs
+        const docEl = composer.querySelector('[data-fid="docs"]');
+        if (docEl) {
+          docEl.value = aiEnhancementLibrary.docs;
+          state.docs = aiEnhancementLibrary.docs;
         }
 
-        const newId = `VVE-${Math.floor(1000 + Math.random() * 9000)}`;
-        const newAsset = {
-          id: newId,
-          title: title,
-          summary: problem.slice(0, 120) + '…',
-          industry: industry,
-          tags: [industry, 'Architect Certified'],
-          status: 'Audited & Active',
-          targetJurisdiction: 'North America / EU',
-          capitalRequirement: '$30,000 - $70,000',
-          implementationTimeline: '14 - 30 Days',
-          valuation: price,
-          escrowDeposit: Math.round(price * 0.10),
-          trustRating: 98,
-          pageCount: 104,
-          frameworkCount: 14,
-          operator: {
-            name: 'Architect Entity (Verified)',
-            title: 'Licensed Systems Architect',
-            verifiedIdentity: true,
-            historicalTransactions: 'Audited Registry Record',
-            peerReviewScore: 5.0,
-            totalCompletedTransfers: 1
-          },
-          commercialParameters: {
-            addressableMarket: economics || '$2.4B Market Sector',
-            targetMarginImprovement: '3.5x Operating Expansion',
-            paybackPeriod: '6.4 Months'
-          },
-          executiveAbstract: `${problem} ${solution}`,
-          operationalProblem: problem,
-          solutionArchitecture: solution,
-          commercialModel: economics || 'Enterprise licensing and operational handover.',
-          riskFactors: 'Operational change-management variance and deployment timeline dependencies.',
-          deliverablesPackage: [
+        // Synchronize Live Buyer Preview
+        setText('pvTitle', state.title);
+        setText('pvHook', state.hook);
+        renderTags(state.tags);
+        setText('pvStage', state.stage);
+        setText('pvGeography', state.geography);
+        setText('pvCapital', state.capital);
+        setText('pvTimeline', state.timeline);
+        setText('pvMonet', state.monet);
+        updateUnlock();
+        renderDocs(state.docs);
+        DEEP.forEach(f => renderPreviewSection(f.id, f.label));
+        refreshReadiness();
+
+        showNotification('📋 Institutional sample draft loaded! Live buyer preview and AI teasers generated.');
+      });
+    }
+
+    // Dynamic Readiness Checklist Controller
+    const REQUIRED = [
+      { id: 'title', label: 'Opportunity title' },
+      { id: 'hook', label: 'One-line hook' },
+      { id: 'price', label: 'Listed price' },
+      { id: 'thesis', label: 'Investment thesis (full text)' },
+      { id: 'problem', label: 'The problem (full text)' }
+    ];
+
+    function refreshReadiness() {
+      if (!readiness) return;
+      let done = 0;
+      readiness.innerHTML = REQUIRED.map(r => {
+        const filled = state[r.id] && String(state[r.id]).trim().length > 0;
+        if (filled) done++;
+        const icon = filled
+          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+          : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
+        return `<div class="lready-row ${filled ? 'done' : 'miss'}">${icon}${r.label}</div>`;
+      }).join('');
+
+      const allDone = (done === REQUIRED.length);
+      if (submitBtn) submitBtn.disabled = !allDone;
+
+      readiness.insertAdjacentHTML('beforeend', `
+        <div class="lready-row ${allDone ? 'done' : 'miss'}" style="border-top:1px solid var(--line);padding-top:.6rem;margin-top:.3rem;">
+          <span class="lready-count">${done} of ${REQUIRED.length} required fields complete</span>
+        </div>
+      `);
+    }
+
+    composer.querySelectorAll('[data-fid]').forEach(el => {
+      el.addEventListener('input', refreshReadiness);
+      el.addEventListener('change', refreshReadiness);
+    });
+
+    // Submission Handler
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        submitBtn.textContent = 'Submitting for review...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+          const newId = `VVE-${Math.floor(1000 + Math.random() * 9000)}`;
+          lastSubmittedAssetId = newId;
+
+          const priceVal = Number(state.price) || 28000;
+          const unlockVal = Math.round(priceVal * 0.10);
+
+          const docLines = (state.docs || '').split('\n').map(l => l.trim()).filter(Boolean);
+          const docsArray = docLines.length > 0 ? docLines : [
             'Operational Systems Architecture 90+ Page Specification (PDF)',
             'Three-Statement Financial Pro-Forma & Cashflow Model (XLSX)',
             '14 Documented Standard Operating Procedures (SOPs) & Integration Maps',
             'Vendor & Supplier Direct Transition Agreements (DOCX)'
-          ]
-        };
+          ];
 
-        State.customAssets.unshift(newAsset);
-        StorageService.set('custom_assets', State.customAssets);
+          const newAsset = {
+            id: newId,
+            title: state.title || 'Institutional Turnkey Opportunity Blueprint',
+            summary: state.hook || (state.problem ? state.problem.slice(0, 140) + '…' : 'Confidential audited business architecture.'),
+            industry: (state.tags ? state.tags.split(',')[0].trim() : 'Enterprise Systems'),
+            tags: (state.tags || 'Systems Architecture, Verified Blueprint').split(',').map(t => t.trim()).filter(Boolean),
+            status: 'Audited & Active',
+            targetJurisdiction: state.geography || 'North America / EU Tier-1',
+            capitalRequirement: state.capital || '$35,000 – $75,000',
+            implementationTimeline: state.timeline || '14 – 30 Days Handover',
+            valuation: priceVal,
+            escrowDeposit: unlockVal,
+            trustRating: 98,
+            pageCount: 104,
+            frameworkCount: 14,
+            operator: {
+              name: 'Architect Entity (KYC Verified)',
+              title: 'Licensed Systems Architect',
+              verifiedIdentity: true,
+              historicalTransactions: 'Audited Registry Record',
+              peerReviewScore: 5.0,
+              totalCompletedTransfers: 1
+            },
+            commercialParameters: {
+              addressableMarket: state.model ? (state.model.match(/\$[\d,.]+[BMT]?/i)?.[0] || '$2.4B TAM') : '$2.4B Market Sector',
+              targetMarginImprovement: '84% Steady-State Gross Margin',
+              paybackPeriod: '6.4 Months Capital Recovery'
+            },
+            executiveAbstract: `${state.problem || ''}\n\n${state.thesis || ''}`.trim(),
+            operationalProblem: state.problem || 'Operational inefficiency and manual compliance risks.',
+            solutionArchitecture: state.thesis || 'Comprehensive systems architecture and automated telemetry.',
+            commercialModel: state.model || state.monet || 'Enterprise recurring licensing model.',
+            riskFactors: state.risks || 'Operational change-management variance and deployment timeline dependencies.',
+            deliverablesPackage: docsArray,
+            deepSections: {
+              thesis: state.thesis,
+              problem: state.problem,
+              gap: state.gap,
+              model: state.model,
+              competitive: state.competitive,
+              risks: state.risks,
+              gtm: state.gtm,
+              financials: state.financials
+            }
+          };
 
-        // Dynamically reflect live blueprint listing in the market intelligence terminal:
-        const matchSec = VVENTRA_DATA.sectors.find(s => 
-          s.name.toLowerCase().includes(industry.toLowerCase()) || 
-          (s.category && s.category.toLowerCase().includes(industry.toLowerCase()))
-        );
-        if (matchSec) {
-          matchSec.architectSupplyCount = (matchSec.architectSupplyCount || 20) + 1;
-          matchSec.arbitrageGap = Math.max(15, Math.round(matchSec.buyerDemandIndex - matchSec.architectSupplyCount * 0.9));
-        }
+          State.customAssets.unshift(newAsset);
+          StorageService.set('custom_assets', State.customAssets);
+          State.activeAssetId = newId;
 
-        appendLiveTransaction(`<strong>New Blueprint Registered:</strong> ${newId} · ${title.slice(0, 36)}… (${formatCurrency(price)})`);
-        updateDashboardKPIs();
-        renderTickerTape();
-        QuadrantMatrixController.render();
-        renderDashboard();
+          // Update real-time platform telemetry
+          appendLiveTransaction(`<strong>New Blueprint Registered:</strong> ${newId} · ${newAsset.title.slice(0, 36)}… (${formatCurrency(priceVal)})`);
+          updateDashboardKPIs();
+          renderTickerTape();
+          if (window.QuadrantMatrixController) QuadrantMatrixController.render();
+          renderDashboard();
 
-        showNotification(`Asset Blueprint ${newId} registered successfully in the transaction repository.`);
-        window.location.hash = `#listing?id=${newId}`;
+          // Hide composer card, display success state
+          if (submitCard) submitCard.style.display = 'none';
+          if (successCard) {
+            successCard.style.display = 'block';
+            successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+
+          showNotification(`Asset Blueprint ${newId} submitted and registered successfully in the transaction repository!`);
+        }, 700);
       });
     }
+
+    if (previewBtn) {
+      previewBtn.addEventListener('click', () => {
+        if (lastSubmittedAssetId) {
+          window.location.hash = `#listing?id=${lastSubmittedAssetId}`;
+        } else {
+          window.location.hash = '#listing';
+        }
+      });
+    }
+
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        if (successCard) successCard.style.display = 'none';
+        if (submitCard) submitCard.style.display = 'block';
+        if (submitBtn) {
+          submitBtn.textContent = 'Submit for review';
+          refreshReadiness();
+        }
+      });
+    }
+
+    // Initial state refresh
+    updateUnlock();
+    renderDocs('');
+    refreshReadiness();
   }
 
   // ===================================================================
