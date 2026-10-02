@@ -2707,12 +2707,15 @@
 
       this.pulses = [];
 
-      // Mouse tracking
+      // Mouse tracking across whole viewport
       const onMouseMove = (e) => {
         const rect = canvas.getBoundingClientRect();
         this.mouse.x = e.clientX - rect.left;
         this.mouse.y = e.clientY - rect.top;
-        this.mouse.isHovering = true;
+        this.mouse.isHovering = (
+          e.clientY >= rect.top && e.clientY <= rect.bottom &&
+          e.clientX >= rect.left && e.clientX <= rect.right
+        );
       };
       const onMouseLeave = () => {
         this.mouse.isHovering = false;
@@ -2720,12 +2723,14 @@
         this.mouse.y = -1000;
       };
 
-      canvas.removeEventListener('mousemove', canvas._onMM);
-      canvas.removeEventListener('mouseleave', canvas._onML);
-      canvas._onMM = onMouseMove;
-      canvas._onML = onMouseLeave;
-      canvas.addEventListener('mousemove', onMouseMove);
-      canvas.addEventListener('mouseleave', onMouseLeave);
+      if (this._onMM) {
+        window.removeEventListener('mousemove', this._onMM);
+        window.removeEventListener('mouseout', this._onML);
+      }
+      this._onMM = onMouseMove;
+      this._onML = onMouseLeave;
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseout', onMouseLeave);
 
       const maxDist = 130;
       let frame = 0;
@@ -2850,6 +2855,12 @@
       if (this.animId) {
         cancelAnimationFrame(this.animId);
         this.animId = null;
+      }
+      if (this._onMM) {
+        window.removeEventListener('mousemove', this._onMM);
+        window.removeEventListener('mouseout', this._onML);
+        this._onMM = null;
+        this._onML = null;
       }
     },
 
