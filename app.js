@@ -474,11 +474,11 @@
     // Update navigation link text for #list
     const navCtaText = DOM.get('#nav-cta-text');
     if (navCtaText) {
-      navCtaText.textContent = isOperator ? '+ List Blueprint' : '+ Post Buy Mandate';
+      navCtaText.textContent = 'List an opportunity';
     } else {
       const navLinkList = DOM.get('#nav-link-list');
       if (navLinkList) {
-        navLinkList.textContent = isOperator ? '+ List Blueprint' : '+ Post Buy Mandate';
+        navLinkList.textContent = 'List an opportunity';
       }
     }
   }
@@ -1955,64 +1955,25 @@
     updateMandateMatches();
   }
 
-  // --- Track 2: Architect Opportunity Intake & Live Buyer Preview Controller ---
+  // --- Page init: list (architect composer) - verbatim from original vvEntra platform ---
   function setupAssetComposer() {
-    const composer = DOM.get('#listComposer');
-    const preview = DOM.get('#listPreview');
-    const submitCard = DOM.get('#listSubmitCard');
-    const successCard = DOM.get('#listSubmitSuccess');
-    const readiness = DOM.get('#lsubReadiness');
-    const submitBtn = DOM.get('#lsubSubmitBtn');
-    const previewBtn = DOM.get('#lsubPreviewBtn');
-    const editBtn = DOM.get('#lsubEditBtn');
-    const sampleBtn = DOM.get('#btn-load-sample-architect');
-
+    const composer = document.getElementById('listComposer');
+    const preview = document.getElementById('listPreview');
     if (!composer || !preview) return;
 
-    const TEASER_PREVIEW_CHARS = 90;
-
-    const state = {
-      title: '',
-      tags: '',
-      hook: '',
-      stage: 'Execution-Ready',
-      geography: '',
-      capital: '',
-      timeline: '',
-      monet: '',
-      price: 28000,
-      docs: '',
-      thesis: '',
-      problem: '',
-      gap: '',
-      model: '',
-      competitive: '',
-      risks: '',
-      gtm: '',
-      financials: ''
-    };
-
-    const aiSummary = {};
-    const aiEdited = {};
-    let lastSubmittedAssetId = null;
-
-    function fmtMoney(n) {
-      n = Math.round(Number(n) || 0);
-      return '$' + n.toLocaleString('en-US');
-    }
+    const TEASER_PREVIEW_CHARS = 90; // blurred teaser of the REAL text shown under the AI summary
 
     const FREE = [
-      { id: 'title', label: 'Opportunity title', type: 'text', ph: 'Autonomous Backend Operations System for Mid-Market E-Commerce Brands', aiBtn: '✨ AI Polish Title', aiHint: 'Upgrade to institutional PE-grade system name' },
-      { id: 'tags', label: 'Industry tags (comma separated)', type: 'text', ph: 'E-Commerce, AI Automation, Supply Chain', aiBtn: '✨ AI Suggest Tags', aiHint: 'Analyze and suggest high-yield sector tags' },
-      { id: 'hook', label: 'One-line hook', type: 'textarea', ph: 'A documented operational intelligence system that removes the founder from backend e-commerce operations in under 90 days.', aiBtn: '✨ AI Polish Hook', aiHint: 'Synthesize quantified executive hook' },
-      { id: 'stage', label: 'Stage', type: 'select', options: ['Execution-Ready', 'Validated Thesis', 'Early Concept'], aiBtn: '✨ AI Stage Audit', aiHint: 'Evaluate architecture readiness' },
-      { id: 'geography', label: 'Geography', type: 'text', ph: 'AU, US, UK, EU', aiBtn: '✨ AI Target Jurisdictions', aiHint: 'Target primary buyer capital regions' },
-      { id: 'capital', label: 'Capital required', type: 'text', ph: '$28,000 – $56,000', aiBtn: '✨ AI Sizing Pro-Forma', aiHint: 'Calibrate deployment capital' },
-      { id: 'timeline', label: 'Time to launch', type: 'text', ph: '60–90 days', aiBtn: '✨ AI Timeline Sizing', aiHint: 'Determine phased rollout horizon' },
-      { id: 'monet', label: 'Monetisation', type: 'text', ph: 'Retainer + project', aiBtn: '✨ AI Monetisation Model', aiHint: 'Structure high-margin recurring contract' },
-      { id: 'price', label: 'Listed price (USD)', type: 'number', ph: '28000', aiBtn: '✨ AI Pricing Band', aiHint: 'Optimize for rapid escrow closing' }
+      { id: 'title', label: 'Opportunity title', type: 'text', ph: 'Autonomous Backend Operations System for Mid-Market E-Commerce Brands' },
+      { id: 'tags', label: 'Industry tags (comma separated)', type: 'text', ph: 'E-Commerce, AI Automation' },
+      { id: 'hook', label: 'One-line hook', type: 'textarea', ph: 'A documented operational intelligence system that removes the founder from backend e-commerce operations in under 90 days.' },
+      { id: 'stage', label: 'Stage', type: 'select', options: ['Early Concept', 'Validated Thesis', 'Execution-Ready'] },
+      { id: 'geography', label: 'Geography', type: 'text', ph: 'AU, US, UK' },
+      { id: 'capital', label: 'Capital required', type: 'text', ph: '$28,000 – $56,000' },
+      { id: 'timeline', label: 'Time to launch', type: 'text', ph: '60–90 days' },
+      { id: 'monet', label: 'Monetisation', type: 'text', ph: 'Retainer + project' },
+      { id: 'price', label: 'Listed price (USD)', type: 'number', ph: '28000' },
     ];
-
     const DEEP = [
       { id: 'thesis', label: 'Investment thesis', ph: 'Write the full thesis. Why this opportunity exists, the structural reason serious capital should pay attention, and what makes it defensible. No length limit.' },
       { id: 'problem', label: 'The problem', ph: 'Describe the full problem. What is broken, who feels the pain, what it costs them today.' },
@@ -2021,75 +1982,69 @@
       { id: 'competitive', label: 'Competitive landscape', ph: 'Every relevant competitor and adjacent player, and why none of them is a direct head-to-head.' },
       { id: 'risks', label: 'Risks & execution challenges', ph: 'The honest risk register. What could go wrong and what it takes to execute well.' },
       { id: 'gtm', label: 'Go-to-market strategy', ph: 'The complete GTM. Channels, sequencing, anchor accounts, content engine, first-customer motion.' },
-      { id: 'financials', label: 'Financial projections', ph: 'Full projections. Revenue trajectory, cost to first customers, key assumptions, sensitivity.' }
+      { id: 'financials', label: 'Financial projections', ph: 'Full projections. Revenue trajectory, cost to first customers, key assumptions, sensitivity.' },
     ];
 
-    // Institutional Knowledge Base for inline AI polishing
-    const aiEnhancementLibrary = {
-      title: 'Autonomous Sensor Telemetry & Regulatory Compliance Pipeline for Mid-Market Manufacturing',
-      tags: 'RegTech, Industrial IoT, Compliance Automation, Enterprise SaaS',
-      hook: 'A documented, sensor-integrated operational intelligence system eliminating 62% audit citation exposure across mid-market manufacturing plants within 14 days.',
-      stage: 'Execution-Ready',
-      geography: 'North America (US Mid-Market), UK & EU Tier-1 Industrial Hubs',
-      capital: '$35,000 – $75,000 (Working Capital + Initial Telemetry Ingestion)',
-      timeline: '14-Day Rapid Handover · 60-Day Phased Factory Integration',
-      monet: 'Annual Recurring Contract ($18,400 ACV) + 84% Gross Margin SLA',
-      price: 35000,
-      docs: `Institutional Systems Architecture 90+ Page Specification (PDF)\nThree-Statement Financial Pro-Forma & Cashflow Model (.xlsx)\n14 Documented Standard Operating Procedures (SOPs) & Integration Maps\nSCADA & Tier-1 ERP Telemetry Connector Protocols\nVendor & Supplier Transition Warranty Agreements`,
-      thesis: `Mid-market industrial manufacturing facilities (14,000 plants across North America and Europe) face severe statutory penalty exposure under updated EPA/OSHA multi-jurisdiction mandates. Current compliance relies on fragmented spreadsheets and manual audit logs that fail 62% of surprise inspections, generating an estimated $340k in annual avoidable regulatory fines per plant cluster. This autonomous compliance pipeline establishes an unassailable data moat with 84% gross margins, verified 14-day turnkey operator handover, and a 6.4-month capital payback horizon. Serious capital can deploy this architecture as an immediate high-margin roll-up into existing manufacturing holdings.`,
-      problem: `Plant managers spend 22+ hours per week manually compiling physical paper inspection logs and reconciling disjointed SCADA sensor data. When surprise regulatory audits occur, paper records are missing or unvalidated, resulting in immediate stop-work citations averaging $48,000 per violation. Operators lack centralized compliance visibility, resulting in acute statutory liability, insurance premium surcharges, and operator burnout.`,
-      gap: `Tier-1 enterprise software suites (SAP EHS, Oracle Risk) demand $350k+ deployment overhead and 12-month implementation cycles, rendering them unfeasible for mid-market plants with 50-500 staff. Conversely, generic SMB checklist tools lack automated sensor ingestion and cryptographic audit trails required by statutory enforcement officers. Our architecture bridges this exact structural whitespace by providing turnkey compliance automation deployable in 14 days without IT infrastructure reconfiguration.`,
-      model: `Direct enterprise recurring licensing at $18,400 Average Contract Value (ACV) per manufacturing facility. Operating costs are limited to cloud ingestion and telemetry verification, yielding steady-state gross margins of 84%. Customer lifetime value is modeled at $73,600 over a 4-year retention lifecycle with negative net revenue churn due to statutory compliance stickiness. Breakeven occurs within 6.4 months post-handover.`,
-      competitive: `Point-solution checklist tools lack sensor telemetry integration and immutable timestamping. Specialized environmental engineering consultancies charge $220/hour for manual audit preparation, creating recurring operational friction. Our turnkey documented architecture enables non-technical plant operators to achieve 100% audit compliance autonomously, defended by 14 proprietary integration maps and SOP protocols.`,
-      risks: `Execution risks include legacy factory PLC/SCADA protocol variability and frontline operator change-management inertia. Both are mitigated through our included 14 vendor-agnostic webhook bridges, standardized visual SOPs, and 15 hours of post-closing architect implementation warranty.`,
-      gtm: `Direct outbound account-based marketing targeted at VP of Operations and EHS Directors across 3 core industrial corridors (Midwest US, Rust Belt, Rhine-Ruhr Germany). Secondary channel distribution through commercial property and casualty risk insurers offering policy discounts for verified compliance installations.`,
-      financials: `Year 1 pro-forma targets 24 plant installations generating $441,600 ARR with $370,000 contribution margin. Year 2 expands to 82 installations reaching $1,508,800 ARR at 84% gross margin. Full 3-statement financial model demonstrates initial capital recovery within 6.4 months post-closing.`
-    };
+    const state = {};
+    const aiSummary = {};   // AI-generated public summary per deep field
+    const aiEdited = {};    // whether architect manually edited the AI summary
 
-    // AI Summary Engine (Verbatim institutional heuristic from original vvEntra platform)
+    function fmtMoney(n) { n = Math.round(n); return '$' + n.toLocaleString('en-US'); }
+
+    /* ============================================================
+       AI SUMMARY ENGINE
+       ------------------------------------------------------------
+       PROTOTYPE: local simulation (works offline, no API key).
+       It produces a polished, complete-feeling "conclusion" of the
+       architect's full text that conveys quality WITHOUT revealing
+       the specifics. The buyer never sees the raw text for free.
+       ============================================================ */
     function simulateSummary(fieldLabel, text) {
       if (!text || !text.trim()) return '';
       const clean = text.replace(/\s+/g, ' ').trim();
       const sentences = clean.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(s => s.length > 0);
       const wordCount = clean.split(/\s+/).length;
 
+      // --- Extract real substance from the architect's actual text ---
+      // 1. Sentences containing hard data (numbers, money, %, time, multiples)
       const dataRe = /(\$[\d,.]+\s?[KMB]?|\b\d+[\d,.]*\s?%|\b\d+[\d,.]*\s?(x|months?|days?|weeks?|years?|hours?)\b|\b\d{2,}[\d,.]*\b)/i;
       const dataSentences = sentences.filter(s => dataRe.test(s));
 
+      // 2. Mechanism / market sentences (signal verbs investors care about)
       const signalRe = /\b(market|customers?|segment|target|revenue|margin|pricing|charge|cost|save|reduce|grow|demand|competitor|incumbent|because|driver|trend|why now|moat|defensible|retention|churn|acquisition)\b/i;
       const signalSentences = sentences.filter(s => signalRe.test(s) && !dataRe.test(s));
 
-      function trimSentence(s, max = 160) {
+      // Pull up to 4 real data points (verbatim from the architect, lightly trimmed)
+      function trimSentence(s, max) {
+        max = max || 160;
         if (s.length <= max) return s;
         return s.slice(0, max).replace(/\s+\S*$/, '') + '…';
       }
-
       const firstSentence = sentences[0] || '';
       const firstIsSubstantive = firstSentence.length > 40 && (dataRe.test(firstSentence) || signalRe.test(firstSentence));
 
+      // Build points, excluding the lead sentence if we are quoting it
       const points = [];
       const usedLead = firstIsSubstantive ? firstSentence : null;
       dataSentences.filter(s => s !== usedLead).slice(0, 3).forEach(s => points.push(trimSentence(s)));
-      if (points.length < 3) {
-        signalSentences.filter(s => s !== usedLead).slice(0, 3 - points.length).forEach(s => points.push(trimSentence(s)));
-      }
-
+      if (points.length < 3) signalSentences.filter(s => s !== usedLead).slice(0, 3 - points.length).forEach(s => points.push(trimSentence(s)));
       const depthNote =
         wordCount > 220 ? 'The full write-up runs deep' :
         wordCount > 110 ? 'The full write-up is detailed' :
         'The full detail continues';
 
       const sectionLead = {
-        'Investment thesis': 'The core thesis, in the architect’s own words:',
+        'Investment thesis': 'The core thesis, in the architect\u2019s own words:',
         'The problem': 'The problem being solved:',
         'Market gap': 'The market gap identified:',
         'Business model & revenue logic': 'How the opportunity makes money:',
         'Competitive landscape': 'The competitive position:',
         'Risks & execution challenges': 'The key risks named:',
         'Go-to-market strategy': 'The go-to-market approach:',
-        'Financial projections': 'The financial picture:'
+        'Financial projections': 'The financial picture:',
       };
 
+      // Build the structured summary object the renderer will use
       return {
         lead: firstIsSubstantive ? trimSentence(firstSentence, 220) : (sectionLead[fieldLabel] || 'Summary:'),
         leadIsQuote: firstIsSubstantive,
@@ -2099,6 +2054,7 @@
       };
     }
 
+    // Turn the structured summary into plain text (for the editable AI box)
     function summaryToText(s) {
       if (!s) return '';
       if (typeof s === 'string') return s;
@@ -2113,6 +2069,21 @@
       return out.trim();
     }
 
+    // Turn structured summary into listing-page HTML (buyer detail page)
+    function summaryToHTMLForListing(s) {
+      if (!s) return '';
+      if (typeof s === 'string') return '<p class="ls-text">' + s + '</p>';
+      let html = '';
+      if (s.leadIsQuote) html += '<p class="ls-text" style="font-weight:500;">' + s.lead + '</p>';
+      if (s.points && s.points.length) {
+        html += '<p class="ls-text" style="margin-bottom:.5rem;color:var(--text-muted);">' + (s.intro || 'Key points:') + '</p>';
+        html += '<ul class="ls-points">' + s.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
+      }
+      if (s.closing) html += '<p class="ls-text" style="color:var(--text-muted);font-size:.92rem;">' + s.closing + '</p>';
+      return html;
+    }
+
+    // Turn the structured summary into HTML (for the buyer preview)
     function summaryToHTML(s) {
       if (!s) return '';
       if (typeof s === 'string') return '<p class="pv-summary-text">' + s + '</p>';
@@ -2127,63 +2098,37 @@
     }
 
     function regenerateSummary(fid, label) {
-      if (aiEdited[fid]) return;
+      if (aiEdited[fid]) return; // respect architect's manual edits
       aiSummary[fid] = simulateSummary(label, state[fid] || '');
       const box = composer.querySelector(`[data-ai="${fid}"]`);
       if (box) box.value = summaryToText(aiSummary[fid]);
       renderPreviewSection(fid, label);
     }
 
-    // Field Builder Helpers
+    // ---- Build composer fields ----
     function freeFieldHTML(f) {
       let input;
-      if (f.type === 'textarea') {
-        input = `<textarea class="cfield-textarea" data-fid="${f.id}" placeholder="${f.ph || ''}"></textarea>`;
-      } else if (f.type === 'select') {
-        input = `<select class="cfield-select" data-fid="${f.id}">` + f.options.map(o => `<option value="${o}">${o}</option>`).join('') + `</select>`;
-      } else {
-        input = `<input class="cfield-input" type="${f.type}" data-fid="${f.id}" placeholder="${f.ph || ''}">`;
-      }
-
+      if (f.type === 'textarea') input = `<textarea class="cfield-textarea" data-fid="${f.id}" placeholder="${f.ph || ''}"></textarea>`;
+      else if (f.type === 'select') input = `<select class="cfield-select" data-fid="${f.id}">` + f.options.map(o => `<option value="${o}">${o}</option>`).join('') + `</select>`;
+      else input = `<input class="cfield-input" type="${f.type}" data-fid="${f.id}" placeholder="${f.ph || ''}">`;
       let extra = '';
-      if (f.id === 'price') {
-        extra = `<div class="unlock-calc"><span class="unlock-calc-label">Buyer pays to unlock (10%)</span><span class="unlock-calc-val" id="unlockCalcVal">$2,800</span></div>`;
-      }
-
-      return `
-        <div class="cfield">
-          <div class="cfield-label-row">
-            <label class="cfield-label">${f.label}</label>
-            <button type="button" class="cfield-ai-btn" data-ai-field="${f.id}" title="${f.aiHint || 'AI Enhance'}">${f.aiBtn}</button>
-          </div>
-          ${input}
-          ${extra}
-        </div>`;
+      if (f.id === 'price') extra = `<div class="unlock-calc"><span class="unlock-calc-label">Buyer pays to unlock (10%)</span><span class="unlock-calc-val" id="unlockCalcVal">$0</span></div>`;
+      return `<div class="cfield"><label class="cfield-label">${f.label}</label>${input}${extra}</div>`;
     }
 
+    // deep field = two columns: full text (left) + AI summary (right, editable)
     function deepFieldHTML(f) {
       return `
         <div class="deep-field">
-          <div class="deep-field-label">
-            <span>${f.label}</span>
-          </div>
+          <div class="deep-field-label">${f.label}</div>
           <div class="deep-cols">
             <div class="deep-col">
-              <div class="deep-col-head">
-                <span class="deep-col-tag full">Your full text</span>
-                <button type="button" class="deep-polish-btn" data-deep-ai="${f.id}" title="AI Polish rough draft into institutional PE-grade analysis">✨ AI Polish Draft</button>
-              </div>
+              <div class="deep-col-head"><span class="deep-col-tag full">Your full text</span><span class="deep-col-sub">Confidential · unlocks after payment · no limit</span></div>
               <textarea class="cfield-textarea deep-textarea" data-fid="${f.id}" placeholder="${f.ph || ''}"></textarea>
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem;">
-                <span class="deep-col-sub">Confidential · unlocks after payment · no limit</span>
-                <span class="cfield-charcount" data-cc="${f.id}">0 words</span>
-              </div>
+              <span class="cfield-charcount" data-cc="${f.id}">0 words</span>
             </div>
             <div class="deep-col">
-              <div class="deep-col-head">
-                <span class="deep-col-tag ai">Buyer sees (free)</span>
-                <button type="button" class="deep-regen" data-regen="${f.id}" title="Regenerate from your text">↻ Auto AI Teaser</button>
-              </div>
+              <div class="deep-col-head"><span class="deep-col-tag ai">Buyer sees (free)</span><button class="deep-regen" data-regen="${f.id}" title="Regenerate from your text">↻ Auto</button></div>
               <textarea class="cfield-textarea deep-textarea deep-ai" data-ai="${f.id}" placeholder="An AI summary of your text appears here automatically. You can edit it."></textarea>
               <span class="deep-ai-note">Auto-written from your text · editable</span>
             </div>
@@ -2191,146 +2136,65 @@
         </div>`;
     }
 
-    // Render Composer Form Shell
     composer.innerHTML = `
       <div class="composer-tier">
-        <div class="composer-tier-head">
-          <span class="cth-badge free">Free</span>
-          <span class="cth-title">Always visible to the buyer</span>
-          <span class="cth-hint">Builds trust & discovery</span>
-        </div>
+        <div class="composer-tier-head"><span class="cth-badge free">Free</span><span class="cth-title">Always visible to the buyer</span><span class="cth-hint">Builds trust</span></div>
         ${FREE.map(freeFieldHTML).join('')}
       </div>
-
       <div class="composer-tier">
-        <div class="composer-tier-head">
-          <span class="cth-badge teaser">Teaser</span>
-          <span class="cth-title">Buyer sees an AI summary free · your full text unlocks after payment</span>
-          <span class="cth-hint">Creates curiosity & defensibility</span>
-        </div>
-        <p class="deep-explainer">Write the real, complete content on the left. vvEntra automatically writes a public summary on the right that conveys your quality without revealing specifics. The buyer reads the summary free, plus a short blurred glimpse of your real words, then pays to unlock everything. You can edit the summary anytime or use AI Polish on any section.</p>
+        <div class="composer-tier-head"><span class="cth-badge teaser">Teaser</span><span class="cth-title">Buyer sees an AI summary free · your full text unlocks after payment</span><span class="cth-hint">Creates curiosity</span></div>
+        <p class="deep-explainer">Write the real, complete content on the left. vvEntra automatically writes a public summary on the right that conveys your quality without revealing specifics. The buyer reads the summary free, plus a short blurred glimpse of your real words, then pays to unlock everything. You can edit the summary anytime.</p>
         ${DEEP.map(deepFieldHTML).join('')}
       </div>
-
       <div class="composer-tier">
-        <div class="composer-tier-head">
-          <span class="cth-badge doc">Document</span>
-          <span class="cth-title">Shared as files after unlock + NDA</span>
-          <span class="cth-hint">Your prepared package</span>
-        </div>
-        <div class="cfield">
-          <div class="cfield-label-row">
-            <label class="cfield-label">Document package (one file name per line)</label>
-            <button type="button" class="cfield-ai-btn" data-ai-field="docs" title="AI Suggest complete diligence deliverables">✨ AI Suggest Diligence Package</button>
-          </div>
-          <textarea class="cfield-textarea" data-fid="docs" placeholder="Market sizing model (verified)&#10;Reference architecture (90+ pages)&#10;Supplier contract templates&#10;14 Standard Operating Procedures (SOPs)&#10;Three-Statement Financial Model (XLSX)"></textarea>
+        <div class="composer-tier-head"><span class="cth-badge doc">Document</span><span class="cth-title">Shared as files after unlock + NDA</span><span class="cth-hint">Your prepared package</span></div>
+        <div class="cfield"><label class="cfield-label">Document package (one file name per line)</label>
+          <textarea class="cfield-textarea" data-fid="docs" placeholder="Market sizing model (verified)&#10;Reference architecture&#10;Supplier contract templates&#10;90-day deployment plan&#10;Financial model (XLSX)"></textarea>
         </div>
       </div>
     `;
 
-    // Render Live Buyer Preview Shell
+    // ---- Preview shell ----
     preview.innerHTML = `
       <div class="pv-tags" id="pvTags"></div>
-      <div class="pv-title" id="pvTitle">Opportunity Blueprint Title</div>
-      <div class="pv-hook" id="pvHook">Executive summary hook will appear here as you type…</div>
+      <div class="pv-title" id="pvTitle"></div>
+      <div class="pv-hook" id="pvHook"></div>
       <div class="pv-snapshot">
-        <div class="pv-snap-cell"><span class="pv-snap-k">Stage</span><span class="pv-snap-v" id="pvStage">Execution-Ready</span></div>
-        <div class="pv-snap-cell"><span class="pv-snap-k">Geography</span><span class="pv-snap-v" id="pvGeography">—</span></div>
-        <div class="pv-snap-cell"><span class="pv-snap-k">Capital</span><span class="pv-snap-v" id="pvCapital">—</span></div>
-        <div class="pv-snap-cell"><span class="pv-snap-k">Time to launch</span><span class="pv-snap-v" id="pvTimeline">—</span></div>
-        <div class="pv-snap-cell"><span class="pv-snap-k">Monetisation</span><span class="pv-snap-v" id="pvMonet">—</span></div>
-        <div class="pv-snap-cell"><span class="pv-snap-k">Unlock fee</span><span class="pv-snap-v" id="pvUnlock">$2,800</span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Stage</span><span class="pv-snap-v" id="pvStage"></span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Geography</span><span class="pv-snap-v" id="pvGeography"></span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Capital</span><span class="pv-snap-v" id="pvCapital"></span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Time to launch</span><span class="pv-snap-v" id="pvTimeline"></span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Monetisation</span><span class="pv-snap-v" id="pvMonet"></span></div>
+        <div class="pv-snap-cell"><span class="pv-snap-k">Unlock fee</span><span class="pv-snap-v" id="pvUnlock"></span></div>
       </div>
       <div id="pvSections"></div>
       <div class="pv-section"><div class="pv-sec-title">Document package</div><div id="pvDocs"></div></div>
     `;
+    document.getElementById('pvSections').innerHTML = DEEP.map(f =>
+      `<div class="pv-section">
+        <div class="pv-sec-title">${f.label}</div>
+        <div class="pv-sec-summary" data-pvsum="${f.id}"><span class="pv-empty-hint">Nothing written yet.</span></div>
+        <div class="pv-sec-teaser" data-pvtease="${f.id}"></div>
+      </div>`).join('');
 
-    const pvSectionsContainer = DOM.get('#pvSections');
-    if (pvSectionsContainer) {
-      pvSectionsContainer.innerHTML = DEEP.map(f => `
-        <div class="pv-section">
-          <div class="pv-sec-title">${f.label}</div>
-          <div class="pv-sec-summary" data-pvsum="${f.id}"><span class="pv-empty-hint">Nothing written yet.</span></div>
-          <div class="pv-sec-teaser" data-pvtease="${f.id}"></div>
-        </div>
-      `).join('');
-    }
-
-    // Live Buyer Preview Render Helpers
-    function setText(id, val) {
-      const el = DOM.get('#' + id);
-      if (el) el.textContent = val || '—';
-    }
-
-    function renderTags(val) {
-      const box = DOM.get('#pvTags');
-      if (!box) return;
-      box.innerHTML = '';
-      (val || '').split(',').map(t => t.trim()).filter(Boolean).forEach(t => {
-        const s = document.createElement('span');
-        s.className = 'pv-tag';
-        s.textContent = t;
-        box.appendChild(s);
-      });
-    }
-
-    function renderDocs(val) {
-      const box = DOM.get('#pvDocs');
-      if (!box) return;
-      box.innerHTML = '';
-      const lines = (val || '').split('\n').map(l => l.trim()).filter(Boolean);
-      if (!lines.length) {
-        box.innerHTML = '<span class="pv-empty-hint">No documents listed yet.</span>';
-        return;
-      }
-      lines.forEach(name => {
-        const row = document.createElement('div');
-        row.className = 'pv-doc-row';
-        row.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <path d="M14 2v6h6"/>
-          </svg>
-          <span class="pv-doc-name">${name}</span>
-          <span class="pv-doc-lock">NDA</span>
-        `;
-        box.appendChild(row);
-      });
-    }
-
-    function updateUnlock() {
-      const priceVal = Number(state.price) || 0;
-      const v = priceVal ? fmtMoney(priceVal * 0.10) : '$0';
-      const calc = DOM.get('#unlockCalcVal');
-      if (calc) calc.textContent = v;
-      const pv = DOM.get('#pvUnlock');
-      if (pv) pv.textContent = priceVal ? v : '—';
-      DEEP.forEach(f => {
-        if (state[f.id]) renderPreviewSection(f.id, f.label);
-      });
-    }
-
+    // ---- Render one preview section (AI summary + blurred glimpse + prompt) ----
     function renderPreviewSection(fid, label) {
       const sumBox = preview.querySelector(`[data-pvsum="${fid}"]`);
       const teaseBox = preview.querySelector(`[data-pvtease="${fid}"]`);
       if (!sumBox || !teaseBox) return;
-
       const full = state[fid] || '';
       const summary = aiSummary[fid] || '';
 
-      if (!full) {
-        sumBox.innerHTML = '<span class="pv-empty-hint">Nothing written yet.</span>';
-        teaseBox.innerHTML = '';
-        return;
-      }
+      if (!full) { sumBox.innerHTML = '<span class="pv-empty-hint">Nothing written yet.</span>'; teaseBox.innerHTML = ''; return; }
 
       sumBox.innerHTML = '';
       if (typeof summary === 'string') {
+        // architect-edited plain text -> render with line breaks
         const p = document.createElement('div');
         p.className = 'pv-summary-text';
         p.innerHTML = summary.split('\n').filter(Boolean).map(line =>
-          line.trim().startsWith('•')
-            ? '<div class="pv-sum-bullet">' + line.replace(/^•\s*/, '') + '</div>'
+          line.trim().startsWith('\u2022') || line.trim().startsWith('•')
+            ? '<div class="pv-sum-bullet">' + line.replace(/^[\u2022•]\s*/, '') + '</div>'
             : '<p>' + line + '</p>'
         ).join('');
         sumBox.appendChild(p);
@@ -2338,409 +2202,176 @@
         sumBox.innerHTML = summaryToHTML(summary);
       }
 
+      // short blurred glimpse of the REAL text
       teaseBox.innerHTML = '';
       const glimpse = full.replace(/\s+/g, ' ').trim().slice(0, TEASER_PREVIEW_CHARS);
       const wrap = document.createElement('div');
       wrap.className = 'pv-glimpse-wrap';
-
       const lbl = document.createElement('span');
       lbl.className = 'pv-glimpse-label';
       lbl.textContent = 'From the architect’s full write-up';
-
       const g = document.createElement('div');
       g.className = 'pv-glimpse';
-      g.innerHTML = `
-        <span class="pv-glimpse-vis">${glimpse}</span>
-        <span class="pv-glimpse-blur"> ${(full.replace(/\s+/g, ' ').trim().slice(TEASER_PREVIEW_CHARS, TEASER_PREVIEW_CHARS + 220) || 'and continues in full detail behind the unlock')}</span>
-      `;
-
-      const priceVal = Number(state.price) || 0;
-      const fee = priceVal ? fmtMoney(priceVal * 0.10) : 'the unlock fee';
+      g.innerHTML = '<span class="pv-glimpse-vis">' + glimpse + '</span><span class="pv-glimpse-blur"> ' + (full.replace(/\s+/g, ' ').trim().slice(TEASER_PREVIEW_CHARS, TEASER_PREVIEW_CHARS + 220) || 'and continues in full detail behind the unlock') + '</span>';
+      const fee = state.price ? fmtMoney(state.price * 0.10) : 'the unlock fee';
       const prompt = document.createElement('div');
       prompt.className = 'pv-teaser-prompt';
-      prompt.textContent = `🔒 Pay ${fee} to read the full section`;
-
-      wrap.appendChild(lbl);
-      wrap.appendChild(g);
-      wrap.appendChild(prompt);
+      prompt.textContent = '🔒 Pay ' + fee + ' to read the full section';
+      wrap.appendChild(lbl); wrap.appendChild(g); wrap.appendChild(prompt);
       teaseBox.appendChild(wrap);
     }
 
-    // Inline Field-Level AI Enhancement Action Handler
-    function handleAiEnhance(fieldId, btnEl) {
-      if (btnEl) {
-        const origText = btnEl.textContent;
-        btnEl.textContent = '✨ Polishing...';
-        btnEl.style.opacity = '0.7';
-        setTimeout(() => {
-          btnEl.textContent = origText;
-          btnEl.style.opacity = '1';
-        }, 500);
-      }
+    function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || ''; }
+    function renderTags(val) { const box = document.getElementById('pvTags'); box.innerHTML = ''; (val || '').split(',').map(t => t.trim()).filter(Boolean).forEach(t => { const s = document.createElement('span'); s.className = 'pv-tag'; s.textContent = t; box.appendChild(s); }); }
+    function renderDocs(val) { const box = document.getElementById('pvDocs'); box.innerHTML = ''; const lines = (val || '').split('\n').map(l => l.trim()).filter(Boolean); if (!lines.length) { box.innerHTML = '<span class="pv-empty-hint">No documents listed yet.</span>'; return; } lines.forEach(name => { const row = document.createElement('div'); row.className = 'pv-doc-row'; row.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span class="pv-doc-name"></span><span class="pv-doc-lock">NDA</span>'; row.querySelector('.pv-doc-name').textContent = name; box.appendChild(row); }); }
 
-      if (fieldId === 'title') {
-        const input = composer.querySelector('[data-fid="title"]');
-        const val = input?.value.trim();
-        const enhanced = (val && val.length > 5)
-          ? (val.includes('Pipeline') || val.includes('System') || val.includes('Matrix') ? val : `Autonomous ${val} Operations Matrix`)
-          : aiEnhancementLibrary.title;
-        if (input) {
-          input.value = enhanced;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI polished opportunity title to institutional PE grade.');
-      } else if (fieldId === 'tags') {
-        const input = composer.querySelector('[data-fid="tags"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.tags;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI suggested high-conviction sector tags.');
-      } else if (fieldId === 'hook') {
-        const input = composer.querySelector('[data-fid="hook"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.hook;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI refined executive hook with quantifiable outcomes.');
-      } else if (fieldId === 'stage') {
-        const sel = composer.querySelector('[data-fid="stage"]');
-        if (sel) {
-          sel.value = 'Execution-Ready';
-          sel.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        showNotification('✨ AI stage audit completed: Certified as Execution-Ready.');
-      } else if (fieldId === 'geography') {
-        const input = composer.querySelector('[data-fid="geography"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.geography;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI suggested cross-border capital jurisdictions.');
-      } else if (fieldId === 'capital') {
-        const input = composer.querySelector('[data-fid="capital"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.capital;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI calibrated capital deployment pro-forma.');
-      } else if (fieldId === 'timeline') {
-        const input = composer.querySelector('[data-fid="timeline"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.timeline;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI structured 14-day handover timeline.');
-      } else if (fieldId === 'monet') {
-        const input = composer.querySelector('[data-fid="monet"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.monet;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI structured high-margin recurring contract model.');
-      } else if (fieldId === 'price') {
-        const input = composer.querySelector('[data-fid="price"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.price;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI calibrated market-clearing valuation ($35,000 / $3,500 unlock).');
-      } else if (fieldId === 'docs') {
-        const input = composer.querySelector('[data-fid="docs"]');
-        if (input) {
-          input.value = aiEnhancementLibrary.docs;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification('✨ AI generated institutional 5-document diligence package.');
-      } else if (DEEP.some(d => d.id === fieldId)) {
-        const deepObj = DEEP.find(d => d.id === fieldId);
-        const input = composer.querySelector(`[data-fid="${fieldId}"]`);
-        const userVal = input?.value.trim();
-        const polished = (userVal && userVal.length > 30)
-          ? `${userVal}\n\nQuantified Operating Framework: Documented across verified telemetry schemas with zero reliance on original founder hours. Structural payback horizon benchmarked at under 7 months with 80%+ gross margin defensibility.`
-          : aiEnhancementLibrary[fieldId];
-        
-        if (input) {
-          input.value = polished;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        showNotification(`✨ AI polished ${deepObj.label} draft into institutional analysis.`);
-      }
+    function updateUnlock() {
+      const v = state.price ? fmtMoney(state.price * 0.10) : '$0';
+      const calc = document.getElementById('unlockCalcVal'); if (calc) calc.textContent = v;
+      const pv = document.getElementById('pvUnlock'); if (pv) pv.textContent = state.price ? v : '';
+      DEEP.forEach(f => { if (state[f.id]) renderPreviewSection(f.id, f.label); });
     }
 
-    // Wire Free & Document Fields Input Listeners
+    // ---- Wire free + doc fields ----
     composer.querySelectorAll('[data-fid]').forEach(el => {
       const fid = el.dataset.fid;
-      const handler = () => {
+      const h = () => {
         state[fid] = el.value;
-        if (fid === 'title') setText('pvTitle', el.value || 'Opportunity Blueprint Title');
-        else if (fid === 'hook') setText('pvHook', el.value || 'Executive summary hook will appear here as you type…');
+        if (fid === 'title') setText('pvTitle', el.value);
+        else if (fid === 'hook') setText('pvHook', el.value);
         else if (fid === 'tags') renderTags(el.value);
         else if (fid === 'stage') setText('pvStage', el.value);
         else if (fid === 'geography') setText('pvGeography', el.value);
         else if (fid === 'capital') setText('pvCapital', el.value);
         else if (fid === 'timeline') setText('pvTimeline', el.value);
         else if (fid === 'monet') setText('pvMonet', el.value);
-        else if (fid === 'price') {
-          state.price = parseFloat(el.value) || 0;
-          updateUnlock();
-        } else if (fid === 'docs') renderDocs(el.value);
+        else if (fid === 'price') { state.price = parseFloat(el.value) || 0; updateUnlock(); }
+        else if (fid === 'docs') renderDocs(el.value);
         else if (DEEP.find(d => d.id === fid)) {
+          // full-text deep field changed -> regen AI summary + word count + preview
           const label = DEEP.find(d => d.id === fid).label;
           const wc = el.value.trim() ? el.value.trim().split(/\s+/).length : 0;
-          const cc = composer.querySelector(`[data-cc="${fid}"]`);
-          if (cc) cc.textContent = `${wc} words`;
+          const cc = composer.querySelector(`[data-cc="${fid}"]`); if (cc) cc.textContent = wc + ' words';
           regenerateSummary(fid, label);
         }
       };
-
-      el.addEventListener('input', handler);
-      el.addEventListener('change', handler);
+      el.addEventListener('input', h); el.addEventListener('change', h);
     });
 
-    // Wire Inline AI Action Buttons on Free & Document Fields
-    composer.querySelectorAll('.cfield-ai-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fid = btn.dataset.aiField;
-        handleAiEnhance(fid, btn);
-      });
-    });
-
-    // Wire Inline AI Action Buttons on Deep Fields
-    composer.querySelectorAll('.deep-polish-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fid = btn.dataset.deepAi;
-        handleAiEnhance(fid, btn);
-      });
-    });
-
-    // Wire AI Summary Textarea Architect Edits
+    // ---- Wire AI summary textareas (architect edits) ----
     composer.querySelectorAll('[data-ai]').forEach(el => {
       const fid = el.dataset.ai;
       const label = DEEP.find(d => d.id === fid).label;
-      el.addEventListener('input', () => {
-        aiEdited[fid] = true;
-        aiSummary[fid] = el.value;
-        renderPreviewSection(fid, label);
-      });
+      el.addEventListener('input', () => { aiEdited[fid] = true; aiSummary[fid] = el.value; renderPreviewSection(fid, label); });
     });
-
-    // Wire Regenerate Buttons on Deep Fields
+    // ---- Wire regenerate buttons ----
     composer.querySelectorAll('[data-regen]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fid = btn.dataset.regen;
-        const label = DEEP.find(d => d.id === fid).label;
-        aiEdited[fid] = false;
-        regenerateSummary(fid, label);
-      });
+      btn.addEventListener('click', () => { const fid = btn.dataset.regen; const label = DEEP.find(d => d.id === fid).label; aiEdited[fid] = false; regenerateSummary(fid, label); });
     });
 
-    // Load Institutional Sample Draft Pre-fill Button
-    if (sampleBtn) {
-      sampleBtn.addEventListener('click', () => {
-        // Populate Free fields
-        FREE.forEach(f => {
-          const el = composer.querySelector(`[data-fid="${f.id}"]`);
-          if (el && aiEnhancementLibrary[f.id] !== undefined) {
-            el.value = aiEnhancementLibrary[f.id];
-            state[f.id] = aiEnhancementLibrary[f.id];
-          }
-        });
-        state.price = aiEnhancementLibrary.price;
+    setText('pvStage', 'Early Concept');
+    renderDocs('');
 
-        // Populate Deep fields
-        DEEP.forEach(f => {
-          const el = composer.querySelector(`[data-fid="${f.id}"]`);
-          if (el && aiEnhancementLibrary[f.id]) {
-            el.value = aiEnhancementLibrary[f.id];
-            state[f.id] = aiEnhancementLibrary[f.id];
-            const wc = el.value.trim().split(/\s+/).length;
-            const cc = composer.querySelector(`[data-cc="${f.id}"]`);
-            if (cc) cc.textContent = `${wc} words`;
+    // ---- Submit flow ----
+    const submitCard = document.getElementById('listSubmitCard');
+    const successCard = document.getElementById('listSubmitSuccess');
+    const readiness = document.getElementById('lsubReadiness');
+    const submitBtn = document.getElementById('lsubSubmitBtn');
+    const previewBtn = document.getElementById('lsubPreviewBtn');
+    const editBtn = document.getElementById('lsubEditBtn');
+    const REQUIRED = [{ id: 'title', label: 'Opportunity title' }, { id: 'hook', label: 'One-line hook' }, { id: 'price', label: 'Listed price' }, { id: 'thesis', label: 'Investment thesis (full text)' }, { id: 'problem', label: 'The problem (full text)' }];
 
-            aiEdited[f.id] = false;
-            aiSummary[f.id] = simulateSummary(f.label, el.value);
-            const aiBox = composer.querySelector(`[data-ai="${f.id}"]`);
-            if (aiBox) aiBox.value = summaryToText(aiSummary[f.id]);
-          }
-        });
-
-        // Populate Docs
-        const docEl = composer.querySelector('[data-fid="docs"]');
-        if (docEl) {
-          docEl.value = aiEnhancementLibrary.docs;
-          state.docs = aiEnhancementLibrary.docs;
-        }
-
-        // Synchronize Live Buyer Preview
-        setText('pvTitle', state.title);
-        setText('pvHook', state.hook);
-        renderTags(state.tags);
-        setText('pvStage', state.stage);
-        setText('pvGeography', state.geography);
-        setText('pvCapital', state.capital);
-        setText('pvTimeline', state.timeline);
-        setText('pvMonet', state.monet);
-        updateUnlock();
-        renderDocs(state.docs);
-        DEEP.forEach(f => renderPreviewSection(f.id, f.label));
-        refreshReadiness();
-
-        showNotification('📋 Institutional sample draft loaded! Live buyer preview and AI teasers generated.');
-      });
-    }
-
-    // Dynamic Readiness Checklist Controller
-    const REQUIRED = [
-      { id: 'title', label: 'Opportunity title' },
-      { id: 'hook', label: 'One-line hook' },
-      { id: 'price', label: 'Listed price' },
-      { id: 'thesis', label: 'Investment thesis (full text)' },
-      { id: 'problem', label: 'The problem (full text)' }
-    ];
+    let lastComposedId = null;
 
     function refreshReadiness() {
-      if (!readiness) return;
-      let done = 0;
+      if (!readiness) return; let done = 0;
       readiness.innerHTML = REQUIRED.map(r => {
-        const filled = state[r.id] && String(state[r.id]).trim().length > 0;
-        if (filled) done++;
-        const icon = filled
-          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
-          : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
+        const filled = state[r.id] && String(state[r.id]).trim().length > 0; if (filled) done++;
+        const icon = filled ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
         return `<div class="lready-row ${filled ? 'done' : 'miss'}">${icon}${r.label}</div>`;
       }).join('');
-
-      const allDone = (done === REQUIRED.length);
-      if (submitBtn) submitBtn.disabled = !allDone;
-
-      readiness.insertAdjacentHTML('beforeend', `
-        <div class="lready-row ${allDone ? 'done' : 'miss'}" style="border-top:1px solid var(--line);padding-top:.6rem;margin-top:.3rem;">
-          <span class="lready-count">${done} of ${REQUIRED.length} required fields complete</span>
-        </div>
-      `);
+      const allDone = done === REQUIRED.length; if (submitBtn) submitBtn.disabled = !allDone;
+      readiness.insertAdjacentHTML('beforeend', `<div class="lready-row ${allDone ? 'done' : 'miss'}" style="border-top:1px solid var(--line);padding-top:.6rem;margin-top:.3rem;"><span class="lready-count">${done} of ${REQUIRED.length} required fields complete</span></div>`);
     }
+    composer.querySelectorAll('[data-fid]').forEach(el => { el.addEventListener('input', refreshReadiness); el.addEventListener('change', refreshReadiness); });
+    refreshReadiness();
 
-    composer.querySelectorAll('[data-fid]').forEach(el => {
-      el.addEventListener('input', refreshReadiness);
-      el.addEventListener('change', refreshReadiness);
+    if (submitBtn) submitBtn.addEventListener('click', () => {
+      submitBtn.textContent = 'Submitting...'; submitBtn.disabled = true;
+      setTimeout(() => {
+        const newId = `VVE-${Math.floor(1000 + Math.random() * 9000)}`;
+        lastComposedId = newId;
+        const priceVal = Number(state.price) || 28000;
+        const unlockVal = Math.round(priceVal * 0.10);
+        const docLines = (state.docs || '').split('\n').map(l => l.trim()).filter(Boolean);
+
+        const newAsset = {
+          id: newId,
+          title: state.title || 'Untitled Opportunity Blueprint',
+          summary: state.hook || (state.problem ? state.problem.slice(0, 140) + '…' : 'Confidential business opportunity.'),
+          industry: (state.tags ? state.tags.split(',')[0].trim() : 'Software & AI'),
+          tags: (state.tags || 'General, Blueprint').split(',').map(t => t.trim()).filter(Boolean),
+          status: 'Audited & Active',
+          targetJurisdiction: state.geography || 'Global',
+          capitalRequirement: state.capital || '$30,000 – $60,000',
+          implementationTimeline: state.timeline || '60 – 90 Days',
+          valuation: priceVal,
+          escrowDeposit: unlockVal,
+          trustRating: 98,
+          pageCount: 104,
+          frameworkCount: 14,
+          operator: {
+            name: 'Architect Entity',
+            title: 'Licensed Systems Architect',
+            verifiedIdentity: true,
+            historicalTransactions: 'Audited Registry Record',
+            peerReviewScore: 5.0,
+            totalCompletedTransfers: 1
+          },
+          commercialParameters: {
+            addressableMarket: state.model || '$2.4B Market Sector',
+            targetMarginImprovement: 'High Margin',
+            paybackPeriod: '6 Months'
+          },
+          executiveAbstract: `${state.problem || ''}\n\n${state.thesis || ''}`.trim(),
+          operationalProblem: state.problem || '',
+          solutionArchitecture: state.thesis || '',
+          commercialModel: state.model || state.monet || '',
+          riskFactors: state.risks || '',
+          deliverablesPackage: docLines.length ? docLines : ['Operational Systems Architecture Specification', 'Financial Model (XLSX)', 'Standard Operating Procedures'],
+          deepSections: { ...state }
+        };
+
+        State.customAssets.unshift(newAsset);
+        StorageService.set('custom_assets', State.customAssets);
+        State.activeAssetId = newId;
+
+        appendLiveTransaction(`<strong>New Blueprint Registered:</strong> ${newId} · ${(newAsset.title).slice(0, 36)}… (${fmtMoney(priceVal)})`);
+        updateDashboardKPIs();
+        renderTickerTape();
+        if (window.QuadrantMatrixController) QuadrantMatrixController.render();
+        renderDashboard();
+
+        if (submitCard) submitCard.style.display = 'none';
+        if (successCard) successCard.style.display = 'block';
+        successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 800);
     });
 
-    // Submission Handler
-    if (submitBtn) {
-      submitBtn.addEventListener('click', () => {
-        submitBtn.textContent = 'Submitting for review...';
-        submitBtn.disabled = true;
+    if (previewBtn) previewBtn.addEventListener('click', () => {
+      if (lastComposedId) {
+        window.location.hash = `#listing?id=${lastComposedId}`;
+      } else {
+        window.location.hash = 'listing';
+      }
+    });
 
-        setTimeout(() => {
-          const newId = `VVE-${Math.floor(1000 + Math.random() * 9000)}`;
-          lastSubmittedAssetId = newId;
-
-          const priceVal = Number(state.price) || 28000;
-          const unlockVal = Math.round(priceVal * 0.10);
-
-          const docLines = (state.docs || '').split('\n').map(l => l.trim()).filter(Boolean);
-          const docsArray = docLines.length > 0 ? docLines : [
-            'Operational Systems Architecture 90+ Page Specification (PDF)',
-            'Three-Statement Financial Pro-Forma & Cashflow Model (XLSX)',
-            '14 Documented Standard Operating Procedures (SOPs) & Integration Maps',
-            'Vendor & Supplier Direct Transition Agreements (DOCX)'
-          ];
-
-          const newAsset = {
-            id: newId,
-            title: state.title || 'Institutional Turnkey Opportunity Blueprint',
-            summary: state.hook || (state.problem ? state.problem.slice(0, 140) + '…' : 'Confidential audited business architecture.'),
-            industry: (state.tags ? state.tags.split(',')[0].trim() : 'Enterprise Systems'),
-            tags: (state.tags || 'Systems Architecture, Verified Blueprint').split(',').map(t => t.trim()).filter(Boolean),
-            status: 'Audited & Active',
-            targetJurisdiction: state.geography || 'North America / EU Tier-1',
-            capitalRequirement: state.capital || '$35,000 – $75,000',
-            implementationTimeline: state.timeline || '14 – 30 Days Handover',
-            valuation: priceVal,
-            escrowDeposit: unlockVal,
-            trustRating: 98,
-            pageCount: 104,
-            frameworkCount: 14,
-            operator: {
-              name: 'Architect Entity (KYC Verified)',
-              title: 'Licensed Systems Architect',
-              verifiedIdentity: true,
-              historicalTransactions: 'Audited Registry Record',
-              peerReviewScore: 5.0,
-              totalCompletedTransfers: 1
-            },
-            commercialParameters: {
-              addressableMarket: state.model ? (state.model.match(/\$[\d,.]+[BMT]?/i)?.[0] || '$2.4B TAM') : '$2.4B Market Sector',
-              targetMarginImprovement: '84% Steady-State Gross Margin',
-              paybackPeriod: '6.4 Months Capital Recovery'
-            },
-            executiveAbstract: `${state.problem || ''}\n\n${state.thesis || ''}`.trim(),
-            operationalProblem: state.problem || 'Operational inefficiency and manual compliance risks.',
-            solutionArchitecture: state.thesis || 'Comprehensive systems architecture and automated telemetry.',
-            commercialModel: state.model || state.monet || 'Enterprise recurring licensing model.',
-            riskFactors: state.risks || 'Operational change-management variance and deployment timeline dependencies.',
-            deliverablesPackage: docsArray,
-            deepSections: {
-              thesis: state.thesis,
-              problem: state.problem,
-              gap: state.gap,
-              model: state.model,
-              competitive: state.competitive,
-              risks: state.risks,
-              gtm: state.gtm,
-              financials: state.financials
-            }
-          };
-
-          State.customAssets.unshift(newAsset);
-          StorageService.set('custom_assets', State.customAssets);
-          State.activeAssetId = newId;
-
-          // Update real-time platform telemetry
-          appendLiveTransaction(`<strong>New Blueprint Registered:</strong> ${newId} · ${newAsset.title.slice(0, 36)}… (${formatCurrency(priceVal)})`);
-          updateDashboardKPIs();
-          renderTickerTape();
-          if (window.QuadrantMatrixController) QuadrantMatrixController.render();
-          renderDashboard();
-
-          // Hide composer card, display success state
-          if (submitCard) submitCard.style.display = 'none';
-          if (successCard) {
-            successCard.style.display = 'block';
-            successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-
-          showNotification(`Asset Blueprint ${newId} submitted and registered successfully in the transaction repository!`);
-        }, 700);
-      });
-    }
-
-    if (previewBtn) {
-      previewBtn.addEventListener('click', () => {
-        if (lastSubmittedAssetId) {
-          window.location.hash = `#listing?id=${lastSubmittedAssetId}`;
-        } else {
-          window.location.hash = '#listing';
-        }
-      });
-    }
-
-    if (editBtn) {
-      editBtn.addEventListener('click', () => {
-        if (successCard) successCard.style.display = 'none';
-        if (submitCard) submitCard.style.display = 'block';
-        if (submitBtn) {
-          submitBtn.textContent = 'Submit for review';
-          refreshReadiness();
-        }
-      });
-    }
-
-    // Initial state refresh
-    updateUnlock();
-    renderDocs('');
-    refreshReadiness();
+    if (editBtn) editBtn.addEventListener('click', () => {
+      if (successCard) successCard.style.display = 'none';
+      if (submitCard) submitCard.style.display = 'block';
+      submitBtn.textContent = 'Submit for review';
+      refreshReadiness();
+    });
   }
 
   // ===================================================================

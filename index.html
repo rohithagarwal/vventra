@@ -44,7 +44,7 @@
           <li><a href="#pricing" class="c-nav__link">Pricing & Flow</a></li>
           <li><a href="#faq" class="c-nav__link">FAQ</a></li>
           <li><a href="#terms" class="c-nav__link">Terms</a></li>
-          <li><a href="#list" class="c-nav__cta" id="nav-link-list"><span id="nav-cta-text">+ Post Mandate</span></a></li>
+          <li><a href="#list" class="c-nav__cta" id="nav-link-list"><span id="nav-cta-text">List an opportunity</span></a></li>
         </ul>
       </nav>
 
@@ -2530,332 +2530,85 @@
     
 
     <!-- ===================================================================
-         VIEW 6: INTAKE & REGISTRATION (#list)
-         Dual-Perspective Architecture:
-         - [data-role="investor"]: Capital Buy-Box & Acquisition Mandate Composer
-         - [data-role="architect"]: Opportunity Architecture Intake + AI Co-Pilot
+         VIEW 6: LIST AN OPPORTUNITY (#list)
+         Verbatim architecture from original vvEntra platform
          =================================================================== -->
-    <section id="page-list" class="c-view">
+    <section id="page-list" class="c-view list-page">
 
-      <!-- ===============================================================
-           TRACK 1: INVESTOR & BUYER ACQUISITION MANDATE COMPOSER
-           =============================================================== -->
-      <div class="intake-track intake-track--investor">
-        <div class="c-section-header">
-          <div>
-            <div class="c-perspective-mode-pill">
-              <span>● Institutional Capital Desk</span>
-              <span class="c-perspective-mode-pill__action" onclick="window.vveSetPerspective('architect')">Need to list an opportunity? Switch to Architect ↗</span>
+      <header class="container-wide list-header">
+        <span class="eyebrow">List an opportunity</span>
+        <h1 class="display lg">Compose your listing. <em>See exactly what the buyer sees</em>.</h1>
+        <p class="list-sub">Fill the form on the left. The panel on the right shows your listing through the buyer’s eyes in real time, so you always know what is free, what is teased, and what unlocks only after payment.</p>
+
+        <!-- VISIBILITY LEGEND -->
+        <div class="vis-legend">
+          <div class="vis-legend-item">
+            <span class="vis-dot free"></span>
+            <div class="vis-legend-text">
+              <span class="vl-title">Free</span>
+              <span class="vl-desc">Buyer sees this fully, before paying anything.</span>
             </div>
-            <h1 class="c-section-header__title">Post Capital Deployment Buy-Box</h1>
-            <p class="c-section-header__sub">Specify your acquisition target, committed capital budget, and diligence criteria. Accredited architects with matching 90+ page blueprints are alerted confidentially under bilateral NDA.</p>
+          </div>
+          <div class="vis-legend-item">
+            <span class="vis-dot teaser"></span>
+            <div class="vis-legend-text">
+              <span class="vl-title">Teaser</span>
+              <span class="vl-desc">Buyer reads an AI summary free · your full text unlocks after payment.</span>
+            </div>
+          </div>
+          <div class="vis-legend-item">
+            <span class="vis-dot doc"></span>
+            <div class="vis-legend-text">
+              <span class="vl-title">Document</span>
+              <span class="vl-desc">Shared as downloadable files only after unlock and NDA.</span>
+            </div>
           </div>
         </div>
+      </header>
 
-        <div class="l-mandate-split">
-          <!-- Buy Mandate Composer Form -->
-          <div class="c-card c-card--institutional">
-            <form id="mandate-form">
-              <div class="c-mandate-section-header">
-                <span class="c-mandate-step-badge">01</span>
-                <div>
-                  <h3 class="c-mandate-step-title">Capital Allocation & Financing Structure</h3>
-                  <p class="c-mandate-step-desc">Define your liquidity envelope ready for technical diligence and closing.</p>
-                </div>
-              </div>
+      <div class="container-wide list-split">
+        <!-- LEFT: COMPOSER -->
+        <div class="list-composer" id="listComposer"><!-- JS renders fields --></div>
 
-              <div class="c-form-group">
-                <label class="c-form-label">Committed Deployment Allocation (USD)</label>
-                <div class="c-budget-presets" id="mandate-budget-presets">
-                  <button type="button" class="c-preset-pill" data-val="25000">$25,000</button>
-                  <button type="button" class="c-preset-pill" data-val="50000">$50,000</button>
-                  <button type="button" class="c-preset-pill is-active" data-val="100000">$100,000</button>
-                  <button type="button" class="c-preset-pill" data-val="250000">$250,000</button>
-                  <button type="button" class="c-preset-pill" data-val="500000">$500,000+</button>
-                </div>
-                <div style="position: relative; margin-top: 0.5rem;">
-                  <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-family: var(--font-family-mono); color: var(--color-text-faint); font-weight: 600;">$</span>
-                  <input type="number" id="mandate-budget" class="c-form-input" style="padding-left: 2rem; font-family: var(--font-family-mono); font-size: 1.1rem; font-weight: 600;" value="100000" min="5000" max="5000000" step="5000" required>
-                </div>
-                <div class="c-mandate-escrow-pill">
-                  <span>🔒 Max Immediate Diligence Escrow Reserve:</span>
-                  <strong id="mandate-escrow-disp">$10,000 (10%)</strong>
-                  <span class="c-mandate-escrow-note">· 100% protected in neutral banking custody during inspection</span>
-                </div>
-              </div>
-
-              <div class="c-form-group">
-                <label class="c-form-label">Transaction & Consideration Structure</label>
-                <div class="c-dealtype-grid">
-                  <label class="c-radio-card">
-                    <input type="radio" name="mandate_structure" value="cash" checked>
-                    <div class="c-radio-card__inner">
-                      <span class="c-radio-card__title">100% Cash Purchase</span>
-                      <span class="c-radio-card__desc">Full IP transfer upon 7-day escrow inspection clearance.</span>
-                    </div>
-                  </label>
-                  <label class="c-radio-card">
-                    <input type="radio" name="mandate_structure" value="staged">
-                    <div class="c-radio-card__inner">
-                      <span class="c-radio-card__title">Staged Tranches</span>
-                      <span class="c-radio-card__desc">50% at blueprint handover, 50% post-operational pilot validation.</span>
-                    </div>
-                  </label>
-                  <label class="c-radio-card">
-                    <input type="radio" name="mandate_structure" value="hybrid">
-                    <div class="c-radio-card__inner">
-                      <span class="c-radio-card__title">Retainer + Advisory</span>
-                      <span class="c-radio-card__desc">Base asset acquisition plus ongoing operating architect retainer.</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <div class="c-mandate-section-header" style="margin-top: 2rem;">
-                <span class="c-mandate-step-badge">02</span>
-                <div>
-                  <h3 class="c-mandate-step-title">Target Industry Verticals & Sector Specialization</h3>
-                  <p class="c-mandate-step-desc">Select sectors where your operating teams command execution capacity.</p>
-                </div>
-              </div>
-
-              <div class="c-form-group">
-                <label class="c-form-label">Target Verticals (Select multiple)</label>
-                <div class="c-sector-chips" id="mandate-sector-chips">
-                  <button type="button" class="c-sector-chip is-selected" data-sector="RegTech & Compliance">RegTech & Compliance</button>
-                  <button type="button" class="c-sector-chip is-selected" data-sector="Vertical AI Agents">Vertical AI Agents</button>
-                  <button type="button" class="c-sector-chip" data-sector="Enterprise Software">Enterprise Software</button>
-                  <button type="button" class="c-sector-chip" data-sector="Tier-2 SMB Fintech">Tier-2 SMB Fintech</button>
-                  <button type="button" class="c-sector-chip" data-sector="Digital Commerce">Digital Commerce</button>
-                  <button type="button" class="c-sector-chip" data-sector="ClimateTech & Energy">ClimateTech & Energy</button>
-                  <button type="button" class="c-sector-chip" data-sector="Healthcare Systems">Healthcare Systems</button>
-                  <button type="button" class="c-sector-chip" data-sector="Supply Chain & Logistics">Supply Chain & Logistics</button>
-                </div>
-              </div>
-
-              <div class="c-form-group">
-                <label for="mandate-niche" class="c-form-label">Specific Niche, Sub-Vertical or Functional Keywords</label>
-                <input type="text" id="mandate-niche" class="c-form-input" placeholder="e.g., Mid-market EPA audit workflows, FDA tracking, automated reconciliation">
-              </div>
-
-              <div class="c-mandate-section-header" style="margin-top: 2rem;">
-                <span class="c-mandate-step-badge">03</span>
-                <div>
-                  <h3 class="c-mandate-step-title">Acquisition Thesis & Operating Mandate</h3>
-                  <p class="c-mandate-step-desc">Detail what you are looking to acquire rather than build from scratch.</p>
-                </div>
-              </div>
-
-              <div class="c-form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
-                  <label for="mandate-thesis" class="c-form-label" style="margin: 0;">Deployment Thesis & Operational Criteria</label>
-                  <div class="c-thesis-templates">
-                    <span style="font-size: 0.72rem; color: var(--color-text-faint); margin-right: 0.4rem;">Template:</span>
-                    <button type="button" class="c-text-pill-btn" data-template="rollup">PE Roll-Up</button>
-                    <button type="button" class="c-text-pill-btn" data-template="cashflow">Operator Cashflow</button>
-                    <button type="button" class="c-text-pill-btn" data-template="ai">Vertical AI</button>
-                  </div>
-                </div>
-                <textarea id="mandate-thesis" class="c-form-textarea" required placeholder="Describe your operating hypothesis: e.g., Seeking complete operating frameworks to roll up into our existing industrial B2B portfolio. Requires verified customer ICP workflows, regulatory audit templates, and sub-12 month payback models."></textarea>
-              </div>
-
-              <div class="c-mandate-section-header" style="margin-top: 2rem;">
-                <span class="c-mandate-step-badge">04</span>
-                <div>
-                  <h3 class="c-mandate-step-title">Mandatory Diligence & Governance Thresholds</h3>
-                  <p class="c-mandate-step-desc">Set minimum requirements architects must satisfy before receiving introductions.</p>
-                </div>
-              </div>
-
-              <div class="c-form-group">
-                <div class="c-checklist-grid">
-                  <label class="c-checkbox-item">
-                    <input type="checkbox" checked disabled>
-                    <span><strong>Minimum 90+ Page Systems Architecture Specification</strong> (Platform Standard)</span>
-                  </label>
-                  <label class="c-checkbox-item">
-                    <input type="checkbox" id="mandate-req-fin" checked>
-                    <span><strong>3-Statement Financial Pro-Forma & Unit Economics Model</strong> (.xlsx)</span>
-                  </label>
-                  <label class="c-checkbox-item">
-                    <input type="checkbox" id="mandate-req-sops" checked>
-                    <span><strong>12+ Standard Operating Procedures (SOPs) & Integration Maps</strong></span>
-                  </label>
-                  <label class="c-checkbox-item">
-                    <input type="checkbox" id="mandate-req-advisory" checked>
-                    <span><strong>15 Hours Dedicated Post-Closing Architect Advisory Transition</strong></span>
-                  </label>
-                </div>
-              </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                <div>
-                  <label for="mandate-window" class="c-form-label">Target Execution Window</label>
-                  <select id="mandate-window" class="c-form-select">
-                    <option value="14">14 Days Rapid Close (Escrow Priority)</option>
-                    <option value="30" selected>30 Days Standard Inspection</option>
-                    <option value="60">60 Days Phased Transition</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="mandate-entity" class="c-form-label">Buyer Entity & Accreditation</label>
-                  <input type="text" id="mandate-entity" class="c-form-input" required value="Apex Horizon Capital (Institutional Syndicate)">
-                </div>
-              </div>
-
-              <div style="margin-top: 1.5rem;">
-                <button type="submit" class="c-btn c-btn--primary c-btn--full" id="mandate-submit-btn" style="padding: 0.9rem; font-size: 0.95rem;">
-                  Publish Acquisition Mandate to Private Registry →
-                </button>
-                <p style="font-size: 0.76rem; color: var(--color-text-faint); text-align: center; margin-top: 0.6rem;">
-                  🛡️ Zero capital deducted upon posting. Diligence escrow is only funded upon bilateral NDA execution and asset inspection terms.
-                </p>
-              </div>
-            </form>
-          </div>
-
-          <!-- Matching Intelligence & Peer Activity Sidebar -->
-          <div>
-            <!-- Live Blueprint Matching Engine -->
-            <div class="c-matching-box">
-              <div class="c-matching-box__header">
-                <div>
-                  <div class="c-matching-box__tag">● LIVE INVENTORY MATCHING</div>
-                  <h3 class="c-matching-box__title"><span id="mandate-match-count">14</span> Blueprints Match This Mandate</h3>
-                </div>
-                <div class="c-badge c-badge--success" id="mandate-match-badge">Active Pipeline</div>
-              </div>
-              <p style="font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 1rem;">
-                Accredited opportunities currently in registry matching your selected budget (<strong id="mandate-match-budget-disp">$100,000</strong>) and sector coverage:
-              </p>
-              
-              <div class="c-matched-cards-stream" id="mandate-matched-stream">
-                <!-- Dynamically rendered top matching blueprint cards -->
-              </div>
+        <!-- RIGHT: LIVE BUYER PREVIEW -->
+        <div class="list-preview-wrap">
+          <div class="list-preview-sticky">
+            <div class="preview-chrome">
+              <span class="preview-chrome-label">Buyer preview</span>
+              <span class="preview-chrome-note">Live · updates as you type</span>
             </div>
-
-            <!-- Active Peer Mandates Stream -->
-            <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-surface);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 0.6rem;">
-                <h4 style="font-size: 0.85rem; font-family: var(--font-family-mono); text-transform: uppercase; color: var(--color-text-faint); margin: 0;">Institutional Peer Buy-Boxes</h4>
-                <span class="c-badge c-badge--outline">Live Feed</span>
-              </div>
-              <div class="c-peer-mandates-list" id="peer-mandates-list">
-                <!-- Peer buy mandates feed -->
-              </div>
-            </div>
-
-            <!-- Published Mandates Manager (User's posted mandates) -->
-            <div class="c-card" style="margin-top: 1.5rem; background: var(--color-bg-alt); border: 1px dashed var(--color-border-default);" id="user-mandates-panel">
-              <h4 style="font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem;">Your Active Published Buy-Boxes (<span id="user-mandate-count">1</span>)</h4>
-              <div id="user-mandate-items">
-                <!-- Populated by JS -->
-              </div>
-            </div>
+            <div class="list-preview" id="listPreview"><!-- JS renders buyer view --></div>
           </div>
         </div>
       </div>
 
-
-      <!-- ===============================================================
-           TRACK 2: ARCHITECT & CREATOR ASSET INTAKE + LIVE BUYER PREVIEW
-           Verbatim architecture from original vvEntra platform
-           =============================================================== -->
-      <div class="intake-track intake-track--architect">
-        <header class="container-wide list-header">
-          <div class="c-perspective-mode-pill" style="margin-bottom: 1.25rem;">
-            <span>● Opportunity Architect Studio</span>
-            <span class="c-perspective-mode-pill__action" onclick="window.vveSetPerspective('investor')">Need to post capital buy-box? Switch to Investor ↗</span>
-          </div>
-          <span class="eyebrow">List an opportunity</span>
-          <h1 class="display lg">Compose your listing. <em>See exactly what the buyer sees</em>.</h1>
-          <p class="list-sub">Fill the form on the left. The panel on the right shows your listing through the buyer’s eyes in real time, so you always know what is free, what is teased, and what unlocks only after payment.</p>
-
-          <!-- Quick Action Toolbar -->
-          <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
-            <button type="button" class="c-btn c-btn--outline c-btn--sm" id="btn-load-sample-architect">
-              📋 Load Institutional Sample Draft
-            </button>
-            <span style="font-size: 0.8rem; color: var(--color-text-faint);">Pre-fills verified 90-page architecture draft to preview complete buyer experience</span>
+      <div class="container-wide list-submit-wrap">
+        <div class="list-submit-card" id="listSubmitCard">
+          <div class="lsub-head">
+            <span class="lsub-eyebrow">Before you submit</span>
+            <h2 class="lsub-title">Ready to publish?</h2>
+            <p class="lsub-desc">Your listing goes to vvEntra review first. Once approved, it appears in the marketplace with the free fields visible and the deeper sections teased. Buyers unlock the rest by paying your unlock fee.</p>
           </div>
 
-          <!-- VISIBILITY LEGEND -->
-          <div class="vis-legend">
-            <div class="vis-legend-item">
-              <span class="vis-dot free"></span>
-              <div class="vis-legend-text">
-                <span class="vl-title">Free</span>
-                <span class="vl-desc">Buyer sees this fully, before paying anything.</span>
-              </div>
-            </div>
-            <div class="vis-legend-item">
-              <span class="vis-dot teaser"></span>
-              <div class="vis-legend-text">
-                <span class="vl-title">Teaser</span>
-                <span class="vl-desc">Buyer reads an AI summary free · your full text unlocks after payment.</span>
-              </div>
-            </div>
-            <div class="vis-legend-item">
-              <span class="vis-dot doc"></span>
-              <div class="vis-legend-text">
-                <span class="vl-title">Document</span>
-                <span class="vl-desc">Shared as downloadable files only after unlock and NDA.</span>
-              </div>
-            </div>
-          </div>
-        </header>
+          <div class="lsub-readiness" id="lsubReadiness"><!-- JS fills checklist --></div>
 
-        <div class="container-wide list-split">
-          <!-- LEFT: COMPOSER -->
-          <div class="list-composer" id="listComposer">
-            <!-- Dynamically populated & interactive fields -->
-          </div>
-
-          <!-- RIGHT: LIVE BUYER PREVIEW -->
-          <div class="list-preview-wrap">
-            <div class="list-preview-sticky">
-              <div class="preview-chrome">
-                <span class="preview-chrome-label">Buyer preview</span>
-                <span class="preview-chrome-note">Live · updates as you type</span>
-              </div>
-              <div class="list-preview" id="listPreview">
-                <!-- Dynamically populated live buyer view -->
-              </div>
-            </div>
+          <div class="lsub-actions">
+            <button class="lsub-btn-primary" id="lsubSubmitBtn">Submit for review</button>
+            <span class="lsub-note">You can edit anytime before approval</span>
           </div>
         </div>
 
-        <!-- SUBMIT / READINESS CARD -->
-        <div class="container-wide list-submit-wrap">
-          <div class="list-submit-card" id="listSubmitCard">
-            <div class="lsub-head">
-              <span class="lsub-eyebrow">Before you submit</span>
-              <h2 class="lsub-title">Ready to publish?</h2>
-              <p class="lsub-desc">Your listing goes to vvEntra review first. Once approved, it appears in the marketplace with the free fields visible and the deeper sections teased. Buyers unlock the rest by paying your unlock fee.</p>
-            </div>
-
-            <div class="lsub-readiness" id="lsubReadiness">
-              <!-- Dynamically populated checklist -->
-            </div>
-
-            <div class="lsub-actions">
-              <button class="lsub-btn-primary" id="lsubSubmitBtn" disabled>Submit for review</button>
-              <span class="lsub-note">You can edit anytime before approval</span>
-            </div>
+        <!-- SUCCESS STATE (hidden until submit) -->
+        <div class="list-submit-success" id="listSubmitSuccess" style="display:none;">
+          <div class="lsuccess-check">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-
-          <!-- SUCCESS STATE (hidden until submit) -->
-          <div class="list-submit-success" id="listSubmitSuccess" style="display:none;">
-            <div class="lsuccess-check">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <h2 class="lsub-title">Listing submitted for review</h2>
-            <p class="lsub-desc">Your opportunity has entered vvEntra’s review queue. We verify documentation depth, check for duplicates, and confirm your architect standing before it goes live. This usually takes 2 to 3 working days.</p>
-            <p class="lsuccess-prompt">Want to see how a buyer will experience your listing right now?</p>
-            <div class="lsub-actions">
-              <button class="lsub-btn-primary" id="lsubPreviewBtn">Preview as buyer →</button>
-              <button class="lsub-btn-ghost" id="lsubEditBtn">Back to composer</button>
-            </div>
+          <h2 class="lsub-title">Listing submitted for review</h2>
+          <p class="lsub-desc">Your opportunity has entered vvEntra’s review queue. We verify documentation depth, check for duplicates, and confirm your architect standing before it goes live. This usually takes 2 to 3 working days.</p>
+          <p class="lsuccess-prompt">Want to see how a buyer will experience your listing right now?</p>
+          <div class="lsub-actions">
+            <button class="lsub-btn-primary" id="lsubPreviewBtn">Preview as buyer →</button>
+            <button class="lsub-btn-ghost" id="lsubEditBtn">Back to composer</button>
           </div>
         </div>
       </div>
