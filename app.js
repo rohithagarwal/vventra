@@ -474,11 +474,11 @@
     // Update navigation link text for #list
     const navCtaText = DOM.get('#nav-cta-text');
     if (navCtaText) {
-      navCtaText.textContent = 'List an opportunity';
+      navCtaText.textContent = isOperator ? 'List an opportunity' : 'Post Buy Mandate';
     } else {
       const navLinkList = DOM.get('#nav-link-list');
       if (navLinkList) {
-        navLinkList.textContent = 'List an opportunity';
+        navLinkList.textContent = isOperator ? 'List an opportunity' : 'Post Buy Mandate';
       }
     }
   }
