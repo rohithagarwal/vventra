@@ -2881,10 +2881,146 @@
       this.setupEvents();
     },
 
-    setupEvents() {
-      if (this.eventsInitialized) return;
-      this.eventsInitialized = true;
+    registry: {
+      KEY: 'vve_user_registry',
 
+      getAll() {
+        const defaults = [
+          {
+            email: 'm.sterling@apexhorizon.com',
+            password: 'ApexCapital#2026',
+            name: 'Marcus Sterling',
+            firm: 'Apex Horizon Capital',
+            role: 'investor',
+            tier: 'Tier-1 Accredited Allocator',
+            escrowPool: '$150,000 Committed',
+            source: 'demo'
+          },
+          {
+            email: 'a.vance@sovereignsystems.io',
+            password: 'SystemsArchitect#94p',
+            name: 'Dr. Aris Vance',
+            firm: 'Sovereign Systems Lab',
+            role: 'architect',
+            tier: 'Verified Systems Architect',
+            escrowPool: '90% Net Payout Standing',
+            source: 'demo'
+          },
+          {
+            email: 'partner@apexhorizon.com',
+            password: 'password123',
+            name: 'Marcus Sterling',
+            firm: 'Apex Horizon Capital',
+            role: 'investor',
+            tier: 'Tier-1 Accredited Allocator',
+            escrowPool: '$150,000 Committed',
+            source: 'credentials'
+          }
+        ];
+
+        try {
+          const stored = localStorage.getItem(this.KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              return parsed;
+            }
+          }
+        } catch (e) {}
+
+        this.saveAll(defaults);
+        return defaults;
+      },
+
+      saveAll(users) {
+        try {
+          localStorage.setItem(this.KEY, JSON.stringify(users));
+        } catch (e) {}
+      },
+
+      findByEmail(email) {
+        if (!email) return null;
+        const clean = email.trim().toLowerCase();
+        return this.getAll().find(u => u.email && u.email.toLowerCase() === clean) || null;
+      },
+
+      register(user) {
+        const users = this.getAll();
+        const cleanEmail = user.email.trim().toLowerCase();
+        const existing = users.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+        if (existing) {
+          return { success: false, message: 'An account with this email already exists. Please Sign In with your password.' };
+        }
+        const newUser = {
+          ...user,
+          email: cleanEmail,
+          createdAt: new Date().toISOString()
+        };
+        users.push(newUser);
+        this.saveAll(users);
+        return { success: true, user: newUser };
+      },
+
+      authenticate(email, password) {
+        if (!email) return { success: false, message: 'Please enter your corporate email address.' };
+        if (!password) return { success: false, message: 'Please enter your security password.' };
+
+        const cleanEmail = email.trim().toLowerCase();
+        const existing = this.findByEmail(cleanEmail);
+
+        if (existing) {
+          if (existing.password === password) {
+            return { success: true, user: existing };
+          } else {
+            return { success: false, message: 'Invalid password for this account. Please check your credentials and try again.' };
+          }
+        }
+
+        // Seamless auto-provisioning for any valid new credential pair
+        const rawPart = cleanEmail.split('@')[0].replace(/[._-]/g, ' ');
+        const formattedName = rawPart.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') || 'Accredited Operator';
+        const newUser = {
+          email: cleanEmail,
+          password: password,
+          name: formattedName,
+          firm: 'Institutional Private Studio',
+          role: 'investor',
+          tier: 'Accredited Member',
+          escrowPool: 'Active Custody',
+          source: 'credentials',
+          createdAt: new Date().toISOString()
+        };
+        const users = this.getAll();
+        users.push(newUser);
+        this.saveAll(users);
+        return { success: true, user: newUser, isNew: true };
+      }
+    },
+
+    showAlert(type, message) {
+      const errBox = DOM.get('#auth-alert-error');
+      const succBox = DOM.get('#auth-alert-success');
+      if (errBox) errBox.style.display = 'none';
+      if (succBox) succBox.style.display = 'none';
+
+      if (type === 'error' && errBox) {
+        errBox.innerHTML = `<span>⚠️</span> <span>${message}</span>`;
+        errBox.style.display = 'flex';
+      } else if (type === 'success' && succBox) {
+        succBox.innerHTML = `<span>✅</span> <span>${message}</span>`;
+        succBox.style.display = 'flex';
+      }
+    },
+
+    clearAlerts() {
+      const errBox = DOM.get('#auth-alert-error');
+      const succBox = DOM.get('#auth-alert-success');
+      if (errBox) errBox.style.display = 'none';
+      if (succBox) succBox.style.display = 'none';
+    },
+
+    switchToSignIn() {
+      this.clearAlerts();
       const tabSignIn = DOM.get('#tab-auth-signin');
       const tabSignUp = DOM.get('#tab-auth-signup');
       const formSignIn = DOM.get('#form-auth-signin');
@@ -2892,28 +3028,49 @@
       const title = DOM.get('#auth-title');
       const desc = DOM.get('#auth-desc');
 
+      if (tabSignIn) tabSignIn.classList.add('is-active');
+      if (tabSignUp) tabSignUp.classList.remove('is-active');
+      if (formSignIn) formSignIn.style.display = 'flex';
+      if (formSignUp) formSignUp.style.display = 'none';
+      if (title) title.textContent = 'Access Venture Intelligence';
+      if (desc) desc.textContent = 'Confidential cryptographic access for accredited capital allocators and systems architects.';
+    },
+
+    switchToSignUp() {
+      this.clearAlerts();
+      const tabSignIn = DOM.get('#tab-auth-signin');
+      const tabSignUp = DOM.get('#tab-auth-signup');
+      const formSignIn = DOM.get('#form-auth-signin');
+      const formSignUp = DOM.get('#form-auth-signup');
+      const title = DOM.get('#auth-title');
+      const desc = DOM.get('#auth-desc');
+
+      if (tabSignUp) tabSignUp.classList.add('is-active');
+      if (tabSignIn) tabSignIn.classList.remove('is-active');
+      if (formSignIn) formSignIn.style.display = 'none';
+      if (formSignUp) formSignUp.style.display = 'flex';
+      if (title) title.textContent = 'Create Accredited Account';
+      if (desc) desc.textContent = 'Establish an accredited firm account or verified systems architect standing.';
+    },
+
+    setupEvents() {
+      if (this.eventsInitialized) return;
+      this.eventsInitialized = true;
+
+      const self = this;
       let currentRole = 'investor';
 
       // Tab Switching
-      if (tabSignIn && tabSignUp && formSignIn && formSignUp) {
-        tabSignIn.addEventListener('click', () => {
-          tabSignIn.classList.add('is-active');
-          tabSignUp.classList.remove('is-active');
-          formSignIn.style.display = 'flex';
-          formSignUp.style.display = 'none';
-          if (title) title.textContent = 'Access Venture Intelligence';
-          if (desc) desc.textContent = 'Confidential cryptographic access for accredited capital allocators and systems architects.';
-        });
+      const tabSignIn = DOM.get('#tab-auth-signin');
+      const tabSignUp = DOM.get('#tab-auth-signup');
+      if (tabSignIn) tabSignIn.addEventListener('click', () => self.switchToSignIn());
+      if (tabSignUp) tabSignUp.addEventListener('click', () => self.switchToSignUp());
 
-        tabSignUp.addEventListener('click', () => {
-          tabSignUp.classList.add('is-active');
-          tabSignIn.classList.remove('is-active');
-          formSignIn.style.display = 'none';
-          formSignUp.style.display = 'flex';
-          if (title) title.textContent = 'Institutional Onboarding';
-          if (desc) desc.textContent = 'Establish an accredited firm account or verified systems architect standing.';
-        });
-      }
+      // Quick switch links
+      const linkToSignUp = DOM.get('#link-switch-to-signup');
+      const linkToSignIn = DOM.get('#link-switch-to-signin');
+      if (linkToSignUp) linkToSignUp.addEventListener('click', () => self.switchToSignUp());
+      if (linkToSignIn) linkToSignIn.addEventListener('click', () => self.switchToSignIn());
 
       // Role Selection
       const roleInvBtn = DOM.get('#auth-role-select-investor');
@@ -2996,6 +3153,7 @@
       const demoInvestorBtn = DOM.get('#demo-btn-investor');
       if (demoInvestorBtn) {
         demoInvestorBtn.addEventListener('click', () => {
+          self.clearAlerts();
           const emailInput = DOM.get('#signin-email');
           const passInput = DOM.get('#signin-password');
           if (emailInput) emailInput.value = 'm.sterling@apexhorizon.com';
@@ -3019,13 +3177,14 @@
               tier: 'Tier-1 Accredited Allocator',
               escrowPool: '$150,000 Committed'
             });
-          }, 650);
+          }, 450);
         });
       }
 
       const demoArchitectBtn = DOM.get('#demo-btn-architect');
       if (demoArchitectBtn) {
         demoArchitectBtn.addEventListener('click', () => {
+          self.clearAlerts();
           const emailInput = DOM.get('#signin-email');
           const passInput = DOM.get('#signin-password');
           if (emailInput) emailInput.value = 'a.vance@sovereignsystems.io';
@@ -3049,17 +3208,26 @@
               tier: 'Verified Systems Architect',
               escrowPool: '90% Net Payout Standing'
             });
-          }, 650);
+          }, 450);
         });
       }
 
       // Manual Sign In Submit
+      const formSignIn = DOM.get('#form-auth-signin');
       if (formSignIn) {
         formSignIn.addEventListener('submit', (e) => {
           e.preventDefault();
+          self.clearAlerts();
+
           const email = DOM.get('#signin-email')?.value.trim();
+          const password = DOM.get('#signin-password')?.value;
           const spinner = DOM.get('#signin-spinner');
           const label = DOM.get('#signin-label');
+
+          if (!email || !password) {
+            self.showAlert('error', 'Please enter both your institutional email and security password.');
+            return;
+          }
 
           if (spinner) spinner.style.display = 'inline-block';
           if (label) label.textContent = 'Verifying credentials...';
@@ -3068,68 +3236,220 @@
             if (spinner) spinner.style.display = 'none';
             if (label) label.textContent = 'Authenticate & Enter Terminal →';
 
-            const rawPart = email ? email.split('@')[0].replace('.', ' ') : 'Verified Client';
-            const formattedName = rawPart.split(' ').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+            const authResult = self.registry.authenticate(email, password);
 
-            AuthController.login({
-              name: formattedName || 'Verified Client',
-              firm: currentRole === 'investor' ? 'Institutional Syndicate' : 'Independent Systems Studio',
-              email: email || 'partner@vventra-client.com',
-              role: currentRole,
-              tier: currentRole === 'investor' ? 'Tier-1 Accredited' : 'Verified Architect',
-              escrowPool: 'Active Custody'
-            });
-          }, 700);
+            if (!authResult.success) {
+              self.showAlert('error', authResult.message);
+              return;
+            }
+
+            self.showAlert('success', 'Credentials validated! Entering secure terminal...');
+            setTimeout(() => {
+              AuthController.login({
+                name: authResult.user.name,
+                firm: authResult.user.firm || (currentRole === 'investor' ? 'Institutional Syndicate' : 'Independent Systems Studio'),
+                email: authResult.user.email,
+                role: authResult.user.role || currentRole,
+                tier: authResult.user.tier || (currentRole === 'investor' ? 'Tier-1 Accredited' : 'Verified Architect'),
+                escrowPool: authResult.user.escrowPool || 'Active Custody'
+              });
+            }, 300);
+          }, 500);
         });
       }
 
-      // Manual Sign Up Submit
+      // Manual Sign Up Submit (Create Account)
+      const formSignUp = DOM.get('#form-auth-signup');
       if (formSignUp) {
         formSignUp.addEventListener('submit', (e) => {
           e.preventDefault();
-          const name = DOM.get('#signup-name')?.value.trim() || 'Institutional Partner';
-          const firm = DOM.get('#signup-firm')?.value.trim() || 'Private Venture Studio';
-          const email = DOM.get('#signup-email')?.value.trim() || 'partner@enterprise.io';
+          self.clearAlerts();
+
+          const name = DOM.get('#signup-name')?.value.trim();
+          const firm = DOM.get('#signup-firm')?.value.trim();
+          const email = DOM.get('#signup-email')?.value.trim();
+          const password = DOM.get('#signup-password')?.value;
           const spinner = DOM.get('#signup-spinner');
           const label = DOM.get('#signup-label');
 
+          if (!name || !email || !password) {
+            self.showAlert('error', 'Please complete all required fields.');
+            return;
+          }
+
+          if (password.length < 6) {
+            self.showAlert('error', 'Password must be at least 6 characters in length.');
+            return;
+          }
+
           if (spinner) spinner.style.display = 'inline-block';
-          if (label) label.textContent = 'Generating 256-bit cryptographic keys...';
+          if (label) label.textContent = 'Establishing cryptographic enclave...';
 
           setTimeout(() => {
             if (spinner) spinner.style.display = 'none';
             if (label) label.textContent = 'Establish Institutional Account →';
 
-            AuthController.login({
-              name: name,
-              firm: firm,
-              email: email,
+            const regResult = self.registry.register({
+              name,
+              firm: firm || 'Private Studio',
+              email,
+              password,
               role: currentRole,
               tier: currentRole === 'investor' ? 'Tier-1 Accredited Allocator' : 'Certified Systems Architect',
-              escrowPool: 'Active Custody'
+              escrowPool: 'Active Custody',
+              source: 'signup'
             });
-          }, 800);
-        });
-      }
 
-      // SSO Buttons
-      const ssoGoogle = DOM.get('#sso-google-btn');
-      if (ssoGoogle) {
-        ssoGoogle.addEventListener('click', () => {
-          showNotification('Federating with Google Workspace SSO enclave...');
-          setTimeout(() => {
-            AuthController.login({
-              name: 'Elena Rostova',
-              firm: 'Nordic Growth Capital',
-              email: 'e.rostova@nordicgrowth.com',
-              role: currentRole,
-              tier: 'Google Workspace Verified',
-              escrowPool: '$200,000 Allocation'
-            });
+            if (!regResult.success) {
+              self.showAlert('error', regResult.message);
+              return;
+            }
+
+            self.showAlert('success', `Account created successfully for ${name}! Entering terminal...`);
+            setTimeout(() => {
+              AuthController.login(regResult.user);
+            }, 350);
           }, 600);
         });
       }
 
+      // Google OAuth Modal and Flow
+      const ssoGoogleBtn = DOM.get('#sso-google-btn');
+      const googleModal = DOM.get('#google-oauth-modal');
+      const googleClose = DOM.get('#google-oauth-close');
+      const googleBackdrop = DOM.get('#google-oauth-backdrop');
+
+      const openGoogleModal = () => {
+        if (googleModal) googleModal.style.display = 'flex';
+      };
+      const closeGoogleModal = () => {
+        if (googleModal) googleModal.style.display = 'none';
+      };
+
+      if (ssoGoogleBtn) ssoGoogleBtn.addEventListener('click', openGoogleModal);
+      if (googleClose) googleClose.addEventListener('click', closeGoogleModal);
+      if (googleBackdrop) googleBackdrop.addEventListener('click', closeGoogleModal);
+
+      // Google Account items selection
+      document.querySelectorAll('#google-oauth-modal .c-oauth-account-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const email = item.getAttribute('data-google-email');
+          const name = item.getAttribute('data-google-name');
+          closeGoogleModal();
+          showNotification(`Authenticated via Google Identity: ${email}`);
+
+          const existing = self.registry.findByEmail(email);
+          const userData = existing || {
+            name: name,
+            email: email,
+            firm: 'Google Verified Syndicate',
+            role: currentRole,
+            tier: 'Google Workspace Verified',
+            escrowPool: '$250,000 Allocation',
+            source: 'google'
+          };
+          if (!existing) self.registry.register({ ...userData, password: 'google_oauth_token' });
+          AuthController.login(userData);
+        });
+      });
+
+      // Google Custom form submit
+      const formGoogleCustom = DOM.get('#form-google-custom');
+      if (formGoogleCustom) {
+        formGoogleCustom.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = DOM.get('#google-custom-name')?.value.trim() || 'Google User';
+          const email = DOM.get('#google-custom-email')?.value.trim();
+          if (!email) return;
+
+          closeGoogleModal();
+          showNotification(`Google Workspace authenticated for ${email}`);
+
+          const existing = self.registry.findByEmail(email);
+          const userData = existing || {
+            name: name,
+            email: email,
+            firm: 'Enterprise Partner',
+            role: currentRole,
+            tier: 'Google Workspace Verified',
+            escrowPool: '$200,000 Allocation',
+            source: 'google'
+          };
+          if (!existing) self.registry.register({ ...userData, password: 'google_oauth_token' });
+          AuthController.login(userData);
+        });
+      }
+
+      // LinkedIn OAuth Modal and Flow
+      const ssoLinkedinBtn = DOM.get('#sso-linkedin-btn');
+      const linkedinModal = DOM.get('#linkedin-oauth-modal');
+      const linkedinClose = DOM.get('#linkedin-oauth-close');
+      const linkedinBackdrop = DOM.get('#linkedin-oauth-backdrop');
+
+      const openLinkedinModal = () => {
+        if (linkedinModal) linkedinModal.style.display = 'flex';
+      };
+      const closeLinkedinModal = () => {
+        if (linkedinModal) linkedinModal.style.display = 'none';
+      };
+
+      if (ssoLinkedinBtn) ssoLinkedinBtn.addEventListener('click', openLinkedinModal);
+      if (linkedinClose) linkedinClose.addEventListener('click', closeLinkedinModal);
+      if (linkedinBackdrop) linkedinBackdrop.addEventListener('click', closeLinkedinModal);
+
+      // LinkedIn Account items selection
+      document.querySelectorAll('#linkedin-oauth-modal .c-oauth-account-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const email = item.getAttribute('data-linkedin-email');
+          const name = item.getAttribute('data-linkedin-name');
+          const headline = item.getAttribute('data-linkedin-headline');
+          closeLinkedinModal();
+          showNotification(`Authenticated via LinkedIn Professional ID: ${name}`);
+
+          const existing = self.registry.findByEmail(email);
+          const userData = existing || {
+            name: name,
+            email: email,
+            firm: headline || 'Venture & Growth Studio',
+            role: currentRole,
+            tier: 'LinkedIn Verified Executive',
+            escrowPool: '$300,000 Allocation',
+            source: 'linkedin'
+          };
+          if (!existing) self.registry.register({ ...userData, password: 'linkedin_oauth_token' });
+          AuthController.login(userData);
+        });
+      });
+
+      // LinkedIn Custom form submit
+      const formLinkedinCustom = DOM.get('#form-linkedin-custom');
+      if (formLinkedinCustom) {
+        formLinkedinCustom.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = DOM.get('#linkedin-custom-name')?.value.trim() || 'LinkedIn Member';
+          const headline = DOM.get('#linkedin-custom-headline')?.value.trim() || 'Private Investor';
+          const email = DOM.get('#linkedin-custom-email')?.value.trim();
+          if (!email) return;
+
+          closeLinkedinModal();
+          showNotification(`LinkedIn verified for ${name} (${headline})`);
+
+          const existing = self.registry.findByEmail(email);
+          const userData = existing || {
+            name: name,
+            email: email,
+            firm: headline,
+            role: currentRole,
+            tier: 'LinkedIn Verified Executive',
+            escrowPool: '$300,000 Allocation',
+            source: 'linkedin'
+          };
+          if (!existing) self.registry.register({ ...userData, password: 'linkedin_oauth_token' });
+          AuthController.login(userData);
+        });
+      }
+
+      // FIDO2 Hardware Security Passkey
       const ssoFido = DOM.get('#sso-fido-btn');
       if (ssoFido) {
         ssoFido.addEventListener('click', () => {
@@ -3141,9 +3461,10 @@
               email: 'j.sterling@apexsyndicate.com',
               role: currentRole,
               tier: 'Hardware Security Key Verified',
-              escrowPool: '$350,000 Allocation'
+              escrowPool: '$350,000 Allocation',
+              source: 'fido2'
             });
-          }, 800);
+          }, 600);
         });
       }
 
@@ -3152,7 +3473,15 @@
       if (linkForgot) {
         linkForgot.addEventListener('click', (e) => {
           e.preventDefault();
-          showNotification('Institutional Recovery: An encrypted hardware reset link has been dispatched to your corporate security administrator.');
+          const email = prompt('Enter your institutional email to initiate password recovery:', 'partner@apexhorizon.com');
+          if (email) {
+            const user = self.registry.findByEmail(email);
+            if (user) {
+              alert(`Institutional Security Recovery: Your registered password for ${email} is:\n\n${user.password}\n\nYou can now sign in.`);
+            } else {
+              alert(`Institutional Security Recovery: A password reset link has been dispatched to ${email}.`);
+            }
+          }
         });
       }
     },

@@ -4086,6 +4086,10 @@
               <p class="c-auth-desc" id="auth-desc">Confidential cryptographic access for accredited capital allocators and systems architects.</p>
             </div>
 
+            <!-- Dynamic Authentication Alerts -->
+            <div class="c-auth-alert c-auth-alert--error" id="auth-alert-error" style="display:none;"></div>
+            <div class="c-auth-alert c-auth-alert--success" id="auth-alert-success" style="display:none;"></div>
+
             <!-- 1-Click Instant Institutional Demo Accounts -->
             <div class="c-auth-demo-box">
               <div class="c-auth-demo-box__title">
@@ -4115,7 +4119,7 @@
             <!-- Mode Tabs (Sign In vs Sign Up) -->
             <div class="c-auth-tabs">
               <button type="button" class="c-auth-tab is-active" id="tab-auth-signin" data-tab="signin">Sign In</button>
-              <button type="button" class="c-auth-tab" id="tab-auth-signup" data-tab="signup">Institutional Register</button>
+              <button type="button" class="c-auth-tab" id="tab-auth-signup" data-tab="signup">Create Account / Sign Up</button>
             </div>
 
             <!-- Role Selector -->
@@ -4172,6 +4176,11 @@
                 <span class="btn-spinner" id="signin-spinner" style="display:none;"></span>
                 <span class="btn-label" id="signin-label">Authenticate & Enter Terminal →</span>
               </button>
+
+              <div class="c-auth-switch-row">
+                <span>New to vvEntra?</span>
+                <button type="button" class="c-auth-switch-link" id="link-switch-to-signup">Create an Institutional Account →</button>
+              </div>
             </form>
 
             <!-- ===================== FORM 2: SIGN UP ===================== -->
@@ -4227,6 +4236,11 @@
                 <span class="btn-spinner" id="signup-spinner" style="display:none;"></span>
                 <span class="btn-label" id="signup-label">Establish Institutional Account →</span>
               </button>
+
+              <div class="c-auth-switch-row">
+                <span>Already registered with vvEntra?</span>
+                <button type="button" class="c-auth-switch-link" id="link-switch-to-signin">Sign In to Your Account →</button>
+              </div>
             </form>
 
             <!-- Institutional SSO Options -->
@@ -4235,13 +4249,17 @@
             </div>
 
             <div class="c-auth-sso-grid">
-              <button type="button" class="c-auth-sso-btn" id="sso-google-btn">
+              <button type="button" class="c-auth-sso-btn" id="sso-google-btn" title="Sign in with Google">
                 <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.5L1.9 16.2C3.7 20 7.5 23.5 12 23.5z"/></svg>
-                <span>Google Workspace SSO</span>
+                <span>Google</span>
               </button>
-              <button type="button" class="c-auth-sso-btn" id="sso-fido-btn">
-                <span style="font-size: 1rem;">🔑</span>
-                <span>Hardware Passkey (FIDO2)</span>
+              <button type="button" class="c-auth-sso-btn c-auth-sso-btn--linkedin" id="sso-linkedin-btn" title="Sign in with LinkedIn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                <span>LinkedIn</span>
+              </button>
+              <button type="button" class="c-auth-sso-btn" id="sso-fido-btn" title="Hardware Security Passkey">
+                <span style="font-size: 0.95rem;">🔑</span>
+                <span>Passkey</span>
               </button>
             </div>
 
@@ -4255,6 +4273,82 @@
                 <span class="c-auth-footer-icon">⚖️</span>
                 <span>Confidential Mutual Non-Disclosure Agreement Bound</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google OAuth Simulation Modal -->
+        <div class="c-oauth-modal" id="google-oauth-modal" style="display: none;">
+          <div class="c-oauth-modal__backdrop" id="google-oauth-backdrop"></div>
+          <div class="c-oauth-modal__dialog">
+            <div class="c-oauth-header">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/><path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.5L1.9 16.2C3.7 20 7.5 23.5 12 23.5z"/></svg>
+              <div>
+                <div class="c-oauth-title">Sign in with Google</div>
+                <div class="c-oauth-sub">Choose an account to continue to vvEntra Terminal</div>
+              </div>
+              <button type="button" class="c-oauth-close" id="google-oauth-close">×</button>
+            </div>
+            <div class="c-oauth-body">
+              <div class="c-oauth-account-list">
+                <button type="button" class="c-oauth-account-item" data-google-email="rohit.agarwal@gmail.com" data-google-name="Rohit Agarwal">
+                  <div class="c-oauth-avatar" style="background:#4285F4;">RA</div>
+                  <div class="c-oauth-account-info">
+                    <strong>Rohit Agarwal</strong>
+                    <span>rohit.agarwal@gmail.com</span>
+                  </div>
+                  <span class="c-oauth-arrow">➔</span>
+                </button>
+                <button type="button" class="c-oauth-account-item" data-google-email="marcus.sterling@apexhorizon.com" data-google-name="Marcus Sterling">
+                  <div class="c-oauth-avatar" style="background:#EA4335;">MS</div>
+                  <div class="c-oauth-account-info">
+                    <strong>Marcus Sterling</strong>
+                    <span>marcus.sterling@apexhorizon.com</span>
+                  </div>
+                  <span class="c-oauth-arrow">➔</span>
+                </button>
+              </div>
+              <div class="c-oauth-divider"><span>OR USE ANOTHER GOOGLE ACCOUNT</span></div>
+              <form id="form-google-custom" class="c-oauth-custom-form">
+                <input type="text" id="google-custom-name" placeholder="Full Name (e.g. Elena Rostova)" class="c-oauth-input" required />
+                <input type="email" id="google-custom-email" placeholder="Google Email (e.g. elena@gmail.com)" class="c-oauth-input" required />
+                <button type="submit" class="c-oauth-submit-btn">Continue with Google Account ➔</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- LinkedIn OAuth Simulation Modal -->
+        <div class="c-oauth-modal" id="linkedin-oauth-modal" style="display: none;">
+          <div class="c-oauth-modal__backdrop" id="linkedin-oauth-backdrop"></div>
+          <div class="c-oauth-modal__dialog">
+            <div class="c-oauth-header" style="background: rgba(10, 102, 194, 0.1); border-color: rgba(10, 102, 194, 0.2);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+              <div>
+                <div class="c-oauth-title">Sign in with LinkedIn</div>
+                <div class="c-oauth-sub">Authenticate using your professional LinkedIn identity</div>
+              </div>
+              <button type="button" class="c-oauth-close" id="linkedin-oauth-close">×</button>
+            </div>
+            <div class="c-oauth-body">
+              <div class="c-oauth-account-list">
+                <button type="button" class="c-oauth-account-item" data-linkedin-email="rohit.agarwal@linkedin.com" data-linkedin-name="Rohit Agarwal" data-linkedin-headline="Venture Capital & Private Equity Partner">
+                  <div class="c-oauth-avatar" style="background:#0A66C2;">in</div>
+                  <div class="c-oauth-account-info">
+                    <strong>Rohit Agarwal</strong>
+                    <span>Venture Capital & Private Equity Partner</span>
+                    <small style="color:rgba(255,255,255,0.45);font-size:0.7rem;">rohit.agarwal@linkedin.com</small>
+                  </div>
+                  <span class="c-oauth-arrow">➔</span>
+                </button>
+              </div>
+              <div class="c-oauth-divider"><span>OR ENTER LINKEDIN DETAILS</span></div>
+              <form id="form-linkedin-custom" class="c-oauth-custom-form">
+                <input type="text" id="linkedin-custom-name" placeholder="Full Name on LinkedIn" class="c-oauth-input" required />
+                <input type="text" id="linkedin-custom-headline" placeholder="Professional Headline (e.g. Managing Partner · Apex VC)" class="c-oauth-input" required />
+                <input type="email" id="linkedin-custom-email" placeholder="LinkedIn Email" class="c-oauth-input" required />
+                <button type="submit" class="c-oauth-submit-btn" style="background: #0A66C2; border-color: #0A66C2;">Authorize with LinkedIn ➔</button>
+              </form>
             </div>
           </div>
         </div>
