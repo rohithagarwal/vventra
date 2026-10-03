@@ -6802,46 +6802,46 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
   color: #FF7738;
 }
 
-.c-auth-sso-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+/* Standard Social SSO Buttons (Google & LinkedIn) */
+.c-auth-social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 1.25rem;
 }
 
-@media (max-width: 580px) {
-  .c-auth-sso-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.c-auth-sso-btn {
+.c-auth-social-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 0.6rem 0.75rem;
+  gap: 11px;
+  width: 100%;
+  padding: 0.72rem 1.2rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.74rem;
+  color: #FFFFFF;
+  font-size: 0.88rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
+  transition: all 0.18s ease;
+  font-family: inherit;
 }
 
-.c-auth-sso-btn:hover {
+.c-auth-social-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
-.c-auth-sso-btn--linkedin:hover {
-  background: rgba(10, 102, 194, 0.18);
-  border-color: rgba(10, 102, 194, 0.5);
-  color: #FFFFFF;
+.c-auth-social-btn--google:hover {
+  background: rgba(66, 133, 244, 0.09);
+  border-color: rgba(66, 133, 244, 0.5);
+}
+
+.c-auth-social-btn--linkedin:hover {
+  background: rgba(10, 102, 194, 0.12);
+  border-color: rgba(10, 102, 194, 0.55);
 }
 
 /* OAuth Modal Windows */

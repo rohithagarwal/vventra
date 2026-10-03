@@ -3032,8 +3032,8 @@
       if (tabSignUp) tabSignUp.classList.remove('is-active');
       if (formSignIn) formSignIn.style.display = 'flex';
       if (formSignUp) formSignUp.style.display = 'none';
-      if (title) title.textContent = 'Access Venture Intelligence';
-      if (desc) desc.textContent = 'Confidential cryptographic access for accredited capital allocators and systems architects.';
+      if (title) title.textContent = 'Welcome back';
+      if (desc) desc.textContent = 'Sign in to your vvEntra account to continue';
     },
 
     switchToSignUp() {
@@ -3049,8 +3049,8 @@
       if (tabSignIn) tabSignIn.classList.remove('is-active');
       if (formSignIn) formSignIn.style.display = 'none';
       if (formSignUp) formSignUp.style.display = 'flex';
-      if (title) title.textContent = 'Create Accredited Account';
-      if (desc) desc.textContent = 'Establish an accredited firm account or verified systems architect standing.';
+      if (title) title.textContent = 'Create your account';
+      if (desc) desc.textContent = 'Join vvEntra as a Buyer or Systems Architect';
     },
 
     setupEvents() {
@@ -3146,69 +3146,6 @@
             pwdHint.textContent = 'Strength: Institutional Grade · Cryptographically robust';
             pwdHint.style.color = '#34D399';
           }
-        });
-      }
-
-      // Quick 1-Click Demo Accounts
-      const demoInvestorBtn = DOM.get('#demo-btn-investor');
-      if (demoInvestorBtn) {
-        demoInvestorBtn.addEventListener('click', () => {
-          self.clearAlerts();
-          const emailInput = DOM.get('#signin-email');
-          const passInput = DOM.get('#signin-password');
-          if (emailInput) emailInput.value = 'm.sterling@apexhorizon.com';
-          if (passInput) passInput.value = 'ApexCapital#2026';
-          if (roleInvBtn) roleInvBtn.click();
-
-          const spinner = DOM.get('#signin-spinner');
-          const label = DOM.get('#signin-label');
-          if (spinner) spinner.style.display = 'inline-block';
-          if (label) label.textContent = 'Authenticating Enclave...';
-
-          setTimeout(() => {
-            if (spinner) spinner.style.display = 'none';
-            if (label) label.textContent = 'Authenticate & Enter Terminal →';
-
-            AuthController.login({
-              name: 'Marcus Sterling',
-              firm: 'Apex Horizon Capital',
-              email: 'm.sterling@apexhorizon.com',
-              role: 'investor',
-              tier: 'Tier-1 Accredited Allocator',
-              escrowPool: '$150,000 Committed'
-            });
-          }, 450);
-        });
-      }
-
-      const demoArchitectBtn = DOM.get('#demo-btn-architect');
-      if (demoArchitectBtn) {
-        demoArchitectBtn.addEventListener('click', () => {
-          self.clearAlerts();
-          const emailInput = DOM.get('#signin-email');
-          const passInput = DOM.get('#signin-password');
-          if (emailInput) emailInput.value = 'a.vance@sovereignsystems.io';
-          if (passInput) passInput.value = 'SystemsArchitect#94p';
-          if (roleArchBtn) roleArchBtn.click();
-
-          const spinner = DOM.get('#signin-spinner');
-          const label = DOM.get('#signin-label');
-          if (spinner) spinner.style.display = 'inline-block';
-          if (label) label.textContent = 'Validating 94p Blueprint standing...';
-
-          setTimeout(() => {
-            if (spinner) spinner.style.display = 'none';
-            if (label) label.textContent = 'Authenticate & Enter Terminal →';
-
-            AuthController.login({
-              name: 'Dr. Aris Vance',
-              firm: 'Sovereign Systems Lab',
-              email: 'a.vance@sovereignsystems.io',
-              role: 'architect',
-              tier: 'Verified Systems Architect',
-              escrowPool: '90% Net Payout Standing'
-            });
-          }, 450);
         });
       }
 
