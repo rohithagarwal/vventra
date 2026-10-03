@@ -3444,7 +3444,10 @@
 
       const launchLinkedInOAuth = () => {
         try {
-          const redirectUri = window.location.origin + window.location.pathname;
+          let redirectUri = window.location.origin + window.location.pathname;
+          if (!redirectUri.endsWith('/')) {
+            redirectUri += '/';
+          }
           const state = 'linkedin_' + Math.random().toString(36).substring(2, 15);
           sessionStorage.setItem('vventra_linkedin_state', state);
 
@@ -3474,6 +3477,24 @@
           const urlParams = new URLSearchParams(window.location.search);
           const linkedInCode = urlParams.get('code');
           const linkedInState = urlParams.get('state');
+          const linkedInError = urlParams.get('error');
+          const linkedInErrorDesc = urlParams.get('error_description');
+
+          if (linkedInError) {
+            if (window.opener) {
+              try {
+                window.opener.postMessage({ type: 'LINKEDIN_AUTH_ERROR', error: linkedInError, description: linkedInErrorDesc }, window.location.origin);
+                window.close();
+                return;
+              } catch (e) {
+                console.warn('Popup postMessage error:', e);
+              }
+            } else {
+              window.history.replaceState({}, document.title, window.location.pathname);
+              console.warn('LinkedIn error:', linkedInError, linkedInErrorDesc);
+              showNotification(`LinkedIn: ${linkedInErrorDesc || linkedInError}`);
+            }
+          }
 
           if (linkedInCode) {
             if (window.opener) {
@@ -3513,6 +3534,11 @@
       // Listen for popup callback message
       window.addEventListener('message', (event) => {
         if (event.origin !== window.location.origin) return;
+        if (event.data && event.data.type === 'LINKEDIN_AUTH_ERROR') {
+          console.warn('LinkedIn OAuth error returned:', event.data.error, event.data.description);
+          showNotification(`LinkedIn notice: ${event.data.description || event.data.error}`);
+          openLinkedinModal();
+        }
         if (event.data && event.data.type === 'LINKEDIN_AUTH_SUCCESS') {
           showNotification('LinkedIn OAuth confirmed! Entering terminal...');
           const existing = self.registry.findByEmail('rohit.agarwal@linkedin.com');
