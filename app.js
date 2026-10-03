@@ -3250,7 +3250,112 @@
         });
       }
 
-      // Google OAuth Modal and Flow
+      // Google Identity Services (OAuth 2.0 Client)
+      const GOOGLE_CLIENT_ID = '428998304160-djaan3bkeje5s2chfu30lcg4ipgpnbn5.apps.googleusercontent.com';
+      let googleTokenClient = null;
+
+      const initGoogleIdentityServices = () => {
+        if (typeof window.google === 'undefined' || !window.google.accounts || !window.google.accounts.oauth2) {
+          return;
+        }
+
+        try {
+          googleTokenClient = window.google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: 'openid profile email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+            callback: async (tokenResponse) => {
+              if (tokenResponse && tokenResponse.access_token) {
+                try {
+                  showNotification('Verifying Google credentials...');
+                  const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                  });
+                  const profile = await profileRes.json();
+
+                  if (profile && profile.email) {
+                    const name = profile.name || profile.given_name || 'Google User';
+                    const email = profile.email;
+                    const picture = profile.picture;
+
+                    const existing = self.registry.findByEmail(email);
+                    const userData = existing || {
+                      name: name,
+                      email: email,
+                      avatar: picture,
+                      firm: 'Google Verified Syndicate',
+                      role: currentRole,
+                      tier: 'Google Workspace Verified',
+                      escrowPool: '$250,000 Allocation',
+                      source: 'google'
+                    };
+                    if (!existing) self.registry.register({ ...userData, password: 'google_oauth_token' });
+                    AuthController.login(userData);
+                    showNotification(`Welcome, ${name}! Signed in via Google.`);
+                  } else {
+                    throw new Error('Incomplete profile data');
+                  }
+                } catch (fetchErr) {
+                  console.error('Error fetching Google user profile:', fetchErr);
+                  self.showAlert('error', 'Could not retrieve profile from Google. Please try again.');
+                }
+              } else if (tokenResponse && tokenResponse.error) {
+                console.warn('Google sign-in error:', tokenResponse.error);
+                if (tokenResponse.error !== 'popup_closed_by_user') {
+                  self.showAlert('error', `Google authentication: ${tokenResponse.error}`);
+                }
+              }
+            },
+            error_callback: (nonOAuthErr) => {
+              console.warn('Google Identity initialization error:', nonOAuthErr);
+              openGoogleModal();
+            }
+          });
+
+          if (window.google.accounts.id) {
+            window.google.accounts.id.initialize({
+              client_id: GOOGLE_CLIENT_ID,
+              callback: (response) => {
+                if (response && response.credential) {
+                  try {
+                    const base64Url = response.credential.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+                    const payload = JSON.parse(jsonPayload);
+                    const email = payload.email;
+                    const name = payload.name || payload.given_name || 'Google User';
+                    const picture = payload.picture;
+
+                    const existing = self.registry.findByEmail(email);
+                    const userData = existing || {
+                      name: name,
+                      email: email,
+                      avatar: picture,
+                      firm: 'Google Verified Syndicate',
+                      role: currentRole,
+                      tier: 'Google Workspace Verified',
+                      escrowPool: '$250,000 Allocation',
+                      source: 'google'
+                    };
+                    if (!existing) self.registry.register({ ...userData, password: 'google_oauth_token' });
+                    AuthController.login(userData);
+                    showNotification(`Welcome, ${name}! Signed in via Google One Tap.`);
+                  } catch (e) {
+                    console.error('JWT parse error', e);
+                  }
+                }
+              }
+            });
+          }
+        } catch (e) {
+          console.warn('Google client init failed:', e);
+        }
+      };
+
+      // Attempt initialization immediately and on window load
+      initGoogleIdentityServices();
+      window.addEventListener('load', initGoogleIdentityServices);
+
+      // Google OAuth Modal and Fallback Flow
       const ssoGoogleBtn = DOM.get('#sso-google-btn');
       const googleModal = DOM.get('#google-oauth-modal');
       const googleClose = DOM.get('#google-oauth-close');
@@ -3263,7 +3368,24 @@
         if (googleModal) googleModal.style.display = 'none';
       };
 
-      if (ssoGoogleBtn) ssoGoogleBtn.addEventListener('click', openGoogleModal);
+      if (ssoGoogleBtn) {
+        ssoGoogleBtn.addEventListener('click', () => {
+          if (!googleTokenClient && typeof window.google !== 'undefined' && window.google.accounts) {
+            initGoogleIdentityServices();
+          }
+
+          if (googleTokenClient) {
+            try {
+              googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+            } catch (err) {
+              console.warn('Falling back to Google dialog:', err);
+              openGoogleModal();
+            }
+          } else {
+            openGoogleModal();
+          }
+        });
+      }
       if (googleClose) googleClose.addEventListener('click', closeGoogleModal);
       if (googleBackdrop) googleBackdrop.addEventListener('click', closeGoogleModal);
 
