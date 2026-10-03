@@ -250,60 +250,43 @@ input, select, textarea {
   gap: 0.6rem;
 }
 
-.c-nav__brand {
+.c-nav__brand,
+.brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
+  color: var(--color-text-main, #f7f2e9);
   text-decoration: none;
-  color: var(--color-text-main);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  line-height: 1;
   flex-shrink: 0;
 }
 
-.c-nav__brand-mark {
-  width: 28px;
+.c-nav__brand svg,
+.brand svg {
+  width: 38px;
   height: 28px;
-  border-radius: 7px;
-  background: var(--color-text-main);
-  color: var(--color-bg-body);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-family-display);
-  font-size: 1.15rem;
-  font-style: italic;
+  flex-shrink: 0;
+}
+
+.c-nav__brand b,
+.brand b {
+  color: #ec5b20;
   font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-  transition: transform var(--duration-fast);
 }
 
-.c-nav__brand:hover .c-nav__brand-mark {
-  transform: scale(1.05);
-}
-
-.c-nav__brand-name {
-  font-size: 1.12rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.c-nav__brand-name span {
-  color: var(--color-brand-primary);
-}
-
-.c-nav__brand-tag {
-  font-size: 0.62rem;
-  font-family: var(--font-family-mono);
-  letter-spacing: 0.12em;
+.c-nav__brand small,
+.brand small {
+  display: block;
+  font-family: var(--font-family-mono, monospace);
+  font-size: 6.5px;
+  font-weight: 500;
+  letter-spacing: 1.7px;
+  color: var(--color-text-muted, #b8afa3);
   text-transform: uppercase;
-  color: var(--color-text-faint);
-  background: var(--color-bg-alt);
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid var(--color-border-subtle);
-  font-weight: 600;
+  margin-top: 2px;
 }
 
 .c-nav__links {
@@ -6309,42 +6292,7 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
 .c-auth-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.c-auth-brand__mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #EC5B20 0%, #D5AF24 100%);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-  font-weight: 800;
-  box-shadow: 0 4px 14px rgba(236, 91, 32, 0.4);
-}
-
-.c-auth-brand__name {
-  font-size: 1.12rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-
-.c-auth-brand__name span {
-  color: #EC5B20;
-}
-
-.c-auth-brand__tag {
-  display: block;
-  font-family: var(--font-family-mono, monospace);
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.08em;
-  margin-top: 3px;
+  gap: 8px;
 }
 
 .c-auth-security-chip {
