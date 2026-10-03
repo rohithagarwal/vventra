@@ -264,6 +264,35 @@ input, select, textarea {
   flex-shrink: 0;
 }
 
+.c-nav__logo {
+  height: 40px;
+  width: auto;
+  max-width: 145px;
+  object-fit: contain;
+  display: block;
+  transition: transform var(--duration-fast, 0.2s);
+}
+
+.c-nav__brand:hover .c-nav__logo {
+  transform: translateY(-1px);
+}
+
+.c-nav__logo--dark {
+  display: none !important;
+}
+
+.c-nav__logo--light {
+  display: block !important;
+}
+
+[data-theme="dark"] .c-nav__logo--light {
+  display: none !important;
+}
+
+[data-theme="dark"] .c-nav__logo--dark {
+  display: block !important;
+}
+
 .c-nav__brand svg,
 .brand svg {
   width: 38px;
@@ -6293,6 +6322,14 @@ section.dark .section-marker .name { color: var(--section-dark-text-faint); }
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.c-auth-brand__logo {
+  height: 38px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
 }
 
 .c-auth-security-chip {
