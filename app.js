@@ -3445,8 +3445,12 @@
       const launchLinkedInOAuth = () => {
         try {
           let redirectUri = window.location.origin + window.location.pathname;
-          if (!redirectUri.endsWith('/')) {
-            redirectUri += '/';
+          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            redirectUri = 'http://localhost:4173';
+          } else {
+            if (!redirectUri.endsWith('/')) {
+              redirectUri += '/';
+            }
           }
           const state = 'linkedin_' + Math.random().toString(36).substring(2, 15);
           sessionStorage.setItem('vventra_linkedin_state', state);
