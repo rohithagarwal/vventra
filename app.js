@@ -3386,24 +3386,7 @@
         });
       }
 
-      // FIDO2 Hardware Security Passkey
-      const ssoFido = DOM.get('#sso-fido-btn');
-      if (ssoFido) {
-        ssoFido.addEventListener('click', () => {
-          showNotification('Awaiting FIDO2 Hardware Passkey biometric touch...');
-          setTimeout(() => {
-            AuthController.login({
-              name: 'Julian Sterling',
-              firm: 'Apex Syndicate Partners',
-              email: 'j.sterling@apexsyndicate.com',
-              role: currentRole,
-              tier: 'Hardware Security Key Verified',
-              escrowPool: '$350,000 Allocation',
-              source: 'fido2'
-            });
-          }, 600);
-        });
-      }
+
 
       // Forgot password modal / prompt
       const linkForgot = DOM.get('#link-forgot-pass');
